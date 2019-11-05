@@ -1,0 +1,109 @@
+<!-- Content -->
+<div class="content-page">
+	<h1><a href="index.php?livemap_id={LIVEMAP_ID}&s=guildman">{MyGuildName}</a> &raquo; {ui_206}</h1>
+	<div id="guild-standings-table"></div>
+	
+	<form id="guild-standing-form" action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<fieldset>
+			<legend>{ui_232}</legend>
+			<span id="guild-selection-indicator"></span>
+			<br><br>
+			<span id="guild-standing-options"></span>
+			<br><br>
+			<button type="submit" id="accept-button"><span class="ui-icon-check ui-icon"></span> {ui_233}</button>
+		</fieldset>
+		<input type="hidden" name="action" value="GUILDMAN">
+		<input type="hidden" name="command" value="change_standing">
+		<input type="hidden" name="source_guild_id" value="{MyGuildID}">
+	</form>
+	<button id="back-button"><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span> {ui_19}</button>
+</div>
+
+<script type="text/javascript" src="js/guildmanager.js"></script>
+<script>
+
+	var GuildTypes = {JSON_GUILDTYPES};
+	var GuildStandings = {JSON_STANDINGS};
+	var StandingColors = ['#EEE', '#EC7600', '#E5C541', '#EEE', 'YellowGreen', 'Lime'];
+	
+	$("#back-button").button().on( 'click', function() { window.location.href = "index.php?livemap_id={LIVEMAP_ID}&s=guildman"; } );
+	
+	/* Standings Table */
+	
+	function guildNameFormatter( cell ) {
+		var data = cell.getData();
+		return "<img src=\"images/guild/tier/" + data.GuildTier + ".png\" class=\"pre-icon\" title=\"{ui_202} " + data.GuildTier + "\">" + data.Name;
+	}
+	
+	function guildTypeFormatter( cell ) {
+		return GuildTypes[cell.getValue()];
+	}
+	
+	function guildDistanceFormatter( cell ) {
+		return cell.getValue() + " m";
+	}
+	
+	function guildLeaderFormatter( cell ) {
+		var data = cell.getData();
+		return data.LeaderName + "<img src=\"images/gender/" + data.LeaderGender + ".png\" class=\"post-icon\">";
+	}
+	
+	function guildStandingMutator( value ) {
+		return value || 0;
+	}
+	
+	function guildStandingFormatter( cell ) {
+		var id = cell.getValue();
+		return "<span style=\"color: " + StandingColors[id] + ";\">" + GuildStandings[id] + "</span>";
+	}
+
+	var standingsTable = new Tabulator( "#guild-standings-table", {
+		layout: "fitColumns",
+		selectable: true,
+		data: {JSON_GUILDS},
+		initialSort: [
+			{ column:"OurStanding", dir:"desc" },
+			{ column:"TheirStanding", dir:"desc" },
+			{ column:"Distance", dir:"asc" },
+		],
+		columns: [
+			{ title:"{ui_230}", field:"Name", widthGrow:2, formatter:guildNameFormatter },
+			{ title:"{ui_234}", field:"GuildTypeID", formatter:guildTypeFormatter },
+			{ title:"{ui_235}", field:"Distance", formatter:guildDistanceFormatter },
+			{ title:"{ui_236}", field:"LeaderName", widthGrow:2, headerSort:false, formatter:guildLeaderFormatter },
+			{ title:"{ui_223}", field:"TheirStanding", mutator:guildStandingMutator, formatter:guildStandingFormatter },
+			{ title:"{ui_224}", field:"OurStanding", mutator:guildStandingMutator, formatter:guildStandingFormatter },
+		],
+		rowSelectionChanged: function( data ) {
+			$("#guild-selection-indicator").html(data.length + " {ui_237}");
+		}
+	} );
+
+	/* Change Standing */
+	
+	$("#guild-standing-form").on( 'submit', function(e) {
+		var self = this;
+		var data = standingsTable.getSelectedData();
+		if( data.length === 0 ) {
+			GuildManager.confirmDialog("{ui_238}!");
+			e.preventDefault(e);
+		} else {
+			data.forEach( function(guild) {
+				$(self).append("<input type='hidden' name='target_guild[]' value='" + guild.ID + "'>");
+			} );
+			GuildManager.spinnerDialog();
+		}
+	} );
+	
+	$.each( GuildStandings, function(id, text) {
+		if( id ) {
+			$("#guild-standing-options").append("<label for='standing-" + id + "' style='color:" + StandingColors[id] + "'>" + text + "</label>");
+			$("#guild-standing-options").append("<input id='standing-" + id + "' type='radio' name='standing' value='" + id + "'>");
+		}
+	} );
+	
+	$("input[type=radio]").checkboxradio();
+	$("#standing-3").click();
+	$("#accept-button").button();
+
+</script>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- UI / Interface -->
+	<ui>
+		<!-- Header / Menu / General -->
+		<string id="0">Spieler</string>
+		<string id="1">Jetzt online</string>
+		<string id="2">Länge eines in-game Tages: {num} Stunden</string>
+		<string id="3">Zeitfaktor</string>
+		<string id="4">Nächster Mitternachtszyklus</string>
+		<string id="5">Morgen</string>
+		<string id="6">bis Neustart</string>
+		<string id="7">Tägliche Serverneustarts</string>
+		<string id="8">Nächste JH</string>
+		<string id="9">Livemap Login</string>
+		<string id="10">Eingeloggt bleiben</string>
+		<string id="11">Bitte authentifiziere dich über Steam, um Zugriff auf deine Gilde(n) und Charaktere auf diesem Server zu erhalten</string>
+		<string id="12">Gildenverwaltung</string>
+		<string id="13">Server Info</string>
+		<string id="14">Server Zeitzone</string>
+		<string id="15">Spieleinstellungen</string>
+		<string id="16">Einloggen</string>
+		<string id="17">Ausloggen</string>
+		<string id="18">Schließen</string>
+		<string id="19">zurück</string>
+		<string id="20">Wettervorhersage</string>
+		<string id="21">JH aktiv</string>
+		<string id="22">Wöchentliche JHs</string>
+		<string id="23">Dauer: {num} Minuten</string>
+		<string id="24">Mitglieder</string>
+		<string id="25">Gründung</string>
+		<string id="26">Größe</string>
+		<string id="27">Kacheln</string>
+		<string id="28">Gebäude</string>
+		<string id="29">Einwohner</string>
+		<string id="30">Ein unbekannter Fehler ist aufgetreten</string>
+		<string id="31">Login fehlgeschlagen. Falsches Passwort?</string>
+		<string id="32">Diese SteamID ist keiner Berechtigungsgruppe zugeordnet</string>
+		<string id="33">Erfolgreich eingeloggt</string>
+		<string id="34">Server-Regeln</string>
+		<string id="35">Jetzt Joinen</string>
+		<string id="36">Details konnten nicht geladen werden. Server offline?</string>
+		<string id="37">Server Offline</string>
+		<string id="38">Stufe-{GuildTier} Gilden-Claim</string>
+		<string id="39">{SizeX}x{SizeY} großes Admin-Land</string>
+		<string id="40">{Name} {LastName}'s persönlicher Claim</string>
+		<string id="41">Außenposten von {GuildName}</string>
+		<string id="42">Handelsposten</string>
+		<!-- Livemap / Layers -->
+		<string id="100">Alternativer Kartenhintergrund</string>
+		<string id="101">Regionen-Overlay</string>
+		<string id="102">Raster-Overlay</string>
+		<string id="103">Claim &amp; Außenposten Planer</string>
+		<string id="104">Spieler Online</string>
+		<string id="105">Admin-Claims</string>
+		<string id="106">Persönliche Claims</string>
+		<string id="107">Gilden-Claims</string>
+		<string id="108">Außenposten</string>
+		<string id="109">Gepflasterte Kacheln / Straßen</string>
+		<string id="110">Gebäude &amp; Strukturen</string>
+		<string id="111">Mitglieder</string>
+		<string id="112">Schläfers Schmiede</string>
+		<string id="113">Schläfers Zange</string>
+		<string id="114">Schläfers Hammer</string>
+		<string id="115">Sehenswürdigkeiten</string>
+		<string id="116">Gebiete</string>
+		<string id="117">Handelsposten</string>
+		<string id="118">Wald</string>
+		<!-- Guild Management -->
+		<string id="200">Du hast noch keine Charaktere auf diesem Server :(</string>
+		<string id="201">Rechte-Check</string>
+		<string id="202">Stufe</string>
+		<string id="203">Gildentyp</string>
+		<string id="204">Diese Gilde besitzt noch keinen Claim</string>
+		<string id="205">Rang</string>
+		<string id="206">Beziehungen</string>
+		<string id="207">Berechtigungen</string>
+		<string id="208">Gilden-Charta</string>
+		<string id="209">Charta bearbeiten</string>
+		<string id="210">Dieser Charakter ist gildenlos</string>
+		<string id="211">Prüft die Rechte deines Charakters auf fremden Gildengebieten</string>
+		<string id="212">Gilde finden</string>
+		<string id="213">Mitglieder</string>
+		<string id="214">Rang ändern</string>
+		<string id="215">Charakter</string>
+		<string id="216">Sichtbarkeit</string>
+		<string id="217">Nur Mitglieder</string>
+		<string id="218">Jeder</string>
+		<string id="219">Willst du '{char_name}' wirklich aus der Gilde werfen?</string>
+		<string id="220">Kicken</string>
+		<string id="221">Speichern</string>
+		<string id="222">Abbrechen</string>
+		<string id="223">Unsere Beziehung</string>
+		<string id="224">Ihre Beziehung</string>
+		<string id="225">Gilden-Berechtigungen</string>
+		<string id="226">Charakter-Berechtigungen</string>
+		<string id="227">Neue Regel</string>
+		<string id="228">Charakter finden</string>
+		<string id="229">Keine Regeln vorhanden</string>
+		<string id="230">Gilde</string>
+		<string id="231">Hinzufügen</string>
+		<string id="232">Beziehung ändern</string>
+		<string id="233">Akzeptieren</string>
+		<string id="234">Typ</string>
+		<string id="235">Distanz</string>
+		<string id="236">Anführer</string>
+		<string id="237">Gilden ausgewählt</string>
+		<string id="238">Wähle mindestens eine Zeile aus der Tabelle</string>
+		<string id="239">Unzureichende Berechtigungen</string>
+		<string id="240">Zeitlimit überschritten. Der Server hat nicht reagiert. Server offline?</string>
+		<string id="241">Die Aktion wurde vom Server abgelehnt</string>
+		<string id="242">Die Änderungen wurden erfolgreich gespeichert</string>
+	</ui>
+	<!-- Game Objects -->
+	<objects>
+		<string id="1702">Bergwerk</string>
+		<string id="1703">Offizin</string>
+		<string id="1704">Sägemühle</string>
+		<string id="1705">Steinbruch</string>
+		<string id="1706">Sammlerhütte</string>
+		<string id="1707">Mühle</string>
+		<string id="1708">Schlachthaus</string>
+		<string id="1709">Geognosiegrube</string>
+		<string id="1710">Sklavenlager</string>
+		<string id="1711">Militärposten</string>
+	</objects>
+	<!-- Weather -->
+	<weather>
+		<string id="0">Regen</string>
+		<string id="1">Wolkig</string>
+		<string id="2">Schnee</string>
+		<string id="3">Sonnig</string>
+	</weather>
+	<!-- Day names -->
+	<daynames>
+		<string id="0">Sonntag</string>
+		<string id="1">Montag</string>
+		<string id="2">Dienstag</string>
+		<string id="3">Mittwoch</string>
+		<string id="4">Donnerstag</string>
+		<string id="5">Freitag</string>
+		<string id="6">Samstag</string>
+	</daynames>
+	<!-- Male Ranks -->
+	<ranks_m>
+		<string id="0">-</string>
+		<string id="1">Graf</string>
+		<string id="2">Landgraf</string>
+		<string id="3">Baron</string>
+		<string id="4">Ritter</string>
+		<string id="5">Vogt</string>
+		<string id="6">Bauer</string>
+		<string id="7">Rekrut</string>
+	</ranks_m>
+	<!-- Female Ranks -->
+	<ranks_f>
+		<string id="0">-</string>
+		<string id="1">Gräfin</string>
+		<string id="2">Landgräfin</string>
+		<string id="3">Baronin</string>
+		<string id="4">Edeldame</string>
+		<string id="5">Vögtin</string>
+		<string id="6">Bäuerin</string>
+		<string id="7">Rekrutin</string>
+	</ranks_f>
+	<!-- Guild Types -->
+	<guildtypes>
+		<string id="0">-</string>
+		<string id="1">Gruppe</string>
+		<string id="2">Orden</string>
+		<string id="3">Staat</string>
+		<string id="4">Königreich</string>
+		<string id="5">Vasallentum</string>
+	</guildtypes>
+	<!-- Standings -->
+	<standings>
+		<string id="0">-</string>
+		<string id="1">Krieg</string>
+		<string id="2">Feindlich</string>
+		<string id="3">Neutral</string>
+		<string id="4">Befreundet</string>
+		<string id="5">Verbündet</string>
+	</standings>
+	<!-- Permissions -->
+	<permissions>
+		<string id="0">Betreten</string>
+		<string id="1">Bauen</string>
+		<string id="2">Beanspruchen</string>
+		<string id="3">Benutzen</string>
+		<string id="4">Zerstören</string>
+	</permissions>
+</root>

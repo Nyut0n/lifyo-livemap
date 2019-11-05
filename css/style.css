@@ -1,0 +1,646 @@
+/* General */
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	height: 100%;
+	background-color: #2c2217;
+	color: #eee;
+	font-family: 'Trebuchet MS', Sans-Serif;
+}
+
+h1 {
+	font-size: 1.5em;
+	margin-bottom: 10px;
+}
+
+/* jQuery Fixes */
+
+.ui-dialog {
+	z-index: 5000 !important;
+	display: none;
+}
+
+.ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+	font-family: 'Trebuchet MS', Sans-Serif !important;
+}
+
+.ui-dialog input[type=submit] {
+	width: 1px; height: 1px;
+	margin: 0; padding: 0;
+	visibility: hidden;
+}
+
+.ui-spinner {
+	width: 90px;
+}
+
+.ui-autocomplete { 
+	max-height: 300px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+/* Tabulator Fixes */
+
+.tabulator-col-content input {
+	background-color: #201913;
+	border: 1px solid Black;
+	color: #eee;
+}
+.tabulator-page {
+	color: #eee !important;
+}
+.tabulator-page.active {
+	color: Black !important;
+}
+
+/* Util */
+
+.hint {
+	font-size: 0.75em;
+	color: #bbb;
+}
+
+.has-tooltip {
+	cursor: help;
+}
+
+.is-clickable {
+	cursor: pointer;
+}
+
+.post-icon {
+	margin-left: 6px;
+}
+
+.pre-icon {
+	margin-right: 6px;
+}
+
+/* Dialogs */
+
+#logins-wrapper {
+	display: flex;
+}
+	#logins-wrapper > div {
+		margin: 5px 5px;
+		padding: 15px;
+		border: 2px groove #473725;
+		text-align: center;
+	}
+	#logins-wrapper h4 {
+		margin-bottom: 10px;
+	}
+	
+.ui-dialog p {
+	margin-bottom: 15px;
+}
+
+.ui-dialog label {
+	display: inline-block;
+	width: 150px;
+}
+
+/* Header Bar */
+	
+header {
+	z-index: 9999;
+	display: flex;
+	position: fixed; top: 10px; left: 10px;
+	min-width: 300px; max-width: 90%;
+}
+	#header-menu {
+		display: none;
+		position: absolute;
+	}
+	.header-section {
+		padding: 8px 10px;
+		background-color: rgba(0,0,0,0.7);
+		background-clip: padding-box;
+		border: 2px solid rgba(0,0,0,0.2);
+		border-radius: 2px;
+	}
+	#header-buttons {
+		display: inline-block;
+		margin-right: 8px;
+	}
+	#header-status {
+		display: inline-flex;
+	}
+		.header-section img {
+			vertical-align: top;
+		}
+		.header-item {
+			flex-grow: 1;
+			vertical-align: middle;
+			line-height: 24px; 
+		}
+		.header-item + .header-item {
+			margin-left: 20px;
+		}
+			.header-item-icon {
+				margin-right: 5px;
+			}
+			.header-item button {
+				box-sizing: border-box;
+				margin-right: 0.3em;
+				padding: 0.2em 0.8em;
+				border: 0.1em solid #DDD;
+				background-color: #333;
+				text-align:center;
+				color: #EEE;
+			}
+			.header-item button:hover {
+				cursor: pointer;
+				background-color: #EEE;
+				color: Black;
+			}
+			.header-highlighted {
+				color: Yellow !important;
+			}
+			#header-jh, #header-restarts {
+				display: none;
+			}
+			#online-players-list, #restarts-list{
+				list-style-type: Square;
+				list-style-position: inside;
+			}
+
+.header-tooltip {
+	font-size: 0.875em !important;
+}
+	.weather-item {
+		display: inline-block;
+		width: 50px;
+		margin: 15px 10px;
+		text-align: center;
+	}
+	.weather-item img {
+		margin: 5px;
+	}
+	
+@media ( max-width: 1180px ) {
+	
+	header .hint {
+		display: none;
+	}
+
+}
+
+/* Notifications */
+
+.notification {
+	z-index: 99999;
+	display: none;
+	position: fixed;
+	bottom: 10px; right: 10px;
+	max-width: 300px;
+	padding: 10px;
+	background-clip: padding-box;
+	border: 2px solid rgba(0,0,0,0.2);
+	border-radius: 2px;
+}
+	.noti-success {
+		background-color: #00631b;
+	}
+	.noti-error {
+		background-color: #a8291b;
+	}
+		
+/* Livemap */
+
+#livemap {
+	height: 100%;
+}
+	.map-guild-popup {
+		
+	}
+		.map-guild-title {
+			font-size: 1.125em;
+			font-weight: bold;
+		}
+		.map-guild-link {
+			font-size: 0.875em;
+			font-weight: normal;
+		}
+		.map-guild-details {
+			margin: 8px 0;
+		}
+		.map-guild-details label {
+			display: inline-block;
+			padding-right: 4px;
+			min-width: 5.7em;
+			font-weight: Bold;
+		}
+		.map-guild-members {
+			margin: 8px 0;
+			padding: 4px 8px 8px 8px;
+			border: 1px solid #BBB;
+		}
+		.map-guild-members.double-col {
+			width: 345px;
+		}
+			.map-guild-members ul {
+				display: block;
+				max-width: 340px;
+				list-style-type: none;
+			}
+			.map-guild-members.double-col li {
+				display: inline-block;
+				width: 170px;
+			}
+			.map-guild-members legend {
+				padding: 0 4px;
+				color: Black;
+				font-weight: normal;
+			}
+	.map-guild-label, .map-region-label, .map-planner-label {
+		box-shadow: none !important;
+		border: none !important;
+	}
+	.map-guild-label {
+		padding: 2px 6px !important;
+		background-color: rgba(0,0,0,0.5) !important;
+	}
+	.map-region-label, .map-planner-label {
+		background-color: transparent !important;
+		color: White !important;
+	}
+	.map-region-label {
+		font-size: 2em !important;
+	}
+	.map-custom-area {
+		cursor: help !important;
+	}
+	.custom-controls {
+		background-color: rgba(0,0,0,.7);
+	}
+	.custom-controls img {
+		vertical-align: top;
+	}
+	.custom-controls > div {
+		padding: 5px;
+		margin: 5px;
+		cursor: pointer;
+	}
+	.custom-controls > div.visible-layer {
+		background-color: Black;
+	}
+	
+	/* Tooltip Styles */
+		
+	.style-dark .leaflet-popup-content-wrapper, 
+	.style-dark .leaflet-popup-tip, 
+	.style-dark .leaflet-tooltip {
+		background-color: rgba(0,0,0,0.85) !important;
+		color: #ddd !important;
+		border: none !important;
+	}
+	.style-dark .leaflet-tooltip-left::before {
+		border-left-color: rgba(0,0,0,0.85) !important;
+	}
+	.style-dark .leaflet-tooltip-right::before {
+		border-right-color: rgba(0,0,0,0.85) !important;
+	}
+	.style-dark .leaflet-tooltip-bottom::before	{
+		border-bottom-color: rgba(0,0,0,0.85) !important;
+	}
+	.style-dark .leaflet-tooltip-top::before {
+		border-top-color: rgba(0,0,0,0.85) !important;
+	}
+	.style-dark .map-guild-members {
+		border: 1px solid Gray !important;
+	}
+	.style-dark .map-guild-members legend {
+		color: #ddd !important;
+	}
+	.style-dark a:link, .style-dark a:active, .style-dark a:visited {
+		color: Orange !important;
+	}
+	.style-standard .bw-icon {
+	   -webkit-filter: invert(1);
+	   filter: invert(1);
+	}
+		/* IE workaround */
+		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+			.style-standard .bw-icon {
+				padding: 2px;
+				border-radius: 2px;
+				background-color: rgba(0,0,0,.5);
+			}
+		}
+
+/* Non-Map Pages */
+
+.content-page {
+	max-width: 1200px;
+	min-width: 1000px;
+	margin: 0 auto 0 auto;
+	padding: 64px 10px 5px 10px;
+	color: #e1e2cf;
+}
+	.content-page a:link, .content-page a:active, .content-page a:visited {
+		color: Orange;
+		text-decoration: None;
+	}
+
+fieldset {
+	padding: 8px 16px;
+	margin-bottom: 15px;
+	border-color: #473725;
+}
+	fieldset legend {
+		color: #9bcc60;
+		font-weight: Bold;
+	}
+	input, select {
+		padding: 3px 6px;
+	}
+	.fieldset-item {
+		margin: 5px 0;
+	}
+	
+.kv-split-left {
+	float: left; 
+	margin-right: 60px;
+}
+.kv-split-right {
+	float: left;
+}
+.kv-row {
+	display: flex;
+	padding: 8px 4px;
+}
+	.kv-row > div:first-child {
+		width: 13em;
+	}
+	.kv-row input[type=text] {
+		width: 25em;
+	}
+
+/* Config Page */
+
+	.kv-row input.jscolor {
+		width: 6em;
+	}
+	.claim-label-group {
+		animation: expand 2s;
+		overflow: hidden;
+	}
+	@keyframes expand {
+		from { max-height: 0; }
+		to   { max-height: 300px; }
+	}
+
+.map-preview {
+	height: 250px;
+	margin: 6px 0;
+	box-shadow: 0 0 8px Black;
+}
+
+#conf-rules {
+	width: 100%;
+	height: 18em;
+	padding: 5px;
+}
+
+#customdata-map {
+	width: 100%;
+	height: 600px;
+}
+	.leaflet-container.crosshair-cursor-enabled {
+		cursor: crosshair;
+	}
+	
+.conf-poi-icon {
+	display: inline-block;
+	padding: 5px;
+	cursor: pointer;
+}
+	.conf-poi-icon svg {
+		width: 32px;
+		height: 32px;
+	}
+	.conf-poi-icon.selected {
+		background-color: Black;
+	}
+
+.group-container {
+	width: 60%;
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	border: 2px groove #473725;
+	line-height: 1.5em;
+}
+	.group-buttons {
+		float: right;
+	}
+	.group-title {
+		display: inline-block;
+		margin-bottom: 5px;
+		font-size: 1.25em;
+		font-weight: Bold;
+	}
+	.group-container > img:first-child {
+		margin-right: 10px;
+	}
+	.group-privlist {
+		list-style-position: inside;
+		font-size: 0.875em;
+	}
+	
+#steam-list {
+	list-style-position: inside;
+	list-style-type: Square;
+	margin-bottom: 10px;
+}
+
+/* RCON */
+
+#rcon-player-wrapper {
+	display: flex;
+}
+	#rcon-player-table {
+		width: 500px;
+		border: 1px solid Black;
+	}
+	#rcon-player-spacer {
+		width: 50px;
+	}
+	#rcon-player-control {
+		flex: 1;
+	}
+
+.rcon-selection-control {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	padding: 10px;
+	margin: 10px;
+	background-color: rgba(0,0,0,0.5);
+	text-align: center;
+	font-size: 1.25em;
+	cursor: pointer;
+	
+}
+.rcon-selection-control:hover {
+	background-color: Black;
+}
+.rcon-selection-control img {
+	margin-top: 10px;
+}
+
+#location-selector {
+	position: relative;
+	width: 511px; height: 511px;
+	margin-top: 10px;
+	background-size: cover;
+}
+	#location-selector img {
+		display: none;
+		position: absolute;
+	}
+
+/* Character Management */
+
+.char-gmlabel {
+	display: inline-block;
+	position: relative;
+	top: -3px;
+	margin-left: 4px;
+	padding: 0 3px;
+	background-color: #56A3F0;
+	border-radius: 3px;
+	font-size: 0.75em;
+	color: Black;
+	font-weight: Bold;
+}
+
+.charman-table-footer {
+	float: left;
+}
+	#rows-selected {
+		color: #eee;
+		font-size: 1em;
+		font-weight: normal;
+	}
+
+#char-inventory-dialog ul {
+	list-style-type: circle;
+	list-style-position: inside;
+}
+#char-inventory-dialog ul ul {
+	margin-left: 10px;
+}
+#char-inventory-dialog li.item-container {
+	list-style-type: disc;
+	cursor: pointer;
+	color: #e5c541;
+}
+#char-inventory-dialog .item-quality, #char-inventory-dialog .item-durability, #char-inventory-dialog .item-quantity {
+	font-size: 0.75em;
+	vertical-align: 25%;
+}
+#char-inventory-dialog .item-quantity {
+	color: #56A3F0;
+}
+#char-inventory-dialog .item-durability {
+	color: #999;
+}
+#char-inventory-dialog .item-list-container {
+	float: left;
+	margin: 0 20px 0 10px;
+}
+
+#char-bulk-form {
+	margin-top: 20px;
+}
+	#char-bulk-form label {
+		display: inline-block;
+		width: 150px;
+	}
+	#char-bulk-form p {
+		margin: 5px 0;
+	}
+
+
+#location-map {
+	position: relative;
+	width: 511px; height: 511px;
+	background-color: #333;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border: 1px solid Black;
+}
+	#location-label {
+		position: absolute;
+		font-size: 0.75em;
+	}
+	#location-marker {
+		position: absolute;
+		width: 8px; height: 8px;
+		margin: -4px 4px 4px -4px;
+		background-color: Red;
+		border: 1px solid White;
+		border-radius: 4px;
+		animation: blink 1s step-start 0s infinite;
+		-webkit-animation: blink 1s step-start 0s infinite;
+	}
+	#location-marker:hover {
+		background-color: Magenta;
+		animation: none;
+	}
+	@keyframes blink { 
+		50% { opacity: 0.0; }
+	}
+	@-webkit-keyframes blink { 
+		50% { opacity: 0.0; }
+	}
+
+/* Guild Management */
+
+.guildman-char-selector {
+	margin-top: 15px;
+	padding: 15px;
+	background-color: rgba(0,0,0,0.4);
+	background-clip: padding-box;
+	border: 2px solid rgba(0,0,0,0.2);
+	overflow: auto;
+}
+	.guildman-title {
+		color: #9bcc60;
+		font-weight: bold;
+	}
+	.guildman-char-buttons {
+		float: right;
+	}
+
+#guild-standings-table {
+	max-width: 900px;
+	margin-bottom: 10px;
+}
+
+#rank-table, #standing-table, #guild-table, #char-table {
+	width: 360px;
+	margin: 10px 0;
+}
+
+	.permission-col {
+		text-align: center !important;
+	}
+	.tabulator-tableHolder .permission-col {
+		cursor: pointer;
+	}
+
+#guild-privcheck-result {
+	display: none;
+	margin: 10px 0;
+}
+	.priv-line {
+		padding: 2px;
+		margin: 0;
+	}		

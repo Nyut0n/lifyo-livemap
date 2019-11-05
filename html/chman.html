@@ -1,0 +1,151 @@
+<!-- Content -->
+<div class="content-page">
+
+	<h1>Account & Character Management</h1>
+	
+	{IFNOT:MOD_INSTALLED}
+	<br><img src="images/warn.png"> Not all functions and columns are available because TTmod is not installed or not updated to the latest version.<br><br>
+	{ENDIFNOT:MOD_INSTALLED}
+	
+	<div id="charman-table"></div>
+	
+	<form id="char-bulk-form" action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<fieldset>
+			<legend>Bulk Action</legend>
+			Apply this to all <b>selected</b> characters: &nbsp;
+			<select id="char-bulk-command" name="command">
+				<option value="ban">Ban Accounts</option>
+				<option value="unban">Unban Accounts</option>
+				<option value="align">Change Alignment</option>
+				<option value="disable">Disable Characters</option>
+				<option value="enable">Enable Characters</option>
+				{IF:PRIV_manage_adv}
+				<option value="delete">Delete Characters</option>
+				<option value="item">Insert Inventory Item</option>
+				<option value="makegm">Set Permanent GM</option>
+				<option value="takegm">Revoke Permanent GM</option>
+				{ENDIF:PRIV_manage_adv}
+			</select>
+			<div id="new-alignment-input" style="display: none;">
+				<p>New Alignment: <input id="bulk-alignment" name="new_alignment" value="0"></p>
+			</div>
+			<div id="new-item-input" style="display: none;">
+				<p>
+					<label><input id="radio-item-id" type="radio" name="item_data_type" value="id"> Item by ID</label>
+					<input type="text" id="bulk-item-id" class="ui-widget ui-widget-content ui-corner-all" name="item_id" maxlength="5">
+				</p>
+				<p>
+					<label><input id="radio-item-name" type="radio" name="item_data_type" value="name" checked> Item by Name</label>
+					<select name="item_name_id" id="bulk-item-select" class="ui-widget ui-widget-content ui-corner-all">
+						<option value="0"></option>
+						{LOOP:items}<option value="{ID}">{Name}</option>{ENDLOOP:items}
+					</select>
+				</p>
+				<p>
+					<label>Quantity</label>
+					<input id="bulk-item-quantity" name="quantity" value="1">
+				</p>
+				<p>
+					<label>Quality</label>
+					<input id="bulk-item-quality" name="quality" value="50">
+				</p>
+				<p>
+					<label>Durability</label>
+					<input id="bulk-item-durability" name="durability" value="5000">
+				</p>
+				<p>
+					<label>Region</label>
+					<select id="bulk-region" class="ui-widget ui-widget-content ui-corner-all" name="region">
+						<option value="0">None</option>
+						<option value="12">{text_reg12} (12)</option>
+						<option value="13">{text_reg13} (13)</option>
+						<option value="14">{text_reg14} (14)</option>
+					</select>
+				</p>
+			</div>
+			<p>
+				<button id="char-bulk-button" type="submit">run</button>
+			</p>
+			<p>
+				<span class="hint">Note: Some bulk actions on 100 or more characters can take up to a few minutes to complete. Depending on your server performance and webserver configuration, you might experience timeouts or errors. In that case, please select smaller batches.</span>
+			</p>
+		</fieldset>
+		<input type="hidden" name="action" value="CHMAN">
+	</form>
+
+</div>
+
+<!-- Rename Dialog -->
+<div class="ui-dialog" id="char-rename-dialog" title="Rename Character">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST" id="form-char-rename">
+		<p>
+			<label>Character ID</label>
+			<span id="rename-display-char-id"></span>
+		</p>
+		<p>
+			<label>First Name</label>
+			<input id="rename-firstname" class="ui-widget ui-widget-content ui-corner-all" name="newfirstname" type="text" maxlength="9">
+		</p>
+		<p>
+			<label>Last Name</label>
+			<input id="rename-lastname" class="ui-widget ui-widget-content ui-corner-all" name="newlastname" type="text" maxlength="15">
+		</p>
+		<input name="CharacterID[]" type="hidden" id="rename-char-id" value="0">
+		<input name="action" type="hidden" value="CHMAN">
+		<input name="command" type="hidden" value="rename">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Stats Dialog -->
+<div class="ui-dialog" id="char-stats-dialog" title="Character Statistics">
+	<div style="width: 600px; height: 300px;">
+		<canvas id="chart-charstats" width="600" height="300"></canvas>
+	</div>
+</div>
+
+<!-- Location Dialog -->
+<div class="ui-dialog" id="char-location-dialog" title="Last Location">
+	<div id="location-map" style="background-image: url({MAP_FILE});">
+		<div id="location-label"></div>
+		<div id="location-marker" class="has-tooltip"></div>
+	</div>
+</div>
+
+<!-- Inventory Dialog -->
+<div class="ui-dialog" id="char-inventory-dialog" title="Character Inventory">
+	<div>
+		<div class="item-list-container">
+			<h2>Inventory:</h2>
+			<ul id="inventory-list"></ul>
+		</div>
+		<div class="item-list-container">
+			<h2>Equipment:</h2>
+			<ul id="equipment-list"></ul>
+		</div>
+	</div>
+</div>
+
+<!-- Skills Dialog -->
+<div class="ui-dialog" id="char-skills-dialog" title="Character Inventory">
+	<p>Click into an amount cell to edit. Editing skills of online players is not recommended.</p>
+	<div id="char-skills-table"></div>
+</div>
+
+<!-- App -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script type="text/javascript" src="js/charman.js"></script>
+<script>
+
+	// ChartJS Defaults
+	Chart.defaults.global.defaultFontColor = "#eee";
+	Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', Calibri, sans-serif";
+	Chart.defaults.global.defaultFontSize = 14;
+
+	// Load Data
+	var characters = {characters};
+	var GuildRankText = {json_ranks};
+	{IF:MOD_INSTALLED}Object.create(NyuCharTable).init(characters, true);{ENDIF:MOD_INSTALLED}
+	{IFNOT:MOD_INSTALLED}Object.create(NyuCharTable).init(characters, false);{ENDIFNOT:MOD_INSTALLED}
+	
+</script>

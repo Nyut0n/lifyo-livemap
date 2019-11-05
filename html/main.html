@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>{WEB_TITLE}</title>
+{IF:FEUDALTOOLS}<base href="{BASE_URL}">{ENDIF:FEUDALTOOLS}
+<meta charset="UTF-8">
+<meta name="description" content="Life is Feudal Your Own Livemap: {WEB_TITLE}">
+<meta name="keywords" content="livemap,lifyo,life is feudal,lif server">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css?v={VERSION}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<script src="js/leaflet.spin.min.js"></script>
+{IFNOT:IS_MAP}
+<link rel="stylesheet" href="css/tabulator.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://unpkg.com/tabulator-tables@4.4.1/dist/js/tabulator.min.js"></script>
+{ENDIFNOT:IS_MAP}
+<script src="js/header.js?v={VERSION}"></script>
+<script src="js/rcon.js?v={VERSION}"></script>
+<script src="js/livemap.js?v={VERSION}"></script>
+<script src="js/controller.js?v={VERSION}"></script>
+<style>
+	{LOOP:FONTS_IMPORT}@import url('{value}');{ENDLOOP:FONTS_IMPORT}
+	#livemap { background-color: #{COLOR_BACKGR}; }
+	{IF:SHOW_LABELS}.map-guild-label { color: #{COLOR_GLABEL}; font-family: '{FONT_GLABEL}', Sans-serif; }{ENDIF:SHOW_LABELS}
+	.leaflet-tooltip-pane, .leaflet-popup-pane { font-family: '{FONT_TOOLTIP}', Sans-serif; }
+</style>
+</head>
+
+<body>
+
+<!-- Sticky Header Bar -->
+<header>
+	<!-- Header Menu --> 
+	<div class="header-section" id="header-buttons">
+		<img id="more-button" class="is-clickable" src="images/header/more.png">
+		<ul id="header-menu">
+			<!-- Admin / Management Items -->
+			{IF:PRIV_conf}<li><div id="menu-config" data-link="?livemap_id={LIVEMAP_ID}&s=conf"><span class="ui-icon ui-icon-gear"></span>Livemap Configuration</div></li>{ENDIF:PRIV_conf}
+			{IF:PRIV_rcon}<li><div id="menu-rcon" data-link="?livemap_id={LIVEMAP_ID}&s=rcon"><span class="ui-icon ui-icon-signal-diag"></span>RCON Console</div></li>{ENDIF:PRIV_rcon}
+			{IF:PRIV_manage_chars}<li><div id="menu-char" data-link="?livemap_id={LIVEMAP_ID}&s=char"><span class="ui-icon ui-icon-person"></span>Character Management</div></li>{ENDIF:PRIV_manage_chars}
+			<!-- Public Items -->
+			<li><div id="menu-server"><span class="ui-icon ui-icon-info"></span>{ui_13}</div></li>
+			{IF:HAS_RULES}<li><div id="menu-rules"><span class="ui-icon ui-icon-script"></span>{ui_34}</div></li>{ENDIF:HAS_RULES}
+			{IF:HAS_LINK}<li><div id="menu-website" data-link="{WEB_LINK}"><span class="ui-icon ui-icon-document"></span>Server Website</div></li>{ENDIF:HAS_LINK}
+			{IF:HAS_DISCORD}<li><div id="menu-discord" data-link="{DISCORD}"><span class="ui-icon ui-icon-comment"></span>Discord Server</div></li>{ENDIF:HAS_DISCORD}
+			{IF:HAS_TEAMSPEAK}<li><div id="menu-teamspeak"><span class="ui-icon ui-icon-volume-on"></span>Teamspeak Server</div></li>{ENDIF:HAS_TEAMSPEAK}
+			{IF:HAS_GUILDMAN}<li><div id="menu-guildman" data-link="?livemap_id={LIVEMAP_ID}&s=guildman"><span class="ui-icon ui-icon-flag"></span>{ui_12}</div></li>{ENDIF:HAS_GUILDMAN}
+			{IFNOT:IS_MAP}<li><div id="menu-livemap" data-link="?livemap_id={LIVEMAP_ID}"><span class="ui-icon ui-icon-home"></span>Livemap</div></li>{ENDIFNOT:IS_MAP}
+			<!-- Login / Logout -->
+			{IFNOT:LOGGED_IN}<li><div id="menu-login"><span class="ui-icon ui-icon-key"></span>{ui_16}</div></li>{ENDIFNOT:LOGGED_IN}
+			{IF:LOGGED_IN}<li><div id="menu-logout" data-link="?livemap_id={LIVEMAP_ID}&action=Logout"><span class="ui-icon ui-icon-closethick"></span>{ui_17}</div></li>{ENDIF:LOGGED_IN}
+		</ul>
+	</div>
+	<!-- Header Status --> 
+	<div class="header-section" id="header-status">
+		{IF:PLAYERS_ENABLE}
+		<div class="header-item" id="header-players">
+			<img class="header-item-icon" src="images/header/players.png">
+			<span id="h-now-online"><img src="images/animated/spinner-16.gif"></span>
+			<span class="hint">{ui_0}</span>
+		</div>
+		{ENDIF:PLAYERS_ENABLE}
+		{IF:PRIV_ingame_time}
+		<div class="header-item" id="header-gametime">
+			<img class="header-item-icon" src="images/header/time.png">
+			<span id="h-gametime"><img src="images/animated/spinner-16.gif"></span> 
+		</div>
+		{ENDIF:PRIV_ingame_time}
+		{IF:PRIV_weather_now}
+		<div class="header-item" id="header-weather">
+			<img class="header-item-icon" id="h-weather-icon" src="images/weather/{weather_icon}.png">
+			<span id="weather-now">{weather_now}</span>
+			<span class="hint">{ui_5}: <span id="weather-tomorrow">{weather_tomorrow}</span></span>
+		</div>
+		{ENDIF:PRIV_weather_now}
+		<div class="header-item" id="header-restarts">
+			<img class="header-item-icon" src="images/header/restart.png">
+			<img class="pre-icon" id="h-restart-warn" src="images/header/warning.png" style="display: none;">
+			<span id="h-restart-timer"><img src="images/animated/spinner-16.gif"></span> 
+			<span class="hint">{ui_6}</span>
+		</div>
+		<div class="header-item" id="header-jh">
+			<img class="header-item-icon" src="images/header/judgementhour.png">
+			<span id="h-jh-timer"><img src="images/animated/spinner-16.gif"></span>
+			<span id="h-jh-text" class="hint">{ui_8}</span>
+		</div>
+	</div>
+</header>
+
+{CONTENT}
+
+<!-- Dialog: Livemap Login -->
+<div id="dialog-login" class="ui-dialog" title="{ui_9}">
+	<div id="logins-wrapper">
+		<div>
+			<h4>Password Login</h4>
+			<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}" id="form-login">
+				<input id="auth_pass" name="auth_pass" type="password" class="ui-widget ui-widget-content ui-corner-all" autocomplete="off">
+				<input name="action" type="hidden" value="Login">
+				<br><br>
+				<button class="ui-button ui-widget ui-corner-all" type="submit">Login</button>
+			</form>
+		</div>
+		<div>
+			<h4>Steam Login</h4>
+			<a href="?livemap_id={LIVEMAP_ID}&action=SteamAuth&rememberme=0" id="steam-login-log"><img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_02.png"></a>
+			<br><br>
+			<input type="checkbox" id="input-rememberme-log" value="y"> {ui_10}
+		</div>
+	</div>
+</div>
+
+<!-- Dialog: Guild Management Login -->
+<div id="dialog-steam" class="ui-dialog" title="{ui_12}">
+	{ui_11}
+	<br><br>
+	<input type="checkbox" id="input-rememberme-guild" value="y"> {ui_10}
+	<br><br>
+	<a href="?livemap_id={LIVEMAP_ID}&action=GuildAuth&rememberme=0" id="steam-login-guild"><img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"></a>
+</div>
+
+<!-- Dialog: Server Info -->
+<div id="dialog-info" class="ui-dialog" title="{ui_13}">
+	<fieldset>
+		<legend>Server Information</legend>
+		<div class="kv-row">
+			<div>Server IP</div>
+			<div>{SERVER_IP}:{SERVER_PORT}</div>
+		</div>
+		<div class="kv-row">
+			<div>{ui_14}</div>
+			<div>{SERVER_TIMEZONE}</div>
+		</div>
+	</fieldset>
+	<fieldset id="serverinfo-fieldset">
+		<legend>{ui_15}</legend>
+		<div class="kv-row">
+			<div>Day Cycle</div>
+			<div class="serverinfo-sq" data-key="dayCycle"></div>
+		</div>
+		<div class="kv-row">
+			<div>Skill Cap</div>
+			<div class="serverinfo-sq" data-key="skillcap"></div>
+		</div>
+		<div class="kv-row">
+			<div>Skill Multiplier</div>
+			<div class="serverinfo-sq" data-key="skillsStatsMult"></div>
+		</div>
+		<div class="kv-row">
+			<div>Animals Count</div>
+			<div class="serverinfo-sq" data-key="animalsCount"></div>
+		</div>
+		<div class="kv-row">
+			<div>Breeding Period</div>
+			<div class="serverinfo-sq" data-key="animalBFPeriod"></div>
+		</div>
+		<div class="kv-row">
+			<div>Crafting Period</div>
+			<div class="serverinfo-sq" data-key="craftingPeriod"></div>
+		</div>
+		<div class="kv-row">
+			<div>Terraforming Speed</div>
+			<div class="serverinfo-sq" data-key="terraformingSpeed"></div>
+		</div>
+		<div class="kv-row">
+			<div>Object Decay Rate</div>
+			<div class="serverinfo-sq" data-key="objectDecayRate"></div>
+		</div>
+	</fieldset>
+</div>
+
+<!-- Dialog: Teamspeak -->
+<div id="dialog-teamspeak" class="ui-dialog" title="Teamspeak Server">
+	<img src="images/ts3.png" style="width: 100px; margin-right: 20px; float: left;">
+	<b>Teamspeak Server IP:</b><br>
+	<a href="ts3server://{TEAMSPEAK}">{TEAMSPEAK}</a>
+	<br><br>
+	<b>Client Software:</b><br>
+	<img src="images/download.png" class="pre-icon"><a href="https://www.teamspeak.com/en/downloads" target="_blank"> Download</a>
+</div>
+
+<!-- Dialog: Rules -->
+<div id="dialog-rules" class="ui-dialog" title="{ui_34}">
+	{SanitizedRulesHtml}
+</div>
+
+<!-- Dialog: Credits -->
+<div id="dialog-credits" class="ui-dialog" title="About">
+	<b>LiF:YO Livemap</b><br>
+	Version: {VERSION}<br>
+	Author Web: <a href="https://nyuton.net" target_="_blank">Nyuton</a><br>
+	License: <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" target_="_blank">GPL v3.0+</a><br>
+	<br>
+	{IF:FEUDALTOOLS}Hosted Livemap via <a href="https://feudal.tools" target="_blank">feudal.tools</a>{ENDIF:FEUDALTOOLS}
+	{IFNOT:FEUDALTOOLS}Dedicated Livemap from <a href="https://nyuton.net/livemap-for-lifyo-dedicated-servers/" target="_blank">nyuton.net</a>{ENDIFNOT:FEUDALTOOLS}
+	<br><br>
+	<b>3rd Party Credits:</b><br>
+	<ul>
+		<li>BitBox Ltd. for making <a href="https://lifeisfeudal.com/" target="_blank">Life is Feudal</a></li>
+		<li>All icons provided by <a href="https://freepik.com" target="_blank">Freepik</a></li>
+		<li>xPaw for the <a href="https://github.com/xPaw/PHP-Source-Query" target="_blank">PHP-SourceQuery</a> library</li>
+		<li>Oli Folkerd for the <a href="http://tabulator.info" target="_blank">Tabulator</a> library</li>
+		<li><a href="https://jquery.org/team/" target="_blank">The jQuery Foundation</a> for their JavaScript libraries</li>
+		<li>JScolor</li>
+	</ul>
+</div>
+
+<script>
+	
+	var livemap_id = {LIVEMAP_ID};
+	var Locale = {LOCALE_UI_JSON};
+
+	var Controller = new NyuLivemapController();
+	$( function() {
+		Controller.init( {JSON_CONFIG}, {PRIVILEGES} );
+		Controller.showMessage( {MESSAGE} );
+	} );
+	
+</script>
+	
+</body>
+</html>

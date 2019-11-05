@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>LiF:YO Livemap Updater/Installer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css?v={VERSION}">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<style>
+	#updater {
+		margin: 2em;
+	}
+	label {
+		display: inline-block;
+		width: 12em;
+	}
+	p {
+		margin: 0.4em 0;
+	}
+</style>
+</head>
+
+<body>
+	<div id="updater">
+		<h1>LiF:YO Livemap v3 Installer/Updater</h1>
+		<main>
+			{IF:SHOW_ERROR}Update Failed: <b>{ERROR}</b><br><br>{ENDIF:SHOW_ERROR}
+			<fieldset>
+				<legend>Requirement Check</legend>
+				<p>
+					<label>PHP Version</label>
+					{IF:PHP_OK}<img src="images/check.png" class="pre-icon">{PHP_VERSION}{ENDIF:PHP_OK}
+					{IFNOT:PHP_OK}<img src="images/stop.png" class="pre-icon">{PHP_VERSION}{ENDIFNOT:PHP_OK}
+				</p>
+				<p>
+					<label>PHP Architecture</label>
+					{IF:ARCH64}<img src="images/check.png" class="pre-icon">64 Bit{ENDIF:ARCH64}
+					{IF:ARCH32}<img src="images/check.png" class="pre-icon">32 Bit{ENDIF:ARCH32}
+					{IF:ARCH32OK}<img src="images/check.png" class="pre-icon">32 Bit, GMP extension found{ENDIF:ARCH32OK}
+				</p>
+				<p>
+					<label>PHP-XML Module</label>
+					{IF:XML_OK}<img src="images/check.png" class="pre-icon">Installed{ENDIF:XML_OK}
+					{IFNOT:XML_OK}<img src="images/stop.png" class="pre-icon">Not installed{ENDIFNOT:XML_OK}
+				</p>
+				<p>
+					<label>Database Connection</label>
+					<img src="images/check.png" class="pre-icon">OK
+				</p>
+				{IF:GQ_ENABLE}
+				<p>
+					<label>Gameserver Query</label>
+					{IF:GQ_OK}<img src="images/check.png" class="pre-icon">OK{ENDIF:GQ_OK}
+					{IFNOT:GQ_OK}<img src="images/stop.png" class="pre-icon">Broken (or server offline){ENDIFNOT:GQ_OK}
+				</p>
+				{ENDIF:GQ_ENABLE}
+				<p>
+					<label>LiF:YO Server Version</label>
+					{IF:LIF_OK}<img src="images/check.png" class="pre-icon">1.4.4.x or higher{ENDIF:LIF_OK}
+					{IFNOT:LIF_OK}<img src="images/stop.png" class="pre-icon">1.3.6.x or older{ENDIFNOT:LIF_OK}
+				</p>
+			</fieldset>
+			<fieldset>
+				<legend>Installation / Update</legend>
+				<form action="" method="POST">
+					Enter the admin password from <i>config-dedicated.php</i> to proceed
+					<p>
+						<label>Admin Password:</label>
+						<input type="password" name="admin_pw" class="ui-widget ui-widget-content ui-corner-all">
+					</p>
+					{IF:REQ_OK}
+					<button type="submit" class="ui-widget ui-button ui-corner-all">OK</button>
+					<input type="hidden" name="update" value="1">
+					{ENDIF:REQ_OK}
+					{IFNOT:REQ_OK}
+					<button type="submit" class="ui-widget ui-button ui-corner-all" disabled>OK</button>
+					<input type="hidden" name="update" value="0">
+					{ENDIFNOT:REQ_OK}
+				</form>
+			</fieldset>
+			
+		</main>
+	</div>
+</body>
+
+</html>

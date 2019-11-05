@@ -1,0 +1,275 @@
+<!-- Content -->
+<div class="content-page">
+
+	<h1>{ui_12}</h1>
+	
+	{IFNOT:has_chars}<p>{ui_200}</p>{ENDIFNOT:has_chars}
+	
+	{LOOP:characters}
+	<div class="guildman-char-selector" data-char="{ID}" data-guild="{GuildID}">
+		{IF:has_guild}
+			<div class="guildman-char-buttons">
+				<button class="guild-privcheck-button" data-char="{ID}">{ui_201}</button>
+			</div>
+			<img src="images/guild/tier/{GuildTier}.png" class="pre-icon" title="{ui_202} {GuildTierName}">
+			<span class="guildman-title">{GuildName}</span> &nbsp; <b>&raquo;</b>
+			<img src="images/guild/rank/{GuildRoleID}.png" class="pre-icon post-icon" title="{GuildRoleName}">
+		{ENDIF:has_guild}
+		{Name} {LastName}
+		<img src="images/gender/{gender}.png" class="post-icon">
+		<br><br>
+		{IFNOT:has_guild}<i>{ui_210}.</i>{ENDIFNOT:has_guild}
+		{IF:has_guild}
+			{ui_203}: {GuildType}<br>
+			{ui_111}: {MemberCount}<br>
+			<br>
+			{IFNOT:has_claim}<i>{ui_204}</i>{ENDIFNOT:has_claim}
+			{IF:has_claim}
+			<button class="guild-members-button" data-guild="{GuildID}">{ui_111} & {ui_205}</button>
+			<button class="guild-standings-button" data-guild="{GuildID}">{ui_206}</button>
+			{IF:isAdmin}
+			<button class="guild-permissions-button" data-guild="{GuildID}">{ui_207}</button>
+			<button class="guild-charter-button" data-guild="{GuildID}">{ui_209}</button>
+			{ENDIF:isAdmin}
+			<br><br>
+			{ENDIF:has_claim}
+			<div class="guildman-charter" id="charter-gid-{GuildID}">
+				<h3>{ui_208}</h3>
+				<div>{GuildCharterHtml}</div>
+			</div>
+		{ENDIF:has_guild}
+	</div>
+	{ENDLOOP:characters}
+	
+	<br><br>
+	<button id="logout-button"><span class="ui-icon ui-icon-arrowreturnthick-1-s"></span> {ui_17}</button>
+	
+</div>
+
+<!-- Privilege Checker Dialog -->
+<div id="guild-privcheck-dialog" class="ui-dialog" title="{ui_201}">
+	{ui_211}<br><br>
+	{ui_212}: <input id="guild-privcheck-input" class="ui-widget ui-widget-content ui-corner-all">
+	<div id="guild-privcheck-result"></div>
+</div>
+
+<!-- Dialog: Member List -->
+<div id="guild-members-dialog" class="ui-dialog" title="{ui_213}">
+	<div id="guild-members-table"></div>
+</div>
+
+<!-- Dialog: Edit Rank -->
+<div id="guild-rank-dialog" class="ui-dialog" title="{ui_214}">
+	<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}">
+		{ui_215}: <span id="subject-name"></span>
+		<br><br>
+		<select name="rank" id="guild-rank-selector" class="ui-widget ui-widget-content ui-corner-all"></select>
+		<input type="hidden" name="action" value="GUILDMAN">
+		<input type="hidden" name="command" value="change_rank">
+		<input type="hidden" name="subject_id" value="0" id="subject-id">
+		<input type="hidden" id="guild-rank-source" name="source_guild_id" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: Edit Charter -->
+<div id="guild-charter-dialog" class="ui-dialog" title="{ui_209}">
+	<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}">
+		{IFNOT:INGAME}<textarea name="charter" rows="15" cols="120" class="ui-widget ui-widget-content ui-corner-all"></textarea>{ENDIFNOT:INGAME}
+		{IF:INGAME}<textarea name="charter" rows="12" cols="80" class="ui-widget ui-widget-content ui-corner-all"></textarea>{ENDIF:INGAME}
+		<br>
+		<fieldset>
+			<legend>{ui_216}</legend>
+			<label for="guild-charter-private">{ui_217}</label>
+			<input id="guild-charter-private" type="radio" name="public" value="0">
+			<label for="guild-charter-public">{ui_218}</label>
+			<input id="guild-charter-public" type="radio" name="public" value="1">
+		</fieldset>
+		<input type="hidden" name="action" value="GUILDMAN">
+		<input type="hidden" name="command" value="update_charter">
+		<input type="hidden" name="source_guild_id" value="0" id="guild-charter-gid">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<script type="text/javascript" src="js/guildmanager.js"></script>
+<script>
+
+	var UI_Ranks = {JSON_RANKS};
+	var UI_Standings = {JSON_STANDINGS};
+	var UI_Permissions = {JSON_PERMISSIONS};
+	var MyCharacters = {JSON_CHARACTERS};
+	var AllGuilds = {JSON_ALL_GUILDS};
+	
+	$(".guild-permissions-button").button().on( 'click', function() { 
+		window.location.href = "index.php?livemap_id={LIVEMAP_ID}&s=guildman&m=permissions&gid=" + this.dataset.guild;
+	} );
+	$(".guild-standings-button").button().on( 'click', function() { 
+		window.location.href = "index.php?livemap_id={LIVEMAP_ID}&s=guildman&m=standings&gid=" + this.dataset.guild;
+	} );
+	$("#logout-button").button().on( 'click', function() { 
+		window.location.href = "index.php?livemap_id={LIVEMAP_ID}&action=SteamLogout";
+	} );
+
+	/* Member List Dialog */
+	
+	$("#guild-members-dialog").dialog( {
+		autoOpen: false, resizable: true, modal: true,
+		height: "auto", width: 500,
+		buttons: {
+			"{ui_18}": function() { $(this).dialog("close"); }
+		}
+	} );
+	
+	$(".guild-members-button").button().on( 'click', function() {
+		var GuildID = this.dataset.guild;
+		$("#guild-members-dialog").dialog('open');
+		membersTable.GuildID = GuildID;
+		membersTable.setData("index.php?livemap_id=" + livemap_id + "&ajax=gg_memberlist&guild=" + GuildID);
+	} );
+
+	function memberNameFormatter( cell ) {
+		var data = cell.getData();
+		return data.Name + " " + data.LastName + "<img src=\"images/gender/" + data.Gender + ".png\" class=\"post-icon\">";
+	}
+	
+	function memberRankFormatter( cell ) {
+		var data = cell.getData();
+		return "<img src='images/guild/rank/" + data.GuildRoleID + ".png' class='pre-icon'>" + UI_Ranks[data.Gender][data.GuildRoleID];
+	}
+	
+	function memberOptionsFormatter( cell ) {
+		var data = cell.getData();
+		var edit = $("<img src=\"images/edit.png\" class=\"pre-icon is-clickable\" title=\"{ui_214}\">").on( 'click', function() {
+			$("#guild-rank-source").val(cell.getTable().GuildID);
+			$("#subject-name").html(data.Name + ' ' + data.LastName);
+			$("#subject-id").val(data.ID);
+			var select = $("#guild-rank-selector").empty();
+			for( var i = 1; i < UI_Ranks[data.Gender].length; i++ ) {
+				select.append("<option value=\"" + i + "\">" + UI_Ranks[data.Gender][i] + "</option>");
+			}
+			$("option[value=" + data.GuildRoleID + "]", select).prop('selected', true);
+			$("#guild-rank-dialog").dialog('open');
+		} );
+		var kick = $("<img src=\"images/kick.png\" class=\"pre-icon is-clickable\" title=\"{ui_220}\">").on( 'click', function() {
+			var text = "{ui_219}".replace("{char_name}", data.Name + ' ' + data.LastName);
+			GuildManager.confirmDialog( text, function() {
+				window.location.href = "index.php?livemap_id={LIVEMAP_ID}&action=GUILDMAN&source_guild_id=" + cell.getTable().GuildID + "&command=kick_member&subject_id=" + data.ID;
+				GuildManager.spinnerDialog();
+			} );
+		} );
+		return $("<span></span>").append(edit).append(kick)[0];
+	}
+
+	var membersTable = new Tabulator( "#guild-members-table", {
+		layout: "fitColumns",
+		selectable: false,
+		initialSort: [
+			{ column:"Name", dir:"asc" },
+			{ column:"GuildRoleID", dir:"asc" },
+		],
+		columns: [
+			{ title:"{ui_215}", field:"Name", formatter:memberNameFormatter },
+			{ title:"{ui_205}", field:"GuildRoleID", formatter:memberRankFormatter },
+			{ title:"", field:"Options", width:60, headerSort:false, formatter:memberOptionsFormatter },
+		],
+	} );
+
+	/* Member List Options */
+	
+	$("#guild-rank-dialog").dialog( {
+		autoOpen: false, resizable: false, modal: true,
+		height: "auto", width: "auto", 
+		buttons: {
+			"{ui_221}": function() { 
+				$("form", this).submit();
+				$(this).dialog("close");
+				GuildManager.spinnerDialog();
+			},
+			"{ui_222}": function() { $(this).dialog("close"); }
+		}
+	} );
+	
+	/* Privilege Checker */
+	
+	$(".guild-privcheck-button").button().on( 'click', function() {
+		var char_id = this.dataset.char;
+		$("#guild-privcheck-dialog").dialog( {
+			modal: true, width: "auto", height: "auto",
+			buttons: { 
+				"{ui_221}": function() { $(this).dialog("close"); }
+			}
+		} );
+		$("#guild-privcheck-input").autocomplete( {
+			minLength: 1,
+			source: AllGuilds.map( function(data) {
+				return { label: data.Name, value: data.Name, id: data.ID };
+			} ),
+			search: function() {
+				$("#guild-privcheck-result").hide();
+			},
+			select: function(event, ui) {
+				var div = $("#guild-privcheck-result").empty();
+				// Start spinner
+				var spinner = new Spinner({scale:2, color:"#ffffff"}).spin( $("#guild-privcheck-dialog")[0] );
+				// Request permission info
+				var ajaxData = {
+					ajax: 'gg_privcheck',
+					guild: ui.item.id,
+					char: char_id,
+				};
+				Controller.ajax( ajaxData, false, function(data) {
+					spinner.stop();
+					// Add standing indicator
+					data.is_member || $("<p class='priv-line'>{ui_223}: " + UI_Standings[data.standing] + "</p>").appendTo(div);
+					// Add no clam indicator
+					if( data.permissions === false ) {
+						$("<p class='priv-line'>{ui_204}.</p>").appendTo(div);
+					// Build permission table
+					} else {
+						$.each( data.permissions, function(key, priv) {
+							var checkIcon = priv ? "check.png" : "stop.png";
+							$("<p class='priv-line'><img src='images/" + checkIcon + "' class='pre-icon'><img src='images/guild/permission/" + key + ".png' class='pre-icon'> " + UI_Permissions[key] + "</p>").appendTo(div);
+						} );
+					}
+					div.show();
+				} );
+			}
+		} );
+	} );
+	
+	/* Guild Charter */
+
+	$(".guildman-charter").accordion( {collapsible: true, active: false} );
+	
+	$("#guild-charter-private, #guild-charter-public").checkboxradio();
+	
+	$(".guild-charter-button").button().on( 'click', function() {
+		var dialog = $("#guild-charter-dialog");
+		// Find char and guild info
+		for( var i = 0; i < MyCharacters.length; i++ ) {
+			if( MyCharacters[i].GuildID === this.dataset.guild ) break;
+		}
+		var mychar = MyCharacters[i];
+		// Update dialog 
+		mychar.GuildCharterPublic ? $("#guild-charter-public", dialog).click() : $("#guild-charter-private", dialog).click();
+		$("textarea", dialog).text(mychar.GuildCharter);
+		$("#guild-charter-gid", dialog).val(this.dataset.guild);
+		// Open dialog
+		dialog.dialog('open');
+	} );
+	
+	$("#guild-charter-dialog").dialog( {
+		autoOpen: false, resizable: true, modal: true,
+		height: "auto", width: "auto", 
+		buttons: {
+			"{ui_221}": function() { 
+				$("form", this).submit();
+				$(this).dialog("close");
+				GuildManager.spinnerDialog();
+			},
+			"{ui_222}": function() { $(this).dialog("close"); }
+		}
+	} );
+
+</script>

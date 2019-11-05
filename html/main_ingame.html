@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<script src="js/controller.js"></script>
+</head>
+<body>
+
+{CONTENT}
+
+<script>
+
+	var livemap_id = {LIVEMAP_ID};
+	var Locale = {LOCALE_UI_JSON};
+	
+	var Controller = new NyuLivemapController();
+	$( function() {
+		Controller.minimalInit( {JSON_CONFIG}, {PRIVILEGES} );
+		Controller.showMessage( {MESSAGE} );
+	} );
+	
+</script>
+
+</body>
+</html>

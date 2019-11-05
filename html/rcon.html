@@ -1,0 +1,276 @@
+<!-- Content -->
+<div class="content-page">
+	
+	<h1>RCON Console</h1>
+	
+	<div id="tabs-container">
+		<!-- Tabs -->
+		<ul>
+			<li><a href="{REAL_LINK}#tab-players">Players</a></li>
+			<li><a href="{REAL_LINK}#tab-global">Global</a></li>
+			<li><a href="{REAL_LINK}#tab-scheduler">Scheduler</a></li>
+		</ul>
+		<!-- Players -->
+		<div id="tab-players">
+			<div id="rcon-player-wrapper">
+				<div id="rcon-player-table"></div>
+				<div id="rcon-player-spacer"></div>
+				<div id="rcon-player-control">
+					<div class="rcon-selection-control" id="rcon-kick-button">Kick<br><img src="images/rcon/kick.png"></div>
+					<div class="rcon-selection-control" id="rcon-ban-button">Ban<br><img src="images/rcon/ban.png"></div>
+					<br>
+					<div class="rcon-selection-control" id="rcon-message-button">Message<br><img src="images/rcon/message.png"></div>
+					<div class="rcon-selection-control" id="rcon-item-button">Insert Item<br><img src="images/rcon/item.png"></div>
+					<br>
+					<div class="rcon-selection-control" id="rcon-teleport-button">Teleport<br><img src="images/rcon/teleport.png"></div>
+				</div>
+			</div>
+		</div>
+		<!-- Global / Advanced -->
+		<div id="tab-global">
+			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+				<fieldset>
+					<legend>Broadcast Message</legend>
+					<div class="kv-row">
+						<div>Message</div>
+						<div>
+							<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="message" maxlength="100" style="width: 500px;">
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Display Position</div>
+						<div>
+							<select name="function" id="rcon-broadcast-function" class="ui-widget ui-widget-content ui-corner-all">
+								<option value="centerprintall">in screen center</option>
+								<option value="bottomprintall">on screen bottom</option>
+								<option value="system_msg_all">in system chat</option>
+								<option value="local_msg_all">in local chat</option>
+							</select>
+						</div>
+					</div>
+					<div class="kv-row" id="rcon-broadcast-duration">
+						<div>Display Duration</div>
+						<div>
+							<input id="rcon-broadcast-time" name="seconds" value="20"> Seconds
+						</div>
+					</div>
+					<input type="hidden" name="action" value="RCON">
+					<input type="hidden" name="command" value="broadcast">
+					<input type="submit" name="submit" value=" Send ">
+				</fieldset>
+			</form>
+			{IF:PRIV_rcon_advanced}
+			<!-- Trigger common functions -->
+			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+				<fieldset>
+					<legend>Trigger Server Functions</legend>
+					<div class="kv-row">
+						<div>Server Function</div>
+						<div>
+							<input type="radio" name="function" value="forest_grow" checked> forestStretchedMaintenance()<br>
+							<span class="hint">Triggers tree spawn and growth cycle.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div> </div>
+						<div>
+							<input type="radio" name="function" value="crops_grow"> cropsStretchedMaintenance()<br>
+							<span class="hint">Triggers one crops grow cycle.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div> </div>
+						<div>
+							<input type="radio" name="function" value="patch_maint"> stretchedPatchMaintenance()<br>
+							<span class="hint">Triggers midnight geo maintenance. Writes terraforming changes to cached files.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div> </div>
+						<div>
+							<input type="radio" name="function" value="spawn_maint"> startStretchedAnimalSpawnMaintenance()<br>
+							<span class="hint">Respawn animals at their spawn locations.</span>
+						</div>
+					</div>
+					<input type="hidden" name="action" value="RCON">
+					<input type="hidden" name="command" value="exec_function">
+					<input type="submit" name="submit" value="Execute">
+				</fieldset>
+			</form>
+			<!-- Trigger custom console command -->
+			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+				<fieldset>
+					<legend>Execute Console Command</legend>
+					Executes a custom console command. Please type it the same way you would do in the server console window.<br>
+					There is no syntax checking and no feedback or error messages will be issued here. In case of problems please check the server logfile.<br>
+					<div class="kv-row">
+						<div>Command</div>
+						<div>
+							<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="command_string" maxlength="255" style="width: 500px;">
+						</div>
+					</div>
+					<input type="hidden" name="action" value="RCON">
+					<input type="hidden" name="command" value="exec_command">
+					<input type="submit" name="submit" value=" Execute ">
+				</fieldset>
+			</form>
+			{ENDIF:PRIV_rcon_advanced}
+		</div>
+		<div id="tab-scheduler">
+			Coming Soon&trade;
+		</div>
+	</div>
+
+</div>
+
+<!-- Dialog: Kick players -->
+<div class="ui-dialog" id="rcon-kick-dialog" title="Kick Players">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<span class="rcon-selection-summary"></span>
+		<br><br>
+		<label>Kick Message: </label>
+		<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="message" maxlength="100">
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="kick">
+		<input type="hidden" class="rcon-char-list" name="characters" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: Ban players -->
+<div class="ui-dialog" id="rcon-ban-dialog" title="Ban Players">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<p>
+			<span class="rcon-selection-summary"></span>
+		</p>
+		<p>
+			<label for="ban-timed">Timed Ban</label><input type="radio" id="ban-timed" name="bantype" value="timed">
+			<label for="ban-permanent">Permanent Ban</label><input type="radio" id="ban-permanent" name="bantype" value="permanent">
+		</p>
+		<div id="rcon-ban-time">
+			<input type="range" id="rcon-ban-slider" name="duration" value="120" max="4320" min="15" step="15" style="width: 300px;"><br>
+			Ban Duration: <span id="ban-duration">2 Hours</span>
+		</div>
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="ban">
+		<input type="hidden" class="rcon-char-list" name="characters" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: Message players -->
+<div class="ui-dialog" id="rcon-message-dialog" title="Message Players">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<p>
+			<span class="rcon-selection-summary"></span>
+		</p>
+		<p>
+			<label>Message: </label> <input type="text" class="ui-widget ui-widget-content ui-corner-all" name="message" maxlength="100">
+		</p>
+		<p>
+			<label>Display Position</label>
+			<select id="rcon-message-function" name="function" class="ui-widget ui-widget-content ui-corner-all">
+				<option value="centerprint">in screen center</option>
+				<option value="bottomprint">on screen bottom</option>
+				<option value="system_msg">in system chat</option>
+				<option value="local_msg">in local chat</option>
+			</select>
+		</p>
+		<p id="rcon-message-duration">
+			<label>Display Duration</label>
+			<input id="rcon-message-time" name="seconds" value="20"> Seconds
+		</p>
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="message_player">
+		<input type="hidden" class="rcon-char-list" name="characters" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: Insert item into inventory -->
+<div class="ui-dialog" id="rcon-item-dialog" title="Insert Item">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<p>
+			<span class="rcon-selection-summary"></span>
+		</p>
+		<p>
+			<label><input id="radio-item-id" type="radio" name="item_data_type" value="id"> Item by ID</label>
+			<input type="text" id="rcon-item-id" class="ui-widget ui-widget-content ui-corner-all" name="item_id" maxlength="5">
+		</p>
+		<p>
+			<label><input id="radio-item-name" type="radio" name="item_data_type" value="name" checked> Item by Name</label>
+			<select name="item_name_id" id="rcon-item-select" class="ui-widget ui-widget-content ui-corner-all">
+				<option value="0"></option>
+				{LOOP:items}<option value="{ID}">{Name}</option>{ENDLOOP:items}
+			</select>
+		</p>
+		<p>
+			<label>Quantity</label>
+			<input id="rcon-item-quantity" name="quantity" value="1">
+		</p>
+		<p>
+			<label>Quality</label>
+			<input id="rcon-item-quality" name="quality" value="50">
+		</p>
+		<p>
+			<label>Durability</label>
+			<input id="rcon-item-durability" name="durability" value="5000">
+		</p>
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="insert_item">
+		<input type="hidden" class="rcon-char-list" name="characters" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+	
+<!-- Dialog: Teleport Player -->
+<div class="ui-dialog" id="rcon-teleport-dialog" title="Teleport Player(s)">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<p>
+			<span class="rcon-selection-summary"></span>
+		</p>
+		<p>
+			<label><input type="radio" id="teleport-togeoid" name="dst_type" value="geo_id" checked> To GeoID:</label>
+			<input type="text" id="rcon-teleport-geoid" class="ui-widget ui-widget-content ui-corner-all" name="geo_id" maxlength="10" autofocus>
+			<img src="images/marker.png" id="rcon-locate-icon" class="post-icon is-clickable" title="Select Location">
+		</p>
+		<p>
+			<label><input type="radio" id="teleport-toplayer" name="dst_type" value="player"> To Player:</label>
+			<select id="rcon-player-select" class="ui-widget ui-widget-content ui-corner-all" name="subject_id"></select>
+		</p>
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="teleport_player">
+		<input type="hidden" class="rcon-char-list" name="characters" value="">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: Location Selector -->
+<div class="ui-dialog" id="rcon-locator-dialog" title="Select Location">
+	Click anywhere on the map to select a location.<br>When done, click the 'Accept' button to translate the location to a GeoID.
+	<div id="location-selector">
+		<img src="images/marker.png">
+	</div>
+</div>
+
+<script>
+
+	// Tabulator in ui-tabs fix
+	$("#tabs-container").tabs( {
+		activate: function(event, ui) {
+			Controller.rcon.playerTable.redraw();
+		}
+	} );
+	
+	$("#rcon-broadcast-function").on( 'change', function() {
+		$("#rcon-broadcast-duration").toggle( this.value.search("print") !== -1 );
+	} );
+	
+	$("#rcon-broadcast-time").spinner( {
+		min: 5, max: 300, step: 1
+	} );
+	
+	$("#tab-global input[type=submit]").button();
+
+
+</script>

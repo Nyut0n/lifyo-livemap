@@ -1,0 +1,132 @@
+<!-- Content -->
+<div class="content-page">
+
+	<h1>Group: {name}</h1>
+
+	{IF:isGMGroup}System group for GMs. Characters whose account is a permanent GM are members of this group automatically.<br><br>{ENDIF:isGMGroup}
+	{IF:isVisitorGroup}System group for regular visitors. Configure the default visitor access level for the livemap here.<br><br>{ENDIF:isVisitorGroup}
+
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+	
+		<fieldset>
+			<legend>Group</legend>
+			<div class="kv-row">
+				<div>Group Name</div>
+				<div><input type="text" name="name" value="{name}" maxlength="50"{IF:isProtected} style="cursor: not-allowed;" disabled{ENDIF:isProtected}></div>
+			</div>
+		</fieldset>
+		
+		{IFNOT:isVisitorGroup}
+		<fieldset>
+			<legend>Password Login</legend>
+			<div class="kv-row">
+				<div>Allow Password Login</div>
+				<div><label for="pw-enable">Enable</label><input id="pw-enable" type="radio" name="enable_pw" value="1"><label for="pw-disable">Disable</label><input id="pw-disable" type="radio" name="enable_pw" value="0"></div>
+			</div>
+			<div id="pw-row" class="kv-row">
+				<div>New Password</div>
+				<div><input type="password" name="login_pw" value=""></div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Steam Accounts</legend>
+			<div class="kv-row">
+				<div>Allow Steam Login</div>
+				<div><label for="steam-enable">Enable</label><input id="steam-enable" type="radio" name="enable_steam" value="1"><label for="steam-disable">Disable</label><input id="steam-disable" type="radio" name="enable_steam" value="0"></div>
+			</div>
+			<div id="steam-acc" class="kv-row">
+				<div>Steam Accounts</div>
+				<div><ul id="steam-list"></ul></div>
+			</div>
+			<div id="steam-add" class="kv-row">
+				<div>Add SteamID</div>
+				<div><input id="add-steamid" type="text" name="addsteamid"> <button id="button-add" type="button">Add</button></div>
+			</div>
+		</fieldset>
+		{ENDIFNOT:isVisitorGroup}
+	
+		<fieldset>
+			<legend>Feature Access</legend>
+			{LOOP:privs}
+			<p class="fieldset-item"><input type="checkbox" name="privileges[]" value="{key}" {IF:isset} checked{ENDIF:isset}> {name} &nbsp; <span class="hint">{descr}</span></p>
+			{ENDLOOP:privs}
+		</fieldset>
+
+		<input type="hidden" name="group_id" value="{group_id}">
+		<input type="hidden" name="action" value="ChangeGroup">
+		<button id="button-save" type="submit"><span class="ui-icon ui-icon-disk"></span> Save Group</button>
+		<a id="button-cancel" href="index.php?livemap_id={LIVEMAP_ID}&s=conf#tab-groups">Cancel</a>
+		
+	</form>
+
+</div>
+
+<script>
+
+	function buildMemberList() {
+		var ul = $("#steam-list");
+		ul.empty();
+		steam_members.forEach( function(account) {
+			var li = $("<li></li>");
+			var link = $("<a href=\"http://steamcommunity.com/profiles/" + account.SteamID + "\" target=\"_blank\">" + account.SteamID + "</a>");
+			var input = $("<input type=\"hidden\" name=\"steamid[]\" value=\"" + account.SteamID + "\">");
+			var span = $("<span class=\"hint\">&nbsp;&nbsp;" + account.Characters.join(", ") + "</span>");
+			var icon = $("<span class=\"ui-icon ui-icon-trash is-clickable post-icon\" title=\"Delete from group\"></span>");
+			li.append(link);
+			if( account.Static ) {
+				li.prepend("[GM] ");
+			} else {
+				li.append(icon);
+				li.append(input);
+			}
+			li.append(span);
+			ul.append(li);
+			// Delete action
+			icon.on('click', function() {
+				$(this.parentNode).remove();
+			} );
+		} );
+	}
+	
+	// Style buttons
+	$("input, select").addClass("ui-widget ui-widget-content ui-corner-all");
+	$("#button-save, #button-cancel").button();
+	
+	// Enable-Disable Password Login
+	$("input[name=enable_pw]").checkboxradio().on( 'click', function() {
+		$("#pw-row").toggle( $(this).val() == 1 );
+	} );
+	
+	// Enable-Disable Steam Login
+	$("input[name=enable_steam]").checkboxradio().on( 'click', function() {
+		$("#steam-acc").toggle( $(this).val() == 1 );
+		$("#steam-add").toggle( $(this).val() == 1 );
+	} );
+
+	// Add Steam User
+	$("#button-add").button().on( 'click', function() {
+		var input = $("#add-steamid");
+		var value = input.val();
+		var regex = /\d{17}/
+		if( ! regex.test(value) ) {
+			alert("Invalid SteamID. Must be a 17-digit number.");
+			return false;
+		}
+		steam_members.push( {SteamID: value, Static: false, Characters: ["*new (Save group to apply)"]} );
+		input.val('');
+		buildMemberList();
+	} );
+	
+	// Set Data
+	var steam_members  = {members};
+	
+	// Set config
+	{IF:pwlogin}$("#pw-enable").click();{ENDIF:pwlogin}
+	{IFNOT:pwlogin}$("#pw-disable").click();{ENDIFNOT:pwlogin}
+	{IF:steamlogin}$("#steam-enable").click();{ENDIF:steamlogin}
+	{IFNOT:steamlogin}$("#steam-disable").click();{ENDIFNOT:steamlogin}
+	
+	buildMemberList();
+
+</script>

@@ -1,0 +1,595 @@
+<!-- Content -->
+<div class="content-page">
+
+	<h1>Livemap Configuration</h1>
+
+	{IF:UPDATER_EXISTS}
+	<div id="updater-warning"><img src="images/warn.png" class="pre-icon">The Livemap was updated. For security reasons, please delete the <b>includes/updater.php</b> file from your webserver now.</div>
+	{ENDIF:UPDATER_EXISTS}
+	
+	<div id="tabs-container">
+		<ul>
+			<li><a href="{REAL_LINK}#tab-general">General</a></li>
+			<li><a href="{REAL_LINK}#tab-appearance">Appearance</a></li>
+			<li><a href="{REAL_LINK}#tab-customdata">Custom Data</a></li>
+			<li><a href="{REAL_LINK}#tab-groups">Groups & Permissions</a></li>
+			<li><a href="{REAL_LINK}#tab-info">Information</a></li>
+			<li><a href="{REAL_LINK}#tab-logs">Logs</a></li>
+		</ul>
+		<!-- General -->
+		<div id="tab-general">
+			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST" enctype="multipart/form-data">
+				<!-- General Settings -->
+				<fieldset>
+					<legend>Livemap Settings</legend>
+					<div class="kv-row">
+						<div>Livemap Title</div>
+						<div>
+							<input type="text" name="title" value="{title}">
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Frontend Language</div>
+						<div>
+							<select name="language">
+								{LOOP:languages}<option value="{shortcut}"{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:languages}
+							</select>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Guild Management</div>
+						<div>
+							<select name="guildmanager">
+								<option value="1">Enabled</option>
+								<option value="0"{IFNOT:guildmanager} selected{ENDIFNOT:guildmanager}>Disabled</option>
+							</select><br>
+							<span class="hint">A page where players can login though Steam and manage their guild online. Required for GuildGUI Mod.</span>
+						</div>
+					</div>
+				</fieldset>
+				<!-- Server Details -->
+				<fieldset>
+					<legend>Server Details</legend>
+					<div class="kv-row">
+						<div>Server dayCycle</div>
+						<div>
+							<input id="conf-daycycle" name="daycycle" value="{daycycle}"><br>
+							<span class="hint">Match with your server configuration. Required to calculate in-game time/date and show weather info.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Daily Restart(s)</div>
+						<div>
+							<input type="text" name="restarts" value="{restarts}"><br>
+							<span class="hint">Use 24-hour HH:MM format of server timezone. Use blank space to seperate multiple times.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Server Timezone</div>
+						<div>
+							<select name="timezone">
+								{LOOP:timezones}<option{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:timezones}
+							</select>
+						</div>
+					</div>
+				</fieldset>
+				<!-- Weather File -->
+				<fieldset>
+					<legend>Weather Source File</legend>
+					{IF:FEUDALTOOLS}
+					<div class="kv-row">
+						<div>Weather XML File</div>
+						<div>
+							{IF:DEFAULT_WEATHER}Using original/unmodified cm_weather1.xml{ENDIF:DEFAULT_WEATHER}
+							{IFNOT:DEFAULT_WEATHER}Using uploaded custom cm_weather1.xml{ENDIFNOT:DEFAULT_WEATHER}
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Replace With</div>
+						<div><input type="file" name="weather_xml"></div>
+					</div>
+					{ENDIF:FEUDALTOOLS}
+					{IFNOT:FEUDALTOOLS}
+					<div class="kv-row">
+						<div>Weather XML File</div>
+						<div>
+							/weather/cm_weather1.xml<br>
+							<span class="hint">Replace the file manually on the webserver filesystem if necessary.</span>
+						</div>
+					</div>
+					{ENDIFNOT:FEUDALTOOLS}
+				</fieldset>
+				<!-- Links & Social -->
+				<fieldset>
+					<legend>Links & Social</legend>
+					<div class="kv-row">
+						<div>Server Website</div>
+						<div><input type="text" name="homepage" value="{homepage}"></div>
+					</div>
+					<div class="kv-row">
+						<div>Discord Server</div>
+						<div><input type="text" name="discord" value="{discord}"></div>
+					</div>
+					<div class="kv-row">
+						<div>Teamspeak Server</div>
+						<div><input type="text" name="teamspeak" value="{teamspeak}"></div>
+					</div>
+				</fieldset>
+				<!-- Rules -->
+				<fieldset>
+					<legend>Server Rules</legend>
+					<textarea id="conf-rules" name="rules">{SanitizedRules}</textarea>
+				</fieldset>
+				<input type="hidden" name="action" value="ChangeConfig">
+				<button type="submit"><span class="ui-icon ui-icon-disk"></span> Save Changes</button>
+			</form>
+		</div>
+		<!-- Appearance -->
+		<div id="tab-appearance">
+			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST" enctype="multipart/form-data">
+				<fieldset>
+					<legend>Appearance</legend>
+					<!-- Left -->
+					<div class="kv-split-left">
+						<div class="kv-row">
+							<div>Map Background Color</div>
+							<div><input name="color_bg" class="jscolor" value="{color_bg}"></div>
+						</div>
+						<div class="kv-row">
+							<div><input id="show-label-checkbox" name="show_labels" type="checkbox" value="1" {IF:SHOW_LABELS}checked{ENDIF:SHOW_LABELS}> Show Claim Labels</div>
+							<div>&nbsp;</div>
+						</div>
+						<div class="kv-row claim-label-group">
+							<div>&nbsp;&dlcorn;Claim Label Color</div>
+							<div><input name="color_label" class="jscolor" value="{color_label}"></div>
+						</div>
+						<div class="kv-row claim-label-group">
+							<div>&nbsp;&dlcorn;Claim Label Font</div>
+							<div>
+								<select name="font_claimlabel">
+									{LOOP:fonts_claimlabel}<option style="font-family: '{name}';"{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:fonts_claimlabel}
+								</select>
+							</div>
+						</div>
+						<div class="kv-row">
+							<div>Claim Border Style</div>
+							<div>
+								<select name="style_claim">
+									{LOOP:claimstyles}<option{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:claimstyles}
+								</select>
+							</div>
+						</div>
+						<div class="kv-row">
+							<div>Claim Border Thickness</div>
+							<div>
+								<select name="width_claim">
+									{LOOP:claimthickness}<option{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:claimthickness}
+								</select>
+							</div>
+						</div>
+						<div class="kv-row">
+							<div>Tooltip Style</div>
+							<div>
+								<select name="style_tooltip">
+									{LOOP:tooltips}<option{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:tooltips}
+								</select>
+							</div>
+						</div>
+						<div class="kv-row">
+							<div>Tooltip Font</div>
+							<div>
+								<select name="font_claimdetail">
+									{LOOP:fonts_claimdetail}<option style="font-family: '{name}';"{IF:selected} selected{ENDIF:selected}>{name}</option>{ENDLOOP:fonts_claimdetail}
+								</select>
+							</div>
+						</div>
+					</div>
+					<!-- Right -->
+					<div class="kv-split-right">
+						<div class="kv-row">
+							<div><img src="images/guild/tier/1.png"> T1 Guild Claim Color</div>
+							<div><input name="color_claim_t1" class="jscolor" value="{color_claim_t1}"></div>
+						</div>
+						<div class="kv-row">
+							<div><img src="images/guild/tier/2.png"> T2 Guild Claim Color</div>
+							<div><input name="color_claim_t2" class="jscolor" value="{color_claim_t2}"></div>
+						</div>
+						<div class="kv-row">
+							<div><img src="images/guild/tier/3.png"> T3 Guild Claim Color</div>
+							<div><input name="color_claim_t3" class="jscolor" value="{color_claim_t3}"></div>
+						</div>
+						<div class="kv-row">
+							<div><img src="images/guild/tier/4.png"> T4 Guild Claim Color</div>
+							<div><input name="color_claim_t4" class="jscolor" value="{color_claim_t4}"></div>
+						</div>
+					</div>
+				</fieldset>
+				<!-- Map Image -->
+				<fieldset>
+					<legend>Map Images</legend>
+					<div class="kv-split-left">
+						<div class="kv-row">
+							<div>Primary Map Image</div>
+							<div><input type="checkbox" name="enable_default" disabled="disabled" checked> Enabled</div>
+						</div>
+						{IFNOT:FEUDALTOOLS}
+						<div class="kv-row">
+							<div>Filename</div>
+							<div>default.jpg</div>
+						</div>
+						{ENDIFNOT:FEUDALTOOLS}
+						<img class="map-preview" src="{mapfile_default}">
+						{IF:FEUDALTOOLS}
+						<br>Replace:<br>
+						<input type="file" name="mapfile_default">
+						{ENDIF:FEUDALTOOLS}
+					</div>
+					<div class="kv-split-right">
+						<div class="kv-row">
+							<div>Secondary Map Image</div>
+							<div><input type="checkbox" name="alt_map"{IF:ENABLE_ALTMAP} checked{ENDIF:ENABLE_ALTMAP}> Enabled</div>
+						</div>
+						{IFNOT:FEUDALTOOLS}
+						<div class="kv-row">
+							<div>Filename</div>
+							<div>alternative.jpg</div>
+						</div>
+						{ENDIFNOT:FEUDALTOOLS}
+						<img class="map-preview" src="{mapfile_alternative}">
+						{IF:FEUDALTOOLS}
+						<br>Replace:<br>
+						<input type="file" name="mapfile_alternative">
+						{ENDIF:FEUDALTOOLS}
+					</div>
+				</fieldset>
+				<input type="hidden" name="action" value="ChangeAppearance">
+				<button type="submit"><span class="ui-icon ui-icon-disk"></span> Save Changes</button>
+			</form>
+		</div>
+		<!-- Custom Data -->
+		<div id="tab-customdata">
+			<button id="new-poi-button"><span class="ui-icon ui-icon-plus"></span> New POI</button> 
+			<button id="new-area-button"><span class="ui-icon ui-icon-plus"></span> New Area</button>
+			<button id="cancel-button"><span class="ui-icon ui-icon-cancel"></span> Cancel</button>
+			<br><br>
+			<div id="customdata-map"></div>
+		</div>
+		<!-- Groups & Permissions -->
+		<div id="tab-groups">
+			{LOOP:groups}
+			<div class="group-container">
+				<div class="group-buttons">
+					<a href="index.php?livemap_id={LIVEMAP_ID}&s=group&id={ID}" class="conf-ui-button"><span class="ui-icon ui-icon-pencil"></span> Edit</a>
+					{IFNOT:isProtected}<a href="index.php?livemap_id={LIVEMAP_ID}&action=DeleteGroup&id={ID}" class="conf-ui-button"><span class="ui-icon ui-icon-trash"></span> Delete</a>{ENDIFNOT:isProtected}
+				</div>
+				<span class="group-title">
+					{IF:isVisitorGroup}<img src="images/group-anonymous.png" title="System Group">{ENDIF:isVisitorGroup}
+					{IF:isGMGroup}<img src="images/group-gamemasters.png" title="System Group">{ENDIF:isGMGroup}
+					{IFNOT:isProtected}<img src="images/group-custom.png" title="Custom Group">{ENDIFNOT:isProtected}
+					{name}
+				</span>
+				<br>
+				{IFNOT:isVisitorGroup}
+				Password Login:
+				{IF:passwordLogin}<img src="images/check.png"> Enabled<br>{ENDIF:passwordLogin}
+				{IFNOT:passwordLogin}<img src="images/stop.png"> Disabled<br>{ENDIFNOT:passwordLogin}
+				Steam Login:
+				{IF:steamLogin}<img src="images/check.png"> Enabled ({memcount} SteamIDs assigned)<br>{ENDIF:steamLogin}
+				{IFNOT:steamLogin}<img src="images/stop.png"> Disabled<br>{ENDIFNOT:steamLogin}
+				{ENDIFNOT:isVisitorGroup}
+				{privCount} privileges assigned <img id="privgroup-{ID}" class="has-tooltip" src="images/tooltip.png">		
+			</div>
+			{ENDLOOP:groups}
+			<button type="button" id="button-newgroup"><span class="ui-icon ui-icon-plus"></span> New Group</button>
+		</div>
+		<!-- Information -->
+		<div id="tab-info">
+			{IFNOT:FEUDALTOOLS}
+			<fieldset>
+				<legend>Webserver</legend>
+				<div class="kv-row">
+					<div>PHP Version</div>
+					<div>{PHP_VERSION}</div>
+				</div>
+				<div class="kv-row">
+					<div>PHP Architecture</div>
+					<div>
+						{IF:ARCH_OK}<img src="images/check.png" class="pre-icon">{ENDIF:ARCH_OK}
+						{IFNOT:ARCH_OK}<img src="images/stop.png" class="pre-icon">{ENDIFNOT:ARCH_OK}
+						{PHP_ARCH_TEXT}<br>
+						<span class="hint">{PHP_ARCH_HINT}</span>
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Outbound Connections</div>
+					<div>
+						{IF:ALLOW_FSOCKOPEN}<img src="images/check.png" class="pre-icon"> Allowed{ENDIF:ALLOW_FSOCKOPEN}
+						{IFNOT:ALLOW_FSOCKOPEN}<img src="images/stop.png" class="pre-icon"> Not allowed <span class="hint">'fsockopen' function is disabled in PHP settings. Won't be able to communicate with LiF Server.</span>{ENDIFNOT:ALLOW_FSOCKOPEN}
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>PHP Info</div>
+					<div><a href="index.php?livemap_id={LIVEMAP_ID}&action=PHPinfo" target="_blank">&raquo; View PHPinfo Page</a></div>
+				</div>
+			</fieldset>
+			{ENDIFNOT:FEUDALTOOLS}
+			<fieldset>
+				<legend>TTmod Status</legend>
+				<div class="kv-row">
+					<div>Status</div>
+					<div>
+						{IF:MOD_INSTALLED}<img src="images/check.png" class="pre-icon"> Installed{ENDIF:MOD_INSTALLED}
+						{IFNOT:MOD_INSTALLED}<img src="images/stop.png" class="pre-icon"> Not installed{ENDIFNOT:MOD_INSTALLED}
+						<br><span class="hint">Required for certain optional features. You can find the latest version <a href="https://nyuton.net/ttmod-lifyo-server-mod/" target="_blank">here</a>.</span>
+					</div>
+				</div>
+				{IF:MOD_INSTALLED}
+				<div class="kv-row">
+					<div>Version</div>
+					<div>
+						{IF:ttmod_up2date}<img src="images/check.png" class="pre-icon"> {ttmod_version}{ENDIF:ttmod_up2date}
+						{IFNOT:ttmod_up2date}
+						<img src="images/stop.png" class="pre-icon"> {ttmod_version}
+						<span class="hint">You are using an outdated version of TTmod. Please download and install latest version.</span>
+						{ENDIFNOT:ttmod_up2date}
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>First Status</div>
+					<div>
+						{ttmod_tracker_start}<br>
+						<span class="hint">TTmod is tracking player online statistics since this date.</span>
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Last Heartbeat</div>
+					<div>
+						{IF:ttmod_healthy}<img src="images/check.png" class="pre-icon">{ENDIF:ttmod_healthy}
+						{IFNOT:ttmod_healthy}<img src="images/stop.png" class="pre-icon">{ENDIFNOT:ttmod_healthy}
+						{ttmod_sec} seconds ago<br>
+						{IFNOT:ttmod_healthy}<span class="hint">TTmod updates this status every 5 minutes. Either your server has been offline or it isn't loading TTmod anymore. Please check.</span>{ENDIFNOT:ttmod_healthy}
+					</div>
+				</div>
+				{ENDIF:MOD_INSTALLED}
+				<div class="kv-row">
+					<div>GuildGUI Address</div>
+					<div>
+						<input type="text" value="{GuildGUI_URL}" style="width: 500px !important;" readonly><br>
+						<span class="hint">copy/paste this to your TTmod config.cs file to enable GuildGUI for players.</span>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<!-- Logs -->
+		<div id="tab-logs">
+			<div id="log-table"></div>
+			<br>
+			<a href="index.php?livemap_id={LIVEMAP_ID}&action=ClearLogs" id="button-clearlogs"><span class="ui-icon ui-icon-trash"></span> Clear Logs</a>
+		</div>
+	</div>
+	
+	<!-- Dialog: New Group -->
+	<div id="dialog-newgroup" class="ui-dialog" title="Create New Group">
+		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+			Group Name: <input type="text" maxlength="50" name="groupname" class="ui-widget ui-widget-content ui-corner-all">
+			<input type="hidden" name="action" value="AddGroup">
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	
+	<!-- Dialog: New POI -->
+	<div id="conf-poi-dialog" class="ui-dialog" title="Create Point of Interest">
+		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+			<fieldset>
+				<legend>Point of Interest</legend>
+				<div class="kv-row">
+					<div>POI Name</div>
+					<div>
+						<input type="text" name="poi_name" maxlength="30">
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Short Description</div>
+					<div>
+						<input type="text" name="poi_desc" maxlength="200"><br>
+						<span class="hint">Optional descriptive text (max 200 characters)</span>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Marker Icon</legend>
+				<div class="kv-row">
+					<div>Icon Image</div>
+					<div>
+						{LOOP:poi_icons}<div class="conf-poi-icon" data-file="{file}">{svg}</div>{ENDLOOP:poi_icons}
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Icon Color</div>
+					<div>
+						<input name="poi_color" id="conf-poi-color" value="#FFFFFF">
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Icon Size</div>
+					<div>
+						<select name="poi_size">
+							<option value="16">16 pixel</option>
+							<option value="24">24 pixel</option>
+							<option value="32">32 pixel</option>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			<input type="hidden" id="conf-poi-icon" name="poi_icon" value="">
+			<input type="hidden" id="conf-poi-geoid" name="poi_geoid" value="">
+			<input type="hidden" name="action" value="AddPoi">
+			<input type="submit" tabindex="-1">
+		</form>
+	</div>
+	
+	<!-- Dialog: New Area -->
+	<div id="conf-area-dialog" class="ui-dialog" title="Create Area Overlay">
+		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+			<fieldset>
+				<legend>Area</legend>
+				<div class="kv-row">
+					<div>Area Name</div>
+					<div>
+						<input type="text" name="area_name" maxlength="30">
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Short Description</div>
+					<div>
+						<input type="text" name="area_desc" maxlength="200"><br>
+						<span class="hint">Optional descriptive text (max 200 characters)</span>
+					</div>
+				</div>
+				<div class="kv-row">
+					<div>Color</div>
+					<div>
+						<input name="area_color" id="conf-area-color" value="#FFFFFF">
+					</div>
+				</div>
+			</fieldset>
+			<input type="hidden" id="conf-area-geometry" name="area_geometry" value="">
+			<input type="hidden" name="action" value="AddArea">
+			<input type="submit" tabindex="-1">
+		</form>
+	</div>
+
+</div>
+
+<script src="js/jscolor.min.js"></script>
+<script src="js/configmap.js"></script>
+<script>
+
+	var PoiData  = {poi_json};
+	var AreaData = {area_json};
+	
+	// Group tooltips
+	{LOOP:groups}
+	$("#privgroup-{ID}").tooltip( {items: "img", content: "<ul class=\"group-privlist\">{LOOP:privileges}<li>{priv_name}</li>{ENDLOOP:privileges}</ul>"} );
+	{ENDLOOP:groups}
+	
+	// Style form with jquery-ui
+	$("select, textarea, input:not(#conf-daycycle)").addClass("ui-widget ui-widget-content ui-corner-all");
+	$("button[type=submit]").button();
+	$(".conf-ui-button").button();
+	$("#conf-daycycle").spinner( {min: 1.0, max: 24.0, step: 0.1} );
+	
+	function logActionFormatter( cell ) {
+		switch( cell.getValue() ) {
+			case 'cdata_poi':			return 'Created new point of interest';
+			case 'cdata_area':			return 'Created new custom area';
+			case 'cdata_remove':		return 'Removed PoI or custom area';
+			case 'config_general':		return 'Changed general configuration';
+			case 'config_appearance':	return 'Changed appearance settings';
+			case 'config_clearlog':		return 'Cleared logs';
+			case 'chman_delete':		return 'Characters were deleted';
+			case 'chman_ban':			return 'Account(s) were banned';
+			case 'chman_unban':			return 'Account(s) were unbanned';
+			case 'chman_disable':		return 'Characters were disabled';
+			case 'chman_enable':		return 'Characters were enabled';
+			case 'chman_align':			return 'Characters alignments were changed';
+			case 'chman_rename':		return 'Character was renamed';
+			case 'chman_item':			return 'Insert item to players inventory';
+			case 'chman_makegm':		return 'Promoted permanent GM(s)';
+			case 'rcon_message_all':	return 'Message to all players';
+			case 'rcon_teleport':		return 'Player(s) teleported';
+			case 'rcon_exec_function':	return 'Execute server function';
+			case 'rcon_exec_command':	return 'Execute custom server command';
+			case 'rcon_kick_player':	return 'Player kicked from server';
+			case 'rcon_ban_player':		return 'Player banned from server';
+			case 'rcon_message_player':	return 'Message sent to player';
+			case 'rcon_insert_item':	return 'Insert item to players inventory';
+			case 'group_add':			return 'Created new user group';
+			case 'group_edit':			return 'Edited user group';
+			case 'group_delete':		return 'Deleted user group';
+			default:					return cell.getValue();
+		}
+	}
+	
+	function logModuleFormatter( cell ) {
+		switch( cell.getData().action.split("_")[0] ) {
+			case 'config':	return 'Livemap Configuration';
+			case 'group':	return 'User Groups';
+			case 'chman':	return 'Character Management';
+			case 'rcon':	return 'RCON Console';
+			case 'cdata':	return 'Custom Data';
+			default:		return cell.getValue();
+		}
+	}
+	
+	var TabbedTabulators = [];
+	var CustomDataMap = null;
+
+	TabbedTabulators.push( new Tabulator( "#log-table", {
+		layout:"fitColumns",
+		tooltips:false,	
+		pagination:"local",
+		paginationSize:20,
+		movableColumns:true,	
+		resizableRows:false,
+		placeholder:"No actions logged yet.",
+		index:"ID",
+		data: {json_logs},
+		columns:[
+			{title:"Time", field:"timestamp", sorter:"string", width:155},
+			{title:"Module", field:"module", sorter:"string", width: 160, formatter:logModuleFormatter},
+			{title:"Login Group", field:"user_group", sorter:"string", width:150},
+			{title:"Action", field:"action", sorter:"string", widthGrow:1, tooltip:true, formatter:logActionFormatter},
+			{title:"Details", field:"detail", widthGrow:2, headerSort:false, tooltip:true},
+		],
+	} ) );
+	
+	// Toggle show label
+	{IFNOT:SHOW_LABELS}$(".claim-label-group").toggle();{ENDIFNOT:SHOW_LABELS}
+	$("#show-label-checkbox").click( function() {
+		$(".claim-label-group").toggle(this.checked);
+	} );
+	
+	// Tabulator and leaflet in ui-tabs fix
+	$("#tabs-container").tabs( {
+		activate: function(event, ui) {
+			TabbedTabulators.forEach( function(table) { table.redraw(); } );
+			if( CustomDataMap === null && ui.newPanel[0].id === 'tab-customdata' ) {
+				CustomDataMap = Object.create(ConfigMap).init(Controller.config);
+			}
+		},
+		create: function(event, ui) {
+			if( CustomDataMap === null && ui.panel[0].id === 'tab-customdata' ) {
+				var interval = setInterval(function () {
+					if( typeof Controller !== 'undefined' && Controller.config !== null ) {
+						CustomDataMap = Object.create(ConfigMap).init(Controller.config);
+						clearInterval(interval);
+					}
+				}, 500);
+			}
+		}
+	} );
+	
+	// New Group Dialog
+	$("#button-newgroup").button().on( 'click', function() {
+		$("#dialog-newgroup").dialog( {
+			width: 400,
+			buttons: {
+				"Create Group": function() { 
+					$(this).find("form").submit();
+					$(this).dialog("close");
+				},
+				"Cancel": function() { $(this).dialog("close"); }
+			}
+		} );
+	} );
+	
+	// Clear Logs Button
+	$("#button-clearlogs").button().on( 'click', function(e) {
+		if( ! confirm("Clearing logs can't be undone. Are you sure?") ) {
+			e.preventDefault();
+			return false;
+		}
+	} );
+
+</script>

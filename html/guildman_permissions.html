@@ -1,0 +1,256 @@
+<!-- Content -->
+<div class="content-page">
+
+	<h1><a href="index.php?livemap_id={LIVEMAP_ID}&s=guildman">{MyGuildName}</a> &raquo; {ui_207}</h1>
+
+	<div id="tabs-container">
+		<ul>
+			<li><a href="{REAL_LINK}#tab-rank">{ui_205}</a></li>
+			<li><a href="{REAL_LINK}#tab-standing">{ui_206}</a></li>
+			<li><a href="{REAL_LINK}#tab-guild">{ui_225}</a></li>
+			<li><a href="{REAL_LINK}#tab-char">{ui_226}</a></li>
+		</ul>
+		<!-- Rank -->
+		<div id="tab-rank">
+			<h3>{ui_205} {ui_207}</h3>
+			<div id="rank-table"></div>
+		</div>
+		<!-- Standing -->
+		<div id="tab-standing">
+			<h3>{ui_206} {ui_207}</h3>
+			<div id="standing-table"></div>
+		</div>
+		<!-- Guild -->
+		<div id="tab-guild">
+			<h3>{ui_225}</h3>
+			<div id="guild-table"></div>
+			<button id="guild-rule-button"><span class="ui-icon ui-icon-plus"></span> {ui_227}</button>
+		</div>
+		<!-- Character -->
+		<div id="tab-char">
+			<h3>{ui_226}</h3>
+			<div id="char-table"></div>
+			<button id="char-rule-button"><span class="ui-icon ui-icon-plus"></span> {ui_227}</button>
+		</div>
+	</div>
+	
+	<br>
+	<button id="back-button"><span class="ui-icon ui-icon-arrowreturnthick-1-w"></span> {ui_19}</button>
+
+</div>
+
+<!-- Dialog: New Guild Rule -->
+<div id="guild-rule-dialog" class="ui-dialog" title="{ui_227}">
+	<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}">
+		{ui_212}: <input id="target-guild-name" class="ui-widget ui-widget-content ui-corner-all" name="target_guild_name">
+		<input type="hidden" name="action" value="GUILDMAN">
+		<input type="hidden" name="command" value="add_rule">
+		<input type="hidden" id="target-guild-id" name="target_guild_id" value="">
+		<input type="hidden" name="source_guild_id" value="{MyGuildID}">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<!-- Dialog: New Character Rule -->
+<div id="char-rule-dialog" class="ui-dialog" title="{ui_227}">
+	<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}">
+		{ui_228}: <input id="target-char-name" class="ui-widget ui-widget-content ui-corner-all" name="target_char_name">
+		<input type="hidden" name="action" value="GUILDMAN">
+		<input type="hidden" name="command" value="add_rule">
+		<input type="hidden" id="target-char-id" name="target_char_id" value="">
+		<input type="hidden" name="source_guild_id" value="{MyGuildID}">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+<script type="text/javascript" src="js/guildmanager.js"></script>
+<script>
+
+	var UI_Ranks = {JSON_RANKS};
+	var UI_Permissions = {JSON_PERMISSIONS};
+	var GuildTypes = {JSON_GUILDTYPES};
+	var GuildStandings = {JSON_STANDINGS};
+	var StandingColors = ['#EEE', '#EC7600', '#E5C541', '#EEE', 'YellowGreen', 'Lime'];
+	var AllGuilds = {JSON_ALL_GUILDS};
+	var AllChars = {JSON_ALL_CHARS};
+	
+	/* Permission Tables */
+
+	function rankPermissionFormatter( cell ) {
+		var id = cell.getValue();
+		return "<img src=\"images/guild/rank/" + id + ".png\" class=\"pre-icon\">" + UI_Ranks["1"][id];
+	}
+	
+	function standingPermissionFormatter( cell ) {
+		var id = cell.getValue();
+		return "<span style=\"color: " + StandingColors[id] + ";\">" + GuildStandings[id] + "</span>";
+	}
+	
+	function charPermissionFormatter( cell ) {
+		var data = cell.getData();
+		return data.Name + " " + data.LastName;
+	}
+		
+	function permissionChanger( e, cell ) {
+		var initialValue = cell.getValue();
+		var element = cell.getElement();
+		var data = cell.getData();
+		// Freeze row
+		if( data.frozen ) return false;
+		cell.getRow().update({"frozen":true});
+		// Clear cell, show spinner
+		$(element).empty();
+		new Spinner({scale:0.5, color:"#ffffff"}).spin(element);
+		// Update permission
+		var ajaxData = {
+			ajax: "gg_togglepriv",
+			which: cell.getField(),
+			sourceGuild: cell.getTable().sourceGuild,
+			subjectType: cell.getTable().subjectType,
+			subjectID: data[cell.getTable().subjectField],
+		};
+		Controller.ajax( ajaxData, false, function(response) {
+			if( response.success ) {
+				// Success - update row, show notification
+				cell.setValue(response.value);
+				Controller.showMessageNotification('success', 'Permission Updated');
+			} else {
+				// Failure - revert row, show error
+				Controller.showMessageNotification('error', 'Permission Update Failed');
+				cell.setValue(initialValue);
+			}
+			// Unfreeze row
+			cell.getRow().update({"frozen":false});
+		} );
+	}
+	
+	var TabbedTabulators = [];
+	var columnDefinitions = {
+		CanEnter: { title:"<img src='images/guild/permission/enter.png'>", field:"CanEnter", width:32, cssClass:"permission-col", headerTooltip:UI_Permissions.CanEnter, formatter:"tickCross", cellClick:permissionChanger },
+		CanBuild: { title:"<img src='images/guild/permission/build.png'>", field:"CanBuild", width:32, cssClass:"permission-col", headerTooltip:UI_Permissions.CanBuild, formatter:"tickCross", cellClick:permissionChanger },
+		CanClaim: { title:"<img src='images/guild/permission/claim.png'>", field:"CanClaim", width:32, cssClass:"permission-col", headerTooltip:UI_Permissions.CanClaim, formatter:"tickCross", cellClick:permissionChanger },
+		CanUse: { title:"<img src='images/guild/permission/use.png'>", field:"CanUse", width:32, cssClass:"permission-col", headerTooltip:UI_Permissions.CanUse, formatter:"tickCross", cellClick:permissionChanger },
+		CanDestroy: { title:"<img src='images/guild/permission/destroy.png'>", field:"CanDestroy", width:32, cssClass:"permission-col", headerTooltip:UI_Permissions.CanDestroy, formatter:"tickCross", cellClick:permissionChanger },
+	};
+	
+	TabbedTabulators.push( new Tabulator( "#rank-table", {
+		layout:"fitColumns", headerSort: false, selectable: false,
+		data: {JSON_RANK_PERMISSIONS},
+		columns:[
+			{ title:"{ui_205}", field:"GuildRoleID", formatter:rankPermissionFormatter },
+			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+			
+		],
+		tableBuilt: function() {
+			this.subjectType = "rank";
+			this.subjectField = "GuildRoleID";
+			this.sourceGuild = {MyGuildID};
+		}
+	} ) );
+	
+	TabbedTabulators.push( new Tabulator( "#standing-table", {
+		layout:"fitColumns", headerSort: false, selectable: false,
+		data: {JSON_STANDING_PERMISSIONS},
+		columns:[
+			{ title:"{ui_223}", field:"StandingTypeID", formatter:standingPermissionFormatter },
+			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+		],
+		tableBuilt: function() {
+			this.subjectType = "standing";
+			this.subjectField = "StandingTypeID";
+			this.sourceGuild = {MyGuildID};
+		}
+	} ) );
+	
+	TabbedTabulators.push( new Tabulator( "#guild-table", {
+		layout:"fitColumns", headerSort: false, selectable: false,
+		data: {JSON_GUILD_PERMISSIONS},
+		placeholder: "{ui_229}",
+		columns:[
+			{ title:"{ui_230}", field:"Name" },
+			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+		],
+		tableBuilt: function() {
+			this.subjectType = "guild";
+			this.subjectField = "GuildID";
+			this.sourceGuild = {MyGuildID};
+		}
+	} ) );
+	
+	TabbedTabulators.push( new Tabulator( "#char-table", {
+		layout:"fitColumns", headerSort: false, selectable: false,
+		data: {JSON_CHAR_PERMISSIONS},
+		placeholder: "{ui_229}",
+		columns:[
+			{ title:"{ui_215}", field:"Name", formatter:charPermissionFormatter },
+			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+		],
+		tableBuilt: function() {
+			this.subjectType = "char";
+			this.subjectField = "CharID";
+			this.sourceGuild = {MyGuildID};
+		}
+	} ) );
+	
+	/* New Rules Dialog & Autocomplete */
+	
+	$("#guild-rule-button").button().on( 'click', function() {
+		$("#guild-rule-dialog").dialog( {
+			modal: true, resizable: false,
+			width: "auto", height: "auto",
+			buttons: {
+				"{ui_231}": function() { 
+					$("form", this).submit();
+					$(this).dialog('close');
+					GuildManager.spinnerDialog();
+				},
+				"{ui_222}": function() { $(this).dialog('close'); },
+			}
+		} );
+		$("#target-guild-name").autocomplete( {
+			minLength: 0,
+			source: AllGuilds.map( function(data) {
+				return { label: data.Name, value: data.Name, id: data.ID };
+			} ),
+			select: function(event, ui) {
+				$("#target-guild-id").val(ui.item.id);
+			}
+		} );
+	} );
+	
+	$("#char-rule-button").button().on( 'click', function() {
+		$("#char-rule-dialog").dialog( {
+			modal: true, resizable: false,
+			width: "auto", height: "auto",
+			buttons: {
+				"{ui_231}": function() { 
+					$("form", this).submit();
+					$(this).dialog('close');
+					GuildManager.spinnerDialog();
+				},
+				"{ui_222}": function() { $(this).dialog('close'); },
+			}
+		} );
+		$("#target-char-name").autocomplete( {
+			minLength: 0,
+			source: AllChars.map( function(data) {
+				return { label: data.Name + ' ' + data.LastName, value: data.Name + ' ' + data.LastName, id: data.ID };
+			} ),
+			select: function(event, ui) {
+				$("#target-char-id").val(ui.item.id);
+			}
+		} );
+	} );
+	
+	
+	/* Tabs & UI */
+	
+	$("#tabs-container").tabs( {
+		activate: function(event, ui) {
+			TabbedTabulators.forEach( function(table) { table.redraw(); } );
+		}
+	} );
+	
+	$("#back-button").button().on( 'click', function() { window.location.href = "index.php?livemap_id={LIVEMAP_ID}&s=guildman"; } );
+
+</script>
