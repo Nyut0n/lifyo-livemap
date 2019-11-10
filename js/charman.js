@@ -336,16 +336,20 @@ var NyuCharTable = {
 			self.locationDialog.dialog("open");
 		} );
 		// Online Statistics
-		var statsIcon = $("<img src=\"images/calendar.png\" class=\"pre-icon\" title=\"Show Online Statistics\">").on( 'click', function() {
-			self.statsDialog.dialog('option', 'title', 'Playtime Distribution: ' + data.Name);
-			self.statsDialog.dialog('open');
-			document.getElementById('chart-charstats').style.visibility = 'hidden';
-			Controller.ajax( {ajax: 'player_statistics', char_id: data.ID}, false, function(response) {
-				document.getElementById('chart-charstats').style.visibility = 'visible';
-				self.statsChart.data.datasets[0].data = response.map( function(d) { return d.share; } );
-				self.statsChart.update();
+		if( this.ttmod ) { 
+			var statsIcon = $("<img src=\"images/calendar.png\" class=\"pre-icon\" title=\"Show Online Statistics\">").on( 'click', function() {
+				self.statsDialog.dialog('option', 'title', 'Playtime Distribution: ' + data.Name);
+				self.statsDialog.dialog('open');
+				document.getElementById('chart-charstats').style.visibility = 'hidden';
+				Controller.ajax( {ajax: 'player_statistics', char_id: data.ID}, false, function(response) {
+					document.getElementById('chart-charstats').style.visibility = 'visible';
+					self.statsChart.data.datasets[0].data = response.map( function(d) { return d.share; } );
+					self.statsChart.update();
+				} );
 			} );
-		} );
+		} else {
+			var statsIcon = "";
+		}
 		// Skills
 		var skillsIcon = $("<img src=\"images/skills.png\" class=\"pre-icon\" title=\"Show & Edit Skills\">").on( 'click', function() {
 			self.skillsDialog.dialog('option', 'title', 'Skills of ' + data.Name);

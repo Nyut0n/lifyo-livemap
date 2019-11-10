@@ -19,16 +19,14 @@ switch( $_REQUEST['action'] ) {
 			$config['admin_pass'] = $session['config']['admin_pass'] = $rs['admin_pass'];
 		}
 		
-		$pass_hash = hash('sha256', $_POST['auth_pass']);
-
 		// Admin Login
-		if( $pass_hash === $config['admin_pass'] ) {
+		if( password_verify($_POST['auth_pass'], $config['admin_pass']) ) {
 			Livemap::login_group(0);
 			Livemap::success_redirect(Livemap::get_ui_string(33));
 		// User login
 		} else {
 			foreach( Livemap::get_groups_array() AS $group ) {
-				if( $pass_hash === $group['password'] ) {
+				if( password_verify($_POST['auth_pass'], $group['password']) ) {
 					Livemap::login_group($group['ID']);
 					Livemap::success_redirect(Livemap::get_ui_string(33));
 				}
@@ -462,7 +460,7 @@ switch( $_REQUEST['action'] ) {
 		$pw_login = isSet($_POST['enable_pw']) && (bool)$_POST['enable_pw'];
 		if( $group->canPasswordLogin() && $pw_login && strlen($_POST['login_pw']) > 0 && strlen($_POST['login_pw']) < 5 ) Livemap::error_redirect("Password is too short (min 5 characters)");
 		if( ! $group->canPasswordLogin() && $pw_login && strlen($_POST['login_pw']) < 5 ) Livemap::error_redirect("Password is too short (min 5 characters)");
-		$password = $pw_login ? hash('sha256', $_POST['login_pw']) : '';
+		$password = $pw_login ? password_hash($_POST['login_pw'], PASSWORD_DEFAULT) : '';
 		
 		// Check for password doubles
 		if( $pw_login ) {

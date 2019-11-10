@@ -334,6 +334,14 @@ header {
 			}
 		}
 
+#dialog-credits ul {
+	list-style-position: inside;
+}
+#dialog-credits a:link, #dialog-credits a:active, #dialog-credits a:visited {
+	color: #9bcc60;
+}
+
+
 /* Non-Map Pages */
 
 .content-page {
@@ -566,7 +574,6 @@ fieldset {
 	#char-bulk-form p {
 		margin: 5px 0;
 	}
-
 
 #location-map {
 	position: relative;

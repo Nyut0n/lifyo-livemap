@@ -11,6 +11,11 @@ function Livemap( controller ) {
 	this.control = null;
 	this.layers = {};
 	
+	this.credits = $("#dialog-credits").dialog( {
+		autoOpen: false, modal: true,
+		width: "auto", height: "auto"
+	} );
+	
 	// Initialize Leaflet Map
 	this.initMap = function( config ) {
 		this.config = config;
@@ -28,10 +33,11 @@ function Livemap( controller ) {
 			maxZoom: 5,
 			maxBounds: [[0,0], [1533,1533]],
 			maxBoundsViscosity: 0.8,
-			attributionControl: false,
 			renderer: L.svg({padding: 100}),
 		} );
 		this.leaflet.zoomControl.setPosition('bottomleft');
+		this.leaflet.attributionControl.setPrefix("LiF:YO Livemap v" + config.version);
+		this.leaflet.attributionControl.addAttribution("<a href=\"javascript:void(0);\" onclick=\"Controller.livemap.credits.dialog('open');\">&starf; about</span>");
 		// Load primary map image
 		L.imageOverlay(config.mapfile_default, [[0,0], [1533,1533]]).addTo(this.leaflet);
 		// Attach design to tooltip and popup panes
@@ -535,16 +541,20 @@ function Livemap( controller ) {
 	};
 	
 	this.showStandings = function( id ) {
-		var layer = this.getLayer('standings');
-		layer.data.active = id;
-		layer.draw();
-		layer.show();
+		if( this.controller.hasPrivilege('standings') ) {
+			var layer = this.getLayer('standings');
+			layer.data.active = id;
+			layer.draw();
+			layer.show();
+		}
 	};
 	
 	this.hideStandings = function() {
-		var layer = this.getLayer('standings');
-		layer.data.active = 0;
-		layer.hide();
+		if( this.controller.hasPrivilege('standings') ) {
+			var layer = this.getLayer('standings');
+			layer.data.active = 0;
+			layer.hide();
+		}
 	};
 	
 	this.generateClaimMemberlist = function( members ) {
@@ -569,8 +579,8 @@ function Livemap( controller ) {
 		html += '</div><div class="map-guild-details">';
 		html += '<label>' + Locale.ui[25] + '</label>{founded}';
 		html += '<br><label>' + Locale.ui[26] + '</label>{Radius} ' + Locale.ui[27];
-		html += '<br><label>' + Locale.ui[28] + '</label>{bcount}';
-		html += '<br><label>' + Locale.ui[29] + '</label>{mcount}';
+		html += this.controller.hasPrivilege('struct_count') ? '<br><label>' + Locale.ui[28] + '</label>{bcount}' : '';
+		html += this.controller.hasPrivilege('member_count') ? '<br><label>' + Locale.ui[29] + '</label>{mcount}' : '';
 		html += '</div>';
 		html +=	this.controller.hasPrivilege('member_names') ? this.generateClaimMemberlist(claim.members) : '';
 		// Create element

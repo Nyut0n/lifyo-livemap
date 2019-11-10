@@ -22,10 +22,6 @@ function NyuLivemapController() {
 		this.rcon = Object.create(NyuRconInterface).init(this) || null;
 		this.initServerInfo();
 		this.initLivemap();
-		if( config.restarts_ts.length > 0 ) {
-			this.header.restartsItem.show();
-			this.header.setRestartsTooltip(config.restarts_ts);
-		}
 		this.run();
 	};
 	
@@ -188,7 +184,7 @@ function NyuLivemapController() {
 		var gameDate  = this.getGameDateTime(this.config.daycycle);
 		var dayOfYear = Math.floor((gameDate.getTime() - Date.UTC(gameDate.getUTCFullYear(), 0, 1) ) / 86400000);
 		// Update game time and date in header
-		this.header.setGameTime(gameDate, this.config.daycycle);
+		this.hasPrivilege('ingame_time') && this.header.setGameTime(gameDate, this.config.daycycle);
 		// On day change, update weather and forecast 
 		if( this.dayOfYear !== dayOfYear ) {
 			this.updateDayOfYear(dayOfYear);

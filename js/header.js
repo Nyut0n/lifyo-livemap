@@ -6,6 +6,10 @@ var NyuLivemapHeader = {
 	init: function( controller ) {
 		this.controller = controller;
 		this.initBar().initDialogs().initMenu();
+		if( controller.config.restarts !== "" ) {
+			this.restartsItem.show();
+			this.setRestartsTooltip(controller.config.restarts_ts);
+		}
 		return this;
 	},
 	
@@ -212,25 +216,26 @@ var NyuLivemapHeader = {
 	},
 	
 	setWeatherTooltip: function( winfo, dayOfYear, time ) {
-		var content = '<b>' + Locale.ui[20] + ':</b><br>';
-		// Find matching record in weatherInfo
-		for( var i = (dayOfYear+1); i < (dayOfYear+9); i++ ) {
-			var day = i < 365 ? i : i - 365;
-			for( j = 0; j < winfo.length; j++ ) {
-				if( winfo[j].day === day ) {
-					// Generate date label
-					time.setUTCDate( time.getUTCDate() + 1 );
-					var datestring = time.getUTCDate() + '/' + (time.getUTCMonth()+1);
-					// Generate icon and label
-					var iconstring = "<img src=\"images/weather/" + winfo[j].key + ".png\">";
-					// Create wrapper and append elements
-					content += "<div class=\"weather-item\">" + datestring + "<br>" + iconstring + "<br>" + winfo[j].weather + "</div>";
-					break;
+		if( this.controller.hasPrivilege('weather_fc') ) {
+			var content = '<b>' + Locale.ui[20] + ':</b><br>';
+			// Find matching record in weatherInfo
+			for( var i = (dayOfYear+1); i < (dayOfYear+9); i++ ) {
+				var day = i < 365 ? i : i - 365;
+				for( j = 0; j < winfo.length; j++ ) {
+					if( winfo[j].day === day ) {
+						// Generate date label
+						time.setUTCDate( time.getUTCDate() + 1 );
+						var datestring = time.getUTCDate() + '/' + (time.getUTCMonth()+1);
+						// Generate icon and label
+						var iconstring = "<img src=\"images/weather/" + winfo[j].key + ".png\">";
+						// Create wrapper and append elements
+						content += "<div class=\"weather-item\">" + datestring + "<br>" + iconstring + "<br>" + winfo[j].weather + "</div>";
+						break;
+					}
 				}
 			}
+			this.weatherItem.addClass("has-tooltip").tooltip( "option", { content: content, disabled: false } );
 		}
-		// Update tooltip
-		this.weatherItem.addClass("has-tooltip").tooltip( "option", { content: content, disabled: false } );
 		return this;
 	},
 	

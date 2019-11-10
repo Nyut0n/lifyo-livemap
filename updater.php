@@ -73,7 +73,7 @@
 			$timezone = date_default_timezone_get();
 			$cdb->query( "INSERT INTO nyu_livemap (ID, timezone) VALUES ('$livemap_id', '$timezone')" );
 			$cdb->query( "INSERT INTO nyu_livemap_groups (livemap_id, type_id, name, privileges) VALUES ('$livemap_id', 1, 'Anonymous visitor', 3051183), ('$livemap_id', 2, 'Game Masters', 3137535)" );
-			header("Location: " . basename(__FILE__));
+			header("Location: index.php");
 			die;
 		}
 	}
@@ -111,7 +111,7 @@
 	->assign('PHP_OK', $php_ok)
 	->assign('REQ_OK', $arch_ok && $lif_ok && $php_ok && $xml_ok)
 	->assign('SHOW_ERROR', isset($error))
-	->assign('ERROR', $error);
+	->assign('ERROR', isset($error) ? $error : '');
 	
 	print $html->parse();
 	

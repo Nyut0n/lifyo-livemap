@@ -76,6 +76,7 @@ class Group {
 		return $output;
 	}
 	
+	// ToDo: Move this elsewhere
 	public function translate_privilege( $key ) {
 		// this blows
 		switch( $key ) {

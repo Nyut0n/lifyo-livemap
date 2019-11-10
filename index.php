@@ -75,8 +75,7 @@
 		$config['server_query'] = strtolower(QUERY_SERVER) === 'yes' ? '1' : '0';
 		$config['mapfile_default'] = 'maps/primary.jpg';
 		$config['mapfile_alternative'] = 'maps/secondary.jpg';
-	#	$config['admin_pass'] = password_hash(ADMIN_PASS, PASSWORD_DEFAULT);
-		$config['admin_pass'] = hash('sha256', ADMIN_PASS);
+		$config['admin_pass'] = password_hash(ADMIN_PASS, PASSWORD_DEFAULT);
 		
 		// Put information into session
 		$_SESSION['LIVEMAP_INFO'][$livemap_id]['CONFIG'] = $config;
