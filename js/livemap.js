@@ -341,7 +341,7 @@ function Livemap( controller ) {
 						var coords = self.px2c(claim.x, claim.y);
 						var color  = '#' + self.config['color_claim_t' + claim.GuildTier];
 						// Claim Tooltip & Popup
-						var tooltip = L.tooltip().setContent(L.Util.template('<b><img src="images/guild/tier/{GuildTier}.png" class="bw-icon" title="Tier-{GuildTier}"> {name}</b><br>' + Locale.ui[38], claim));
+						var tooltip = L.tooltip().setContent(L.Util.template('<b><img src="images/guild/tier/{GuildTier}.png" class="bw-icon" title="Tier-{GuildTier}"> {name}</b><br>' + Locale.ui[38] + '<br><span class="hint">' + Locale.ui[43] + '</span>', claim));
 						var popup = L.popup({className:'map-guild-popup', maxWidth:400}).setContent(self.generateClaimPopup(claim));
 						// Claim circle
 						L.circle( coords, {
