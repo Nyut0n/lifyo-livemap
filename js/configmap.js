@@ -94,7 +94,6 @@ var ConfigMap = {
 	},
 	
 	enterAreaMode: function() {
-		
 		( this.mode !== 'area' ) ? this.enterMode('area') : this.exitMode();
 	},
 	
@@ -196,6 +195,11 @@ var ConfigMap = {
 	
 	finishPath: function( event ) {
 		var self = this;
+		if( this.cache.positions.length < 3 ) {
+			alert("An area must have at least 3 coordinates");
+			this.exitMode();
+			return false;
+		}
 		if( this.mode === 'area' ) {
 			$("#conf-area-dialog").dialog( {
 				width: "auto", height: "auto",

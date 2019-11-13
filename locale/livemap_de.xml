@@ -46,7 +46,7 @@
 		<string id="40">{Name} {LastName}'s persönlicher Claim</string>
 		<string id="41">Außenposten von {GuildName}</string>
 		<string id="42">Handelsposten</string>
-		<string id="44">Für Details klicken</string>
+		<string id="43">Für Details klicken</string>
 		<!-- Livemap / Layers -->
 		<string id="100">Alternativer Kartenhintergrund</string>
 		<string id="101">Regionen-Overlay</string>
