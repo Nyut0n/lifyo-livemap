@@ -93,14 +93,13 @@ var NyuLivemapHeader = {
 		// Server Rules Dialog
 		this.rulesDialog = $("#dialog-rules").dialog( {
 			autoOpen: false, resizable: true, modal: true,
-			height: "auto", width: "auto",
+			width: "auto", height: Math.round($(window).height() * 0.8),
 			buttons: [
 				{ text: Locale.ui[18], click: function() { $(this).dialog("close"); } },
 			],
 			create: function() {
 				// Fix for maxWidth bug
 				$(this).css("maxWidth", "1000px");
-				$(this).css("maxHeight", "600px");
 			}
 		} );
 		return this;
