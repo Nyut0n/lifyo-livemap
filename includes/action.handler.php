@@ -118,7 +118,7 @@ switch( $_REQUEST['action'] ) {
 
 		$token = $cdb->esc($_GET['Token']);
 		
-		$details = $server->get_token_details($token) || die($errormsg);
+		$details = $server->get_token_details($token) or die($errormsg);
 		
 		$_SESSION['SteamAuth'] = array( 'steam_id' => $details['SteamID'] );
 		$_SESSION['InGame'] = TRUE;

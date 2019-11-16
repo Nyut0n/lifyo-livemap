@@ -117,6 +117,8 @@
 			$content->assign( 'claimthickness', Template::simple_select_array($claimborder, $config['width_claim']) );
 			$tooltips = array( 'standard', 'dark' );
 			$content->assign( 'tooltips', Template::simple_select_array($tooltips, $config['style_tooltip']) );
+			// Secondary map image
+			$content->assign( 'ENABLE_ALTMAP', (bool)$config["alt_map"] );
 			// Assign timezones
 			$content->assign( 'timezones', Template::simple_select_array(timezone_identifiers_list(), $config['timezone']) );
 			// Assign groups

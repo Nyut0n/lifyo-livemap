@@ -128,7 +128,7 @@ function NyuLivemapController() {
 			/* Layer Controls */
 			
 			// Util layers
-			livemap.getLayer('secondaryMap').addControl("images/control/map.png", Locale.ui[100]);
+			parseInt(self.config.alt_map) > 0 && livemap.getLayer('secondaryMap').addControl("images/control/map.png", Locale.ui[100]);
 			livemap.getLayer('regions').addControl("images/control/regions.png", Locale.ui[101]);
 			livemap.getLayer('grid').addControl("images/control/grid.png", Locale.ui[102]);
 			livemap.getLayer('planner').addControl("images/control/planner.png", Locale.ui[103]);
