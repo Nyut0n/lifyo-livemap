@@ -117,16 +117,14 @@ switch( $_REQUEST['action'] ) {
 		if( ! isSet($_GET['Token']) || strlen($_GET['Token']) !== 64 ) die($errormsg);
 
 		$token = $cdb->esc($_GET['Token']);
-		
 		$details = $server->get_token_details($token) or die($errormsg);
 		
-		$_SESSION['SteamAuth'] = array( 'steam_id' => $details['SteamID'] );
+		Livemap::set_steam_id($details['SteamID']);
 		$_SESSION['InGame'] = TRUE;
 		$_SESSION['CharID'] = intval($details['CharID']);
 		
-		$redirect = "index.php?livemap_id=$livemap_id&s=guildman";
-		header("Location: $redirect");
-		die;
+		Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=guildman";
+		Livemap::success_redirect();
 
 	break;
 

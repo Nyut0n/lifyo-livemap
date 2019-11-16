@@ -94,6 +94,7 @@
 					$char['MemberCount'] = count($guild->get_members());
 				}
 			}
+			sort($mychars); // Rebuild array index
 			
 			$content->assign('characters', $mychars)
 			->assign('has_chars', (bool)$mychars)

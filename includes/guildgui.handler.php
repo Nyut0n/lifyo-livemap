@@ -38,7 +38,7 @@
 			if( ! isSet($_POST['charter'], $_POST['public']) ) Livemap::error_redirect();
 
 			// Process action in database
-			$code = $guild->update_charter($_POST['charter'], (bool)$_POST['public']));
+			$code = $guild->update_charter($_POST['charter'], (bool)$_POST['public']);
 			($code === 1) && Livemap::success_redirect(Livemap::get_ui_string(242));
 			Livemap::error_redirect(Livemap::get_ui_string(241+$code));
 			

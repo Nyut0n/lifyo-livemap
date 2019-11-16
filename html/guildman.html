@@ -41,8 +41,10 @@
 	</div>
 	{ENDLOOP:characters}
 	
+	{IFNOT:INGAME}
 	<br><br>
 	<button id="logout-button"><span class="ui-icon ui-icon-arrowreturnthick-1-s"></span> {ui_17}</button>
+	{ENDIFNOT:INGAME}
 	
 </div>
 
@@ -197,7 +199,7 @@
 		$("#guild-privcheck-dialog").dialog( {
 			modal: true, width: "auto", height: "auto",
 			buttons: { 
-				"{ui_221}": function() { $(this).dialog("close"); }
+				"{ui_18}": function() { $(this).dialog("close"); }
 			}
 		} );
 		$("#guild-privcheck-input").autocomplete( {
@@ -248,7 +250,7 @@
 		var dialog = $("#guild-charter-dialog");
 		// Find char and guild info
 		for( var i = 0; i < MyCharacters.length; i++ ) {
-			if( MyCharacters[i].GuildID === this.dataset.guild ) break;
+			if( MyCharacters[i].GuildID == this.dataset.guild ) break;
 		}
 		var mychar = MyCharacters[i];
 		// Update dialog 
