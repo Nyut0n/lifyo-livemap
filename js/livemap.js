@@ -140,7 +140,7 @@ function Livemap( controller ) {
 					// Draw Players
 					data.forEach( function(player) {
 						L.marker( self.px2c(player.x, player.y) )
-						.bindTooltip(player.FirstName + ' ' + player.LastName, {direction:"bottom"})
+						.bindTooltip(player.FullName, {direction:"bottom"})
 						.addTo(layerGroup);
 					} );
 				};
