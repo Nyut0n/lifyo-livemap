@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- UI / Interface -->
+	<ui>
+		<!-- Header / Menu / General -->
+		<string id="0">игроков</string>
+		<string id="1">сейчас онлайн</string>
+		<string id="2">Продолжительность дня: {num} часов</string>
+		<string id="3">Коэффициент времения</string>
+		<string id="4">Следующая ночь</string>
+		<string id="5">Завтра</string>
+		<string id="6">до перезагрузки</string>
+		<string id="7">Ежедневный перезапуск сервер</string>
+		<string id="8">Следующий СЧ</string>
+		<string id="9">Livemap Логин</string>
+		<string id="10">Оставаться в системе</string>
+		<string id="11">Пожалуйста, авторизуйтесь через Steam для доступа к вашей гильдии на этом сервере</string>
+		<string id="12">Управление гильдией</string>
+		<string id="13">Информация о сервере</string>
+		<string id="14">Часовой пояс сервера</string>
+		<string id="15">Настройки игры</string>
+		<string id="16">Залогиниться</string>
+		<string id="17">Разлогиниться</string>
+		<string id="18">Закрыть</string>
+		<string id="19">Назад</string>
+		<string id="20">Прогноз погоды</string>
+		<string id="21">СЧ активность</string>
+		<string id="22">Еженедельные Судные Часы</string>
+		<string id="23">Продолжительность: {num} минут</string>
+		<string id="24">Список участников</string>
+		<string id="25">Основан</string>
+		<string id="26">Диаметр</string>
+		<string id="27">клеток</string>
+		<string id="28">Строения</string>
+		<string id="29">Население</string>
+		<string id="30">Обнаружена неизвестная ошибка</string>
+		<string id="31">Не залогинился? Направильный пароль</string>
+		<string id="32">Ваш SteamID не назначен группе разрешений</string>
+		<string id="33">Логин успешен</string>
+		<string id="34">Правила сервера</string>
+		<string id="35">Присоединяйся сейчас</string>
+		<string id="36">Не возможно получить информацию о сервере. Сервер оффлайн?</string>
+		<string id="37">Сервер оффлайн</string>
+		<string id="38">Уровень-{GuildTier} гильдейского клайма</string>
+		<string id="39">{SizeX}x{SizeY} территории Админа </string>
+		<string id="40">{Name} {LastName}'s персонального клайма</string>
+		<string id="41">Аванпост {GuildName}</string>
+		<string id="42">Торговый пост</string>
+		<string id="43">нажми для детализации</string>
+		<!-- Livemap / Layers -->
+		<string id="100">Альтернативное отображение карты</string>
+		<string id="101">Регионы</string>
+		<string id="102">Координатная сетка</string>
+		<string id="103">Планировщик клаймов и аванпостов</string>
+		<string id="104">игроков онлайн</string>
+		<string id="105">Земли админа</string>
+		<string id="106">Персональные клаймы</string>
+		<string id="107">Гильдейские клаймы</string>
+		<string id="108">Аванпосты</string>
+		<string id="109">Дороги</string>
+		<string id="110">Строения &amp; структуры</string>
+		<string id="111">Участников</string>
+		<string id="112">Кузня спящего</string>
+		<string id="113">Клещи спящего</string>
+		<string id="114">Молот спящего</string>
+		<string id="115">Точки интереса</string>
+		<string id="116">Зоны</string>
+		<string id="117">Торговые посты</string>
+		<string id="118">Леса</string>
+		<!-- Guild Management -->
+		<string id="200">Вы не имеете персонажей на этом сервере :(</string>
+		<string id="201">Проверка привилегий</string>
+		<string id="202">Уровень</string>
+		<string id="203">Тип гильдии</string>
+		<string id="204">Эта гильдия не имеет клайма</string>
+		<string id="205">Ранг</string>
+		<string id="206">Оношения</string>
+		<string id="207">Разрешения</string>
+		<string id="208">Устав гильдии</string>
+		<string id="209">Изменить устав</string>
+		<string id="210">Этот персонаж без гильдии</string>
+		<string id="211">Проверить разрешения ваших персонажей в других гильдиях</string>
+		<string id="212">Найти гильдию</string>
+		<string id="213">Список участников</string>
+		<string id="214">Изменить ранг</string>
+		<string id="215">Персоанаж</string>
+		<string id="216">Видимость устава</string>
+		<string id="217">Только участникам</string>
+		<string id="218">Всем</string>
+		<string id="219">Вы действительно хотите кикнуть '{char_name}' из гильдии?</string>
+		<string id="220">Кикнуть персонажа</string>
+		<string id="221">Сохранить</string>
+		<string id="222">Отмена</string>
+		<string id="223">Ваше отношений</string>
+		<string id="224">Их отношение</string>
+		<string id="225">Разрешения гильдиям</string>
+		<string id="226">Разрешения персонажам</string>
+		<string id="227">Новое правило</string>
+		<string id="228">Найти персонажа</string>
+		<string id="229">Правила еще не созданы</string>
+		<string id="230">Гильдия</string>
+		<string id="231">Добавить</string>
+		<string id="232">Сменить отношение</string>
+		<string id="233">Применить</string>
+		<string id="234">Тип</string>
+		<string id="235">Расстояние</string>
+		<string id="236">Лидер</string>
+		<string id="237">гильдий выделено</string>
+		<string id="238">Выберите хотя бы одну строку из таблицы</string>
+		<string id="239">Недостаточно разрешений</string>
+		<string id="240">Сервер не отвечает. Превышено время ответа. Сервер оффлайн?</string>
+		<string id="241">Сервер отклонил действие</string>
+		<string id="242">Ваши изменения были успешно применены</string>
+	</ui>
+	<!-- Game Objects -->
+	<objects>
+		<string id="1702">Шахта</string>
+		<string id="1703">Домик травник</string>
+		<string id="1704">Лесопилка</string>
+		<string id="1705">Карьер</string>
+		<string id="1706">Хижина охотника</string>
+		<string id="1707">Мельница</string>
+		<string id="1708">Живодерня</string>
+		<string id="1709">Геогнозическая копь</string>
+		<string id="1710">Лагерь рабов</string>
+		<string id="1711">Военный аванпост</string>
+	</objects>
+	<!-- Weather -->
+	<weather>
+		<string id="0">Дождь</string>
+		<string id="1">Облачно</string>
+		<string id="2">Снег</string>
+		<string id="3">Ясно</string>
+	</weather>
+	<!-- Day names -->
+	<daynames>
+		<string id="0">Воскресенье</string>
+		<string id="1">Понедельник</string>
+		<string id="2">Вторник</string>
+		<string id="3">Среда</string>
+		<string id="4">Четверг</string>
+		<string id="5">Пятница</string>
+		<string id="6">Суббота</string>
+	</daynames>
+	<!-- Male Ranks -->
+	<ranks_m>
+		<string id="0">-</string>
+		<string id="1">Граф</string>
+		<string id="2">Виконт</string>
+		<string id="3">Барон</string>
+		<string id="4">Рыцарь</string>
+		<string id="5">Управляющий</string>
+		<string id="6">Крестьянин</string>
+		<string id="7">Рекрут</string>
+	</ranks_m>
+	<!-- Female Ranks -->
+	<ranks_f>
+		<string id="0">-</string>
+		<string id="1">Графиня</string>
+		<string id="2">Виконтесса</string>
+		<string id="3">Баронесса</string>
+		<string id="4">Дама</string>
+		<string id="5">Управляющая</string>
+		<string id="6">Крестьянка</string>
+		<string id="7">Крестьяник</string>
+	</ranks_f>
+	<!-- Guild Types -->
+	<guildtypes>
+		<string id="0">-</string>
+		<string id="1">Поселок</string>
+		<string id="2">Город</string>
+		<string id="3">Графство</string>
+		<string id="4">Королевство</string>
+		<string id="5">Вассал</string>
+	</guildtypes>
+	<!-- Standings -->
+	<standings>
+		<string id="0">-</string>
+		<string id="1">Война</string>
+		<string id="2">Враждебное</string>
+		<string id="3">Нейтральное</string>
+		<string id="4">Дружба</string>
+		<string id="5">Союз</string>
+	</standings>
+	<!-- Permissions -->
+	<permissions>
+		<string id="0">Вход</string>
+		<string id="1">Строить</string>
+		<string id="2">Клаймить</string>
+		<string id="3">Использовать</string>
+		<string id="4">Разрушать</string>
+	</permissions>
+</root>
