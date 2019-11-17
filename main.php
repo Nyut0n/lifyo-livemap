@@ -322,6 +322,7 @@
 			
 			// Load template
 			$content = new Template('html/chman.html');	
+			$content->assign( 'mapfile_default', $config['mapfile_default'] );
 			
 			// Assign characters and items list
 			$content->assign( 'characters', $charjson );

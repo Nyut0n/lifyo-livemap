@@ -188,7 +188,7 @@ class Livemap {
 	#	'fr' => 'French',
 		'de' => 'German',
 	#	'it' => 'Italian',
-	#	'ru' => 'Russian',
+		'ru' => 'Russian',
 	#	'es' => 'Spanish',
 	);
 	
