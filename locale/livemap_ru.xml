@@ -74,7 +74,7 @@
 		<string id="203">Тип гильдии</string>
 		<string id="204">Эта гильдия не имеет клайма</string>
 		<string id="205">Ранг</string>
-		<string id="206">Оношения</string>
+		<string id="206">Отношения</string>
 		<string id="207">Разрешения</string>
 		<string id="208">Устав гильдии</string>
 		<string id="209">Изменить устав</string>
@@ -83,7 +83,7 @@
 		<string id="212">Найти гильдию</string>
 		<string id="213">Список участников</string>
 		<string id="214">Изменить ранг</string>
-		<string id="215">Персоанаж</string>
+		<string id="215">Персонаж</string>
 		<string id="216">Видимость устава</string>
 		<string id="217">Только участникам</string>
 		<string id="218">Всем</string>
@@ -91,8 +91,8 @@
 		<string id="220">Кикнуть персонажа</string>
 		<string id="221">Сохранить</string>
 		<string id="222">Отмена</string>
-		<string id="223">Ваше отношений</string>
-		<string id="224">Их отношение</string>
+		<string id="223">Их отношение</string>
+		<string id="224">Ваше отношение</string>
 		<string id="225">Разрешения гильдиям</string>
 		<string id="226">Разрешения персонажам</string>
 		<string id="227">Новое правило</string>
@@ -115,7 +115,7 @@
 	<!-- Game Objects -->
 	<objects>
 		<string id="1702">Шахта</string>
-		<string id="1703">Домик травник</string>
+		<string id="1703">Домик травника</string>
 		<string id="1704">Лесопилка</string>
 		<string id="1705">Карьер</string>
 		<string id="1706">Хижина охотника</string>
