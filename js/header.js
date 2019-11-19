@@ -285,7 +285,9 @@ var NyuLivemapHeader = {
 	
 	setJhTooltip: function( data ) {
 		var content = Locale.ui[22] + ":<ul id=\"restarts-list\">";
+		var firstTs = data.timestamps[0];
 		data.timestamps.forEach( function(ts) {
+			if( ts >= firstTs + 7 * 24 * 3600 ) return false;
 			var dateBegin = new Date(ts*1000);
 			var dateEnd   = new Date(ts*1000 + data.duration*60*1000);
 			content += "<li>" + Locale.daynames[dateBegin.getDay()] + ", " + dateBegin.getHours().pad(2) + ':' + dateBegin.getMinutes().pad(2) + " - " + dateEnd.getHours().pad(2) + ':' + dateEnd.getMinutes().pad(2) + "</li>";

@@ -205,7 +205,7 @@ class LiFServer {
 			if( empty($this->serverrules['weekSchedule']) || ! $this->serverrules['duration'] ) return FALSE;
 			// Convert the bullshit returned from SourceQuery to an offset
 			// Real offset seconds minus DST seconds because Russians don't like DST
-			$tz_utc_offset = date('Z') - date('I')*3600;	
+			$tz_utc_offset = date('Z') - date('I') * 3600;
 			// Create an array of timestamps for the next JH events
 			$days = explode( ' ', $this->serverrules['weekSchedule'] );
 			$timestamps = array();
