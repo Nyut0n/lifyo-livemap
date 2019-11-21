@@ -68,7 +68,7 @@ var ConfigMap = {
 			.bindTooltip(L.Util.template("<b>{name}</b><br>{desc}<br><span class=\"hint\">click to delete</span>", poi), {direction:"top"})
 			.addTo(self.leaflet)
 			.on('click', function() {
-				if( self.mode !== null && confirm("Remove POI '" + poi.name + "' from the map?") ) {
+				if( self.mode === null && confirm("Remove POI '" + poi.name + "' from the map?") ) {
 					window.location.href = "index.php?livemap_id=" + livemap_id + "&action=RemoveCustomData&id=" + poi.ID;
 				}
 			});
@@ -81,7 +81,7 @@ var ConfigMap = {
 			.bindTooltip(L.Util.template("<b>{name}</b><br>{desc}<br><span class=\"hint\">click to delete</span>", area), {direction:"top"})
 			.addTo(self.leaflet)
 			.on('click', function() {
-				if( self.mode !== null && confirm("Remove Area '" + area.name + "' from the map?") ) {
+				if( self.mode === null && confirm("Remove Area '" + area.name + "' from the map?") ) {
 					window.location.href = "index.php?livemap_id=" + livemap_id + "&action=RemoveCustomData&id=" + area.ID;
 				}
 			});
