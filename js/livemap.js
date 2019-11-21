@@ -695,3 +695,8 @@ L.Control.CustomControl = L.Control.extend({
 L.control.customControl = function(opts) { 
 	return new L.Control.CustomControl(opts);
 };
+
+// Leaflet default marker size override
+L.Icon.Default.prototype.options.iconSize = [20, 30];
+L.Icon.Default.prototype.options.iconAnchor = [10, 30];
+L.Icon.Default.prototype.options.shadowSize = [30, 30];
