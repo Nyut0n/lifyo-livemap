@@ -342,7 +342,6 @@ function Livemap( controller ) {
 						var color  = '#' + self.config['color_claim_t' + claim.GuildTier];
 						// Claim Tooltip & Popup
 						var tooltip = L.tooltip().setContent(L.Util.template('<b><img src="images/guild/tier/{GuildTier}.png" class="bw-icon" title="Tier-{GuildTier}"> {name}</b><br>' + Locale.ui[38] + '<br><span class="hint">' + Locale.ui[43] + '</span>', claim));
-						var popup = L.popup({className:'map-guild-popup', maxWidth:400}).setContent(self.generateClaimPopup(claim));
 						// Claim circle
 						L.circle( coords, {
 							weight: lineWidth,
@@ -354,15 +353,17 @@ function Livemap( controller ) {
 						} )
 						.on('mouseover', function(e) { this.setStyle({fillOpacity:0.25}); })
 						.on('mouseout', function(e) { this.setStyle({fillOpacity:0.1}); })
-						.on('popupopen', function(e) { 
+						.on('popupopen', function(e) {
 							this.unbindTooltip();
+							this.setPopupContent(self.generateClaimPopup(claim));
+							this.getPopup().update();
 							self.showStandings(claim.GuildID);
 						})
 						.on('popupclose', function(e) { 
 							this.bindTooltip(tooltip);
 							self.hideStandings();
 						})
-						.bindPopup(popup)
+						.bindPopup(self.generateClaimPopup(claim), {className:'map-guild-popup', maxWidth:400})
 						.bindTooltip(tooltip)
 						.addTo(layerGroup);
 						// Claim Label
@@ -562,10 +563,12 @@ function Livemap( controller ) {
 		var allowSteam = this.controller.hasPrivilege('steam_links');
 		var fieldsetClass = members.length > dcThreshold ? "map-guild-members double-col" : "map-guild-members";
 		members.forEach( function(member) {
+			var isOnline = self.controller.players.list.filter(function(player){ return player.ID === member.CharID; }).length > 0;
 			var rank_key = parseInt(member.gender) === 1 ? 'ranks_m' : 'ranks_f';
 			var item = '<li><img class="pre-icon bw-icon" src="images/guild/rank/{GuildRoleId}.png" title="' + Locale[rank_key][member.GuildRoleId] + '">';
 			item += allowSteam ? '<a href="https://steamcommunity.com/profiles/{SteamID}" target="_blank">{FullName}</a>' : '{FullName}';
-			item += '<img src="images/blank.png"></li>';
+			item += isOnline ? '<img class="post-icon" src="images/online-indicator.png" title="now online">' : '<img class="post-icon" width="8" src="images/blank.png">';
+			item += '</li>';
 			ul.innerHTML += L.Util.template(item, member);
 		} );
 		return "<fieldset class=\"" + fieldsetClass + "\"><legend>" + Locale.ui[24] + "</legend>" + ul.outerHTML + "</fieldset>";
