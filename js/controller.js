@@ -10,7 +10,7 @@ function NyuLivemapController() {
 	this.config  = null;
 	this.dayOfYear = null;
 	this.serverInfo = null;
-	this.players = [];
+	this.players = null;
 	
 	this.notificationDuration  = 10;
 	this.playersUpdateInterval = 10;
