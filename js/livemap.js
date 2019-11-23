@@ -563,7 +563,7 @@ function Livemap( controller ) {
 		var allowSteam = this.controller.hasPrivilege('steam_links');
 		var fieldsetClass = members.length > dcThreshold ? "map-guild-members double-col" : "map-guild-members";
 		members.forEach( function(member) {
-			var isOnline = typeof self.controller.players.list === 'object' && self.controller.players.list.filter(function(player){ return player.ID === member.CharID; }).length > 0;
+			var isOnline = self.controller.players !== null && self.controller.players.list.filter(function(player){ return player.ID === member.CharID; }).length > 0;
 			var rank_key = parseInt(member.gender) === 1 ? 'ranks_m' : 'ranks_f';
 			var item = '<li><img class="pre-icon bw-icon" src="images/guild/rank/{GuildRoleId}.png" title="' + Locale[rank_key][member.GuildRoleId] + '">';
 			item += allowSteam ? '<a href="https://steamcommunity.com/profiles/{SteamID}" target="_blank">{FullName}</a>' : '{FullName}';
