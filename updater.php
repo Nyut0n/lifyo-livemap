@@ -82,6 +82,11 @@
 				$cdb->query( "INSERT INTO nyu_livemap_groups (livemap_id, type_id, name, privileges) VALUES ('$livemap_id', 1, 'Anonymous visitor', 3051183), ('$livemap_id', 2, 'Game Masters', 3137535)" );
 			}
 			
+			// 3.1.0 update
+			if( version_compare($current_version, "3.1.0", "<") ) {
+				$cdb->query( "ALTER TABLE `nyu_livemap` ADD COLUMN `admin_steam` BIGINT UNSIGNED NULL AFTER `ID`" );
+			}
+			
 			// Finally, update version column in livemap table
 			$cdb->query( "UPDATE nyu_livemap SET version = '" . VERSION . "' WHERE ID = '$livemap_id'" );
 			
