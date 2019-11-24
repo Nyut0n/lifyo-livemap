@@ -4,7 +4,7 @@
 	<h1>Livemap Configuration</h1>
 
 	{IF:UPDATER_EXISTS}
-	<div id="updater-warning"><img src="images/warn.png" class="pre-icon">The Livemap was updated. For security reasons, please delete the <b>includes/updater.php</b> file from your webserver now.</div>
+	<div id="updater-warning"><img src="images/warn.png" class="pre-icon">The Livemap was updated. For security reasons, you should delete the <b>updater.php</b> file from your webserver now.</div>
 	{ENDIF:UPDATER_EXISTS}
 	
 	<div id="tabs-container">
@@ -44,6 +44,13 @@
 								<option value="0"{IFNOT:guildmanager} selected{ENDIFNOT:guildmanager}>Disabled</option>
 							</select><br>
 							<span class="hint">A page where players can login though Steam and manage their guild online. Required for GuildGUI Mod.</span>
+						</div>
+					</div>
+					<div class="kv-row">
+						<div>Admin SteamID</div>
+						<div>
+							<input type="text" name="steamid" value="{admin_steam}"><br>
+							<span class="hint">Enter your SteamID here to use Steam Authentication for admin login.</span>
 						</div>
 					</div>
 				</fieldset>

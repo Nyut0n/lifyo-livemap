@@ -76,10 +76,15 @@ switch( $_REQUEST['action'] ) {
 				// Remember Login?
 				isSet($_GET['rememberme']) && $_GET['rememberme'] && Livemap::set_auth_cookie();			
 
-				// Assign permissions
-				foreach( Livemap::get_groups_array() AS $group ) {
-					$steam_id_list = explode(",", $group['members_csv']);
-					if( in_array($steamid, $steam_id_list) ) Livemap::login_group($group['ID']);
+				// Admin Login?
+				if( $steamid && $steamid === $config['admin_steam'] ) {
+					Livemap::login_group(0);
+				// Assign group permissions
+				} else {
+					foreach( Livemap::get_groups_array() AS $group ) {
+						$steam_id_list = explode(",", $group['members_csv']);
+						if( in_array($steamid, $steam_id_list) ) Livemap::login_group($group['ID']);
+					}
 				}
 				
 				if( $to_guildman ) {
@@ -154,6 +159,7 @@ switch( $_REQUEST['action'] ) {
 		$discord  = trim($cdb->esc($_POST['discord']));
 		$teamspeak= trim($cdb->esc($_POST['teamspeak']));
 		$rules	  = trim($cdb->esc($_POST['rules']));
+		$steamid  = trim($cdb->esc($_POST['steamid']));
 		
 		// Check title
 		if( strlen($title) < 5 ) Livemap::error_redirect('Livemap title too short (min. 5 characters)');
@@ -179,6 +185,8 @@ switch( $_REQUEST['action'] ) {
 			$homepage = "http://$homepage";
 			if( filter_var($homepage, FILTER_VALIDATE_URL) === FALSE ) Livemap::error_redirect('Invalid homepage address!');
 		}
+		// Admin SteamID
+		if( $steamid && ! is_numeric($steamid) ) Livemap::error_redirect('SteamID must be numeric');
 		
 		// FeudalTools only: Check weather xml file upload
 		if( $config['isttmap'] && isSet($_FILES['weather_xml']) && $_FILES['weather_xml']['error'] !== UPLOAD_ERR_NO_FILE ) {
@@ -203,7 +211,7 @@ switch( $_REQUEST['action'] ) {
 		}
 		
 		// Update database and redirect with force_reload
-		$cdb->query( "UPDATE {$config['table_c']} SET title = '$title', homepage = '$homepage', discord = '$discord', teamspeak = '$teamspeak', language = '$language', daycycle = '$daycycle', timezone = '$timezone', restarts = '$restarts', rules = '$rules', guildmanager = '$guildman' WHERE ID = '$livemap_id'" );
+		$cdb->query( "UPDATE {$config['table_c']} SET title = '$title', admin_steam = '$steamid', homepage = '$homepage', discord = '$discord', teamspeak = '$teamspeak', language = '$language', daycycle = '$daycycle', timezone = '$timezone', restarts = '$restarts', rules = '$rules', guildmanager = '$guildman' WHERE ID = '$livemap_id'" );
 		Livemap::log_action('config_general');
 		$session['FORCE_RELOAD'] = TRUE;
 		Livemap::success_redirect("Livemap configuration was updated!");
