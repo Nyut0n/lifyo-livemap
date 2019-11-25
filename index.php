@@ -18,7 +18,7 @@
 	 *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	 */
 
-	const VERSION  = '3.0.4';
+	const VERSION  = '3.1.0';
 	const BASE_URL = '/';
 	
 	require_once('config-dedicated.php');
@@ -79,7 +79,6 @@
 		
 		// Put information into session
 		$_SESSION['LIVEMAP_INFO'][$livemap_id]['CONFIG'] = $config;
-
 	}
-
+	
 	require_once('main.php');
