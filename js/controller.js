@@ -172,8 +172,7 @@ function NyuLivemapController() {
 			else self.header.setOnlinePlayers(data.online + " / " + data.max);
 			self.hasPrivilege('online_list') && self.header.setOnlinePlayersList(data.list);
 			// Update players layer, if initialized and privileged
-			var layer = self.livemap.getLayer('players');
-			layer && self.hasPrivilege('player_layer') && self.livemap.getLayer('players').setData(data.list);
+			self.livemap.getLayer('players') && self.hasPrivilege('player_layer') && self.livemap.updatePlayers(data.list);
 			// Update rcon table
 			self.rcon !== null && self.rcon.updatePlayerTable(data.list);
 		} );

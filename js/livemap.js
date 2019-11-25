@@ -139,9 +139,19 @@ function Livemap( controller ) {
 				layer.onDraw = function(layerGroup, data) {
 					// Draw Players
 					data.forEach( function(player) {
-						L.marker( self.px2c(player.x, player.y) )
-						.bindTooltip(player.FullName, {direction:"bottom"})
-						.addTo(layerGroup);
+						if( player.hasOwnProperty('old_x') ) { // Markers with existing coordinates are animated
+							var line = L.polyline( [self.px2c(player.old_x, player.old_y), self.px2c(player.x, player.y)] );
+							// Debug movement path
+							//    line.addTo(layerGroup);
+							L.Marker.movingMarker(line.getLatLngs(), [2000])
+							.bindTooltip(player.FullName, {direction:"bottom"})
+							.addTo(layerGroup)
+							.start();
+						} else { // New ones just pop up as usual markers
+							L.marker( self.px2c(player.x, player.y) )
+							.bindTooltip(player.FullName, {direction:"bottom"})
+							.addTo(layerGroup);
+						}
 					} );
 				};
 			break;
@@ -541,6 +551,24 @@ function Livemap( controller ) {
 		
 		return layer;
 		
+	};
+	
+	this.updatePlayers = function( newData ) {
+		var layer = this.getLayer('players');
+		if( layer.hasData ) {
+			var oldData = layer.data;
+			var data = newData.map( function(player) {
+				var match = oldData.filter( function(p) { return p.ID === player.ID; } );
+				if( match.length > 0 ) {
+					player.old_x = match[0].x;
+					player.old_y = match[0].y;
+				}
+				return player;
+			} );
+			this.getLayer('players').setData(data);
+		} else {
+			this.getLayer('players').setData(newData);
+		}
 	};
 	
 	this.showStandings = function( id ) {
