@@ -169,6 +169,7 @@
 			$content->assign( 'poi_icons', $poi_icons );
 			$content->assign( 'poi_json', json_encode(Livemap::get_custom_pois()) );
 			$content->assign( 'area_json', json_encode(Livemap::get_custom_areas()) );
+			$content->assign( 'rules_json', json_encode($config['rules']) );
 			
 			// Get logs
 			$logs = $cdb->query( "SELECT ID, user_group, timestamp, action, detail FROM {$config['table_l']} WHERE livemap_id = $livemap_id ORDER BY ID DESC" );

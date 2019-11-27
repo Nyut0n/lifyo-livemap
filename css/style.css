@@ -58,6 +58,17 @@ h1 {
 	color: Black !important;
 }
 
+/* SCEditor Overrides */
+
+.sceditor-container {
+	background: padding-box #695444 !important;
+	border: 0 !important;
+}
+
+.bbcode-wysiwyg ul, .bbcode-wysiwyg ul {
+	list-style-position: inside;
+}
+
 /* Util */
 
 .hint {
@@ -660,4 +671,4 @@ fieldset {
 	.priv-line {
 		padding: 2px;
 		margin: 0;
-	}		
+	}

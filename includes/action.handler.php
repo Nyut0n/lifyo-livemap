@@ -147,7 +147,7 @@ switch( $_REQUEST['action'] ) {
 		
 		// Check input is set
 		isSet($_POST['title'], $_POST['homepage'], $_POST['discord'], $_POST['teamspeak'], $_POST['restarts'], $_POST['language'], $_POST['daycycle'], $_POST['timezone'], $_POST['guildmanager']) || Livemap::error_redirect();
-		
+
 		// Evaluate input
 		$title    = trim($cdb->esc($_POST['title']));
 		$language = $_POST['language'];

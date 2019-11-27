@@ -18,7 +18,7 @@
 		</ul>
 		<!-- General -->
 		<div id="tab-general">
-			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST" enctype="multipart/form-data">
+			<form id="general-form" action="index.php?livemap_id={LIVEMAP_ID}" method="POST" enctype="multipart/form-data">
 				<!-- General Settings -->
 				<fieldset>
 					<legend>Livemap Settings</legend>
@@ -125,7 +125,8 @@
 				<!-- Rules -->
 				<fieldset>
 					<legend>Server Rules</legend>
-					<textarea id="conf-rules" name="rules">{SanitizedRules}</textarea>
+					<textarea id="conf-rules">{SanitizedRules}</textarea>
+					<input type="hidden" name="rules" id="hidden-rules">
 				</fieldset>
 				<input type="hidden" name="action" value="ChangeConfig">
 				<button type="submit"><span class="ui-icon ui-icon-disk"></span> Save Changes</button>
@@ -478,6 +479,7 @@
 
 	var PoiData  = {poi_json};
 	var AreaData = {area_json};
+	var RulesString = {rules_json};
 	
 	// Group tooltips
 	{LOOP:groups}
@@ -485,7 +487,7 @@
 	{ENDLOOP:groups}
 	
 	// Style form with jquery-ui
-	$("select, textarea, input:not(#conf-daycycle)").addClass("ui-widget ui-widget-content ui-corner-all");
+	$("select, input:not(#conf-daycycle)").addClass("ui-widget ui-widget-content ui-corner-all");
 	$("button[type=submit]").button();
 	$(".conf-ui-button").button();
 	$("#conf-daycycle").spinner( {min: 1.0, max: 24.0, step: 0.1} );
@@ -602,5 +604,23 @@
 			return false;
 		}
 	} );
+	
+	// Rules Editor
+	var rulesElement = document.getElementById('conf-rules');
+	sceditor.create( rulesElement, {
+		format: 'bbcode',
+		style: 'css/sceditor/inside.css',
+		icons: 'monocons',
+		toolbar: 'bold,italic,underline,size,color|bulletlist,table,quote,horizontalrule,link,unlink,image|left,center,right|source',
+		emoticonsEnabled: false,
+		resizeEnabled: false,
+		spellcheck: false,
+	} );
+	sceditor.instance(rulesElement).val(RulesString);
+	// Update hidden element before submit
+	$("#general-form").on( 'submit', function(event) {
+		$("#hidden-rules").val(sceditor.instance(rulesElement).val());
+	} );
+	
 
 </script>

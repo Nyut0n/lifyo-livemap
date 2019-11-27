@@ -94,6 +94,7 @@ var NyuLivemapHeader = {
 		this.rulesDialog = $("#dialog-rules").dialog( {
 			autoOpen: false, resizable: true, modal: true,
 			width: "auto", height: Math.round($(window).height() * 0.8),
+			classes: { "ui-dialog-content": "bbcode-wysiwyg" },
 			buttons: [
 				{ text: Locale.ui[18], click: function() { $(this).dialog("close"); } },
 			],
@@ -102,6 +103,8 @@ var NyuLivemapHeader = {
 				$(this).css("maxWidth", "1000px");
 			}
 		} );
+		var parser = new sceditor.BBCodeParser();
+		$("#dialog-rules").html( parser.toHTML(controller.config.rules) );
 		return this;
 	},
 	
