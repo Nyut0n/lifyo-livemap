@@ -156,8 +156,10 @@ var NyuLivemapHeader = {
 		document.getElementById('h-gametime').innerHTML = timestring + " <span class=\"hint\">" + datestring + "</span>";
 		// Set game time tooltip
 		var progression = Math.round( (24/dayCycle) * 100 ) / 100;
-		var gameseconds = (24 - date.getUTCHours()) * 3600 + (60 - date.getUTCMinutes()) * 60 + (60 - date.getUTCSeconds());
+		var gameseconds = (23 - date.getUTCHours()) * 3600 + (60 - date.getUTCMinutes()) * 60 + (60 - date.getUTCSeconds());
 		var realseconds = Math.round(gameseconds / progression);
+		console.log(gameseconds);
+		console.log(timestring);
 		var timerString = L.Util.template( "{hrs}:{min}:{sec}", {
 			hrs: Math.floor(realseconds / 60 / 60 % 24).pad(2),
 			min: Math.floor(realseconds / 60 % 60).pad(2),
