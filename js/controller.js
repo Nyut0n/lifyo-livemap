@@ -133,8 +133,8 @@ function NyuLivemapController() {
 			livemap.getLayer('grid').addControl("images/control/grid.png", Locale.ui[102]);
 			livemap.getLayer('planner').addControl("images/control/planner.png", Locale.ui[103]);
 			// Custom Data
-			data.pois  && livemap.getLayer('pois').addControl("images/control/pois.png", Locale.ui[115]);
-			data.areas && livemap.getLayer('areas').addControl("images/control/areas.png", Locale.ui[116]);
+			data.pois.length  && livemap.getLayer('pois').addControl("images/control/pois.png", Locale.ui[115]);
+			data.areas.length && livemap.getLayer('areas').addControl("images/control/areas.png", Locale.ui[116]);
 			// Online Players
 			self.hasPrivilege('player_layer') && livemap.getLayer('players').addControl("images/control/players.png", Locale.ui[104]);
 			// Claim & outpost layers
