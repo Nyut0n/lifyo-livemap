@@ -59,7 +59,7 @@
 				$charter_data = json_decode($claim['GuildCharter'], TRUE);
 				if( isSet($charter_data['GuildCharterPublic']) && $charter_data['GuildCharterPublic'] ) {
 					$claim['GuildCharterPublic'] = TRUE;
-					$claim['SanitizedCharter'] = nl2br(htmlentities($charter_data['GuildCharter']));
+					$claim['SanitizedCharter'] = htmlentities($charter_data['GuildCharter']);
 				} else {
 					$claim['GuildCharterPublic'] = FALSE;
 					$claim['SanitizedCharter'] = "";

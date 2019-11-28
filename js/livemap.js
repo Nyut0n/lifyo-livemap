@@ -625,7 +625,8 @@ function Livemap( controller ) {
 	};
 	
 	this.openCharter = function( guildName, charterText ) {
-		$("<div>" + charterText + "</div>").dialog( {
+		var bbparser = new sceditor.BBCodeParser();
+		$("<div class=\"bbcode-wysiwyg\">" + bbparser.toHTML(charterText) + "</div>").dialog( {
 			title: Locale.ui[208] + ": " + guildName,
 			width: "auto", minWidth: 300,
 			height: "auto", maxHeight: 700,

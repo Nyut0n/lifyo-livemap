@@ -88,8 +88,7 @@
 					$char['GuildTier'] = Guild::get_claim_tier(intval($char['Radius']));
 					$char['GuildType'] = Livemap::get_ui_guildtypes()[$guild->type];
 					$charter = $guild->get_detail('GuildCharter');
-					$char['GuildCharter'] = ( $charter ? $charter : "" );
-					$char['GuildCharterHtml'] = nl2br(htmlspecialchars($charter));
+					$char['GuildCharter'] = ( $charter ? htmlspecialchars($charter) : "" );
 					$char['GuildCharterPublic'] = intval( $guild->get_detail('GuildCharterPublic') );
 					$char['MemberCount'] = count($guild->get_members());
 				}

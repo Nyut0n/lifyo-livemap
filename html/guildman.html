@@ -35,7 +35,7 @@
 			{ENDIF:has_claim}
 			<div class="guildman-charter" id="charter-gid-{GuildID}">
 				<h3>{ui_208}</h3>
-				<div>{GuildCharterHtml}</div>
+				<div class="bbcode-wysiwyg">{GuildCharterHtml}</div>
 			</div>
 		{ENDIF:has_guild}
 	</div>
@@ -77,8 +77,7 @@
 <!-- Dialog: Edit Charter -->
 <div id="guild-charter-dialog" class="ui-dialog" title="{ui_209}">
 	<form method="POST" action="index.php?livemap_id={LIVEMAP_ID}">
-		{IFNOT:INGAME}<textarea name="charter" rows="15" cols="120" class="ui-widget ui-widget-content ui-corner-all"></textarea>{ENDIFNOT:INGAME}
-		{IF:INGAME}<textarea name="charter" rows="12" cols="80" class="ui-widget ui-widget-content ui-corner-all"></textarea>{ENDIF:INGAME}
+		<textarea id="charter-editor"></textarea>
 		<br>
 		<fieldset>
 			<legend>{ui_216}</legend>
@@ -89,6 +88,7 @@
 		</fieldset>
 		<input type="hidden" name="action" value="GUILDMAN">
 		<input type="hidden" name="command" value="update_charter">
+		<input type="hidden" name="charter" value="" id="hidden-charter">
 		<input type="hidden" name="source_guild_id" value="0" id="guild-charter-gid">
 		<input type="submit" tabindex="-1">
 	</form>
@@ -241,11 +241,39 @@
 	} );
 	
 	/* Guild Charter */
-
+	
+	var bbparser = new sceditor.BBCodeParser();
+	MyCharacters.forEach( function(character) {
+		$("#charter-gid-" + character.GuildID + " > div").html( bbparser.toHTML(character.GuildCharter) );
+	} );
 	$(".guildman-charter").accordion( {collapsible: true, active: false} );
 	
-	$("#guild-charter-private, #guild-charter-public").checkboxradio();
-	
+	$("#guild-charter-dialog").dialog( {
+		autoOpen: false, resizable: true, modal: true,
+		height: "auto", width: "auto", 
+		buttons: {
+			"{ui_221}": function() {
+				$("#hidden-charter", this).val(sceditor.instance(charterEditor).val());
+				$("form", this).submit();
+				$(this).dialog("close");
+				GuildManager.spinnerDialog();
+			},
+			"{ui_222}": function() { $(this).dialog("close"); }
+		}
+	} );
+
+	var charterEditor = document.getElementById('charter-editor');
+	sceditor.create( charterEditor, {
+		format: 'bbcode',
+		style: 'css/sceditor/inside.css',
+		width: 700,
+		icons: 'monocons',
+		toolbar: 'bold,italic,underline,size,color|bulletlist,table,quote,horizontalrule|left,center,right|source',
+		emoticonsEnabled: false,
+		resizeEnabled: false,
+		spellcheck: false,
+	} );
+
 	$(".guild-charter-button").button().on( 'click', function() {
 		var dialog = $("#guild-charter-dialog");
 		// Find char and guild info
@@ -255,23 +283,14 @@
 		var mychar = MyCharacters[i];
 		// Update dialog 
 		mychar.GuildCharterPublic ? $("#guild-charter-public", dialog).click() : $("#guild-charter-private", dialog).click();
-		$("textarea", dialog).text(mychar.GuildCharter);
+		sceditor.instance(charterEditor).val(mychar.GuildCharter);
 		$("#guild-charter-gid", dialog).val(this.dataset.guild);
 		// Open dialog
 		dialog.dialog('open');
 	} );
 	
-	$("#guild-charter-dialog").dialog( {
-		autoOpen: false, resizable: true, modal: true,
-		height: "auto", width: "auto", 
-		buttons: {
-			"{ui_221}": function() { 
-				$("form", this).submit();
-				$(this).dialog("close");
-				GuildManager.spinnerDialog();
-			},
-			"{ui_222}": function() { $(this).dialog("close"); }
-		}
-	} );
+	$("#guild-charter-private, #guild-charter-public").checkboxradio();
 
+
+	
 </script>
