@@ -128,7 +128,7 @@
 	<!-- Weather -->
 	<weather>
 		<string id="0">Regen</string>
-		<string id="1">Wolkig</string>
+		<string id="1">Bewölkt</string>
 		<string id="2">Schnee</string>
 		<string id="3">Sonnig</string>
 	</weather>

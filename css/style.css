@@ -165,9 +165,13 @@ header {
 			#header-jh, #header-restarts {
 				display: none;
 			}
-			#online-players-list, #restarts-list{
+			#restarts-list {
 				list-style-type: Square;
 				list-style-position: inside;
+			}
+			#online-players-list li {
+				display: inline-block;
+				width: 148px;
 			}
 
 .header-tooltip {
