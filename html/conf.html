@@ -217,8 +217,13 @@
 					<legend>Map Images</legend>
 					<div class="kv-split-left">
 						<div class="kv-row">
-							<div>Primary Map Image</div>
-							<div><input type="checkbox" name="enable_default" disabled="disabled" checked> Enabled</div>
+							<div><b>Primary Map Image</b></div>
+							<div>
+								<select name="pri_map" id="conf-pri-map">
+									<option value="1">Map Image</option>
+									<option value="2"{IF:PRI_TILE} selected{ENDIF:PRI_TILE}>Use Tileset</option>
+								</select>
+							</div>
 						</div>
 						{IFNOT:FEUDALTOOLS}
 						<div class="kv-row">
@@ -228,14 +233,19 @@
 						{ENDIFNOT:FEUDALTOOLS}
 						<img class="map-preview" src="{mapfile_default}">
 						{IF:FEUDALTOOLS}
-						<br>Replace:<br>
-						<input type="file" name="mapfile_default">
+						<p id="pri-map-upload">Map Image Upload:<br><input type="file" name="mapfile_default"></p>
 						{ENDIF:FEUDALTOOLS}
 					</div>
 					<div class="kv-split-right">
 						<div class="kv-row">
-							<div>Secondary Map Image</div>
-							<div><input type="checkbox" name="alt_map"{IF:ENABLE_ALTMAP} checked{ENDIF:ENABLE_ALTMAP}> Enabled</div>
+							<div><b>Secondary Map Image</b></div>
+							<div>
+								<select name="alt_map" id="conf-alt-map">
+									<option value="0">Disable</option>
+									<option value="1"{IF:SEC_IMAGE} selected{ENDIF:SEC_IMAGE}>Map Image</option>
+									<option value="2"{IF:SEC_TILE} selected{ENDIF:SEC_TILE}>Use Tileset</option>
+								</select>
+							</div>
 						</div>
 						{IFNOT:FEUDALTOOLS}
 						<div class="kv-row">
@@ -245,8 +255,7 @@
 						{ENDIFNOT:FEUDALTOOLS}
 						<img class="map-preview" src="{mapfile_alternative}">
 						{IF:FEUDALTOOLS}
-						<br>Replace:<br>
-						<input type="file" name="mapfile_alternative">
+						<p id="alt-map-upload">Map Image Upload:<br><input type="file" name="mapfile_alternative"></p>
 						{ENDIF:FEUDALTOOLS}
 					</div>
 				</fieldset>
@@ -622,5 +631,6 @@
 		$("#hidden-rules").val(sceditor.instance(rulesElement).val());
 	} );
 	
+		
 
 </script>

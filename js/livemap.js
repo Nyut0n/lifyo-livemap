@@ -38,8 +38,8 @@ function Livemap( controller ) {
 		this.leaflet.zoomControl.setPosition('bottomleft');
 		this.leaflet.attributionControl.setPrefix("LiF:YO Livemap v" + config.version);
 		this.leaflet.attributionControl.addAttribution("<a href=\"javascript:void(0);\" onclick=\"Controller.livemap.credits.dialog('open');\">&starf; about</span>");
-		// Load primary map image
-		L.imageOverlay(config.mapfile_default, [[0,0], [1533,1533]]).addTo(this.leaflet);
+		// Load primary map imagery
+		this.initLayer('primaryMap').setData(config.mapfile_default).show();
 		// Attach design to tooltip and popup panes
 		$(this.leaflet.getPane('tooltipPane')).addClass('style-' + config.style_tooltip);
 		$(this.leaflet.getPane('popupPane')).addClass('style-' + config.style_tooltip);
@@ -106,6 +106,26 @@ function Livemap( controller ) {
 		
 		switch(name) {
 			
+			case 'primaryMap':
+				layer.onDraw = function(layerGroup, data) {
+					var primaryMap = self.config.pri_map < 2 ? L.imageOverlay(data, [[0,0], [1533,1533]]) : self.createTileLayer();
+					primaryMap.addTo(layerGroup);
+				};
+			break;
+			
+			case 'secondaryMap':
+				layer.onDraw = function(layerGroup, data) {
+					var secondaryMap = self.config.alt_map < 2 ? L.imageOverlay(data, [[0,0], [1533,1533]]) : self.createTileLayer();
+					secondaryMap.addTo(layerGroup);
+				};
+				layer.onShow = function() {
+					self.getLayer('primaryMap').hide();
+				};
+				layer.onHide = function() {
+					self.getLayer('primaryMap').show();
+				};
+			break;
+			
 			case 'pois':
 				layer.onDraw = function(layerGroup, data) {
 					data.forEach( function(poi) {
@@ -153,12 +173,6 @@ function Livemap( controller ) {
 							.addTo(layerGroup);
 						}
 					} );
-				};
-			break;
-			
-			case 'secondaryMap':
-				layer.onDraw = function(layerGroup, data) {
-					L.imageOverlay(data, [[0,0], [1533,1533]]).addTo(layerGroup);
 				};
 			break;
 			
@@ -553,6 +567,17 @@ function Livemap( controller ) {
 		
 	};
 	
+	this.createTileLayer = function() {
+		var tileURL = this.config.isttmap ? 'maps/tileset/' + this.config.ID + '/{z}_{x}_{y}.jpg' : 'maps/tileset/{z}_{x}_{y}.jpg';
+		var tileLayer = new L.TileLayer.YoMatrix( tileURL, {
+			tileSize: 511,
+			minZoom: -1,
+			minNativeZoom: 0,
+			bounds: [[0,0], [1533, 1533]],
+		} );
+		return tileLayer;
+	};
+	
 	this.updatePlayers = function( newData ) {
 		var layer = this.getLayer('players');
 		if( layer.hasData ) {
@@ -734,3 +759,15 @@ L.control.customControl = function(opts) {
 L.Icon.Default.prototype.options.iconSize = [20, 30];
 L.Icon.Default.prototype.options.iconAnchor = [10, 30];
 L.Icon.Default.prototype.options.shadowSize = [30, 30];
+
+// Custom TileLayer cause URL generation is broken for CRS.Simple systems
+L.TileLayer.YoMatrix = L.TileLayer.extend( {
+    getTileUrl: function(coords) {
+        var data = {
+			x: coords.x,
+			y: 3 * Math.pow(2, this._getZoomForUrl()) + coords.y,
+			z: this._getZoomForUrl(),
+		};
+		return L.Util.template(this._url, L.Util.extend(data, this.options));
+    }
+} );

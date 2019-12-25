@@ -227,10 +227,11 @@ switch( $_REQUEST['action'] ) {
 		$mygroup->isAdmin() OR Livemap::error_redirect();
 		
 		// Check input is set
-		isSet($_POST['color_bg'], $_POST['color_bg'], $_POST['color_label'], $_POST['color_claim_t1'], $_POST['color_claim_t2'], $_POST['color_claim_t3'], $_POST['color_claim_t4'], $_POST['style_claim'], $_POST['style_tooltip'], $_POST['width_claim'],  $_POST['font_claimdetail'],  $_POST['font_claimlabel']) OR Livemap::error_redirect();
+		isSet($_POST['alt_map'], $_POST['pri_map'], $_POST['color_bg'], $_POST['color_bg'], $_POST['color_label'], $_POST['color_claim_t1'], $_POST['color_claim_t2'], $_POST['color_claim_t3'], $_POST['color_claim_t4'], $_POST['style_claim'], $_POST['style_tooltip'], $_POST['width_claim'],  $_POST['font_claimdetail'],  $_POST['font_claimlabel']) OR Livemap::error_redirect();
 	
 		// Evaluate input
-		$alt_map  = isSet($_POST['alt_map']) ? 1 : 0;
+		$pri_map  = intval($_POST['pri_map']);	// 0 = Disable // 1 = Image // 2 = Tileset
+		$alt_map  = intval($_POST['alt_map']);
 		$c_bg	  = $_POST['color_bg'];
 		$c_label  = isSet($_POST['show_labels']) && $_POST['show_labels'] === '1' ? $_POST['color_label'] : 'ZZZZZZ';
 		$s_claim  = $_POST['style_claim'];
@@ -255,6 +256,14 @@ switch( $_REQUEST['action'] ) {
 		if( ! in_array($s_claim, ['solid', 'dotted', 'dashed'] ) ) Livemap::error_redirect();
 		if( ! in_array($s_tooltip, ['standard', 'dark'] ) ) Livemap::error_redirect();
 		if( $w_claim < 1 || $w_claim > 5 ) Livemap::error_redirect();
+		if( $pri_map < 1 ) Livemap::error_redirect();
+		
+		// Tileset verification	
+		if( max($pri_map, $alt_map) === 2 ) {
+			if( $pri_map === 2 && $alt_map === 2 ) Livemap::error_redirect("Tileset can be used for either primary or secondary map image. Not both.");
+			$tileset_path = Livemap::$config['isttmap'] ? 'maps/tileset/' . Livemap::$id : 'maps/tileset';
+			file_exists("$tileset_path/full.jpg") || file_exists("$tileset_path/1_0_3.jpg") || Livemap::error_redirect('No tileset found. Install a tileset first.');
+		}
 		
 		// FeudalTools only: Check map image uploads
 		if( $config['isttmap'] ) {
@@ -292,7 +301,7 @@ switch( $_REQUEST['action'] ) {
 		}
 		
 		// Update database and redirect with force_reload
-		$cdb->query( "UPDATE {$config['table_c']} SET alt_map = $alt_map, color_bg = '$c_bg', color_claim_t1 = '$c_claim_t1', color_claim_t2 = '$c_claim_t2', color_claim_t3 = '$c_claim_t3', color_claim_t4 = '$c_claim_t4', color_label = '$c_label', style_claim = '$s_claim', style_tooltip = '$s_tooltip', width_claim = '$w_claim', font_claimlabel = '$f_label', font_claimdetail = '$f_detail' WHERE ID = '$livemap_id'" );
+		$cdb->query( "UPDATE {$config['table_c']} SET pri_map = $pri_map, alt_map = $alt_map, color_bg = '$c_bg', color_claim_t1 = '$c_claim_t1', color_claim_t2 = '$c_claim_t2', color_claim_t3 = '$c_claim_t3', color_claim_t4 = '$c_claim_t4', color_label = '$c_label', style_claim = '$s_claim', style_tooltip = '$s_tooltip', width_claim = '$w_claim', font_claimlabel = '$f_label', font_claimdetail = '$f_detail' WHERE ID = '$livemap_id'" );
 		Livemap::log_action('config_appearance');
 		$session['FORCE_RELOAD'] = TRUE;
 		Livemap::success_redirect("Livemap design settings were updated!");

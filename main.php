@@ -107,9 +107,13 @@
 			$content = new Template('html/conf.html');
 			// Assign config
 			foreach( $config AS $key => $val ) $content->assign( $key, $val );
-			$content->assign( 'languages', $languages )
+			$content->assign( 'languages', $languages );
 			// Rules
-			->assign( 'SanitizedRules', htmlspecialchars($config['rules']) );
+			$content->assign( 'SanitizedRules', htmlspecialchars($config['rules']) );
+			// Map image facts
+			$content->assign( 'PRI_TILE', intval($config['pri_map']) === 2 )
+			->assign( 'SEC_TILE', intval($config['alt_map']) === 2 )
+			->assign( 'SEC_IMAGE', intval($config['alt_map']) === 1 );
 			// Assign styles
 			$claimstyles = array( 'solid', 'dashed', 'dotted' );
 			$content->assign( 'claimstyles', Template::simple_select_array($claimstyles, $config['style_claim']) );
@@ -117,8 +121,6 @@
 			$content->assign( 'claimthickness', Template::simple_select_array($claimborder, $config['width_claim']) );
 			$tooltips = array( 'standard', 'dark' );
 			$content->assign( 'tooltips', Template::simple_select_array($tooltips, $config['style_tooltip']) );
-			// Secondary map image
-			$content->assign( 'ENABLE_ALTMAP', (bool)$config["alt_map"] );
 			// Assign timezones
 			$content->assign( 'timezones', Template::simple_select_array(timezone_identifiers_list(), $config['timezone']) );
 			// Assign groups

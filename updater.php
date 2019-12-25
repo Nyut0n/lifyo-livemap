@@ -85,6 +85,7 @@
 			// 3.1.0 update
 			if( version_compare($current_version, "3.1.0", "<") ) {
 				$cdb->query( "ALTER TABLE `nyu_livemap` ADD COLUMN `admin_steam` BIGINT UNSIGNED NULL AFTER `ID`" );
+				$cdb->query( "ALTER TABLE `nyu_livemap` ADD COLUMN `pri_map` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `rules`" );
 			}
 			
 			// Finally, update version column in livemap table
