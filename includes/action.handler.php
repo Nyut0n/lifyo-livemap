@@ -11,22 +11,26 @@ switch( $_REQUEST['action'] ) {
 
 		isset($_POST['auth_pass']) || Livemap::error_redirect(Livemap::get_ui_string(31));
 		strlen($_POST['auth_pass']) > 3 || Livemap::error_redirect(Livemap::get_ui_string(31));
-	
+
 		// FeudalTools only: Get real password hash from database. Don't rely on cached one.
-		// Not necessary on dedicated maps, since the password is read straight from config-dedicated.php
+		// Not necessary on dedicated maps, since the plain-text password is read from config-dedicated.php
 		if( $config['isttmap'] ) {
 			$rs = $cdb->query("SELECT admin_pass FROM {$config['table_c']} WHERE ID = '$livemap_id'", FALSE);
 			$config['admin_pass'] = $session['config']['admin_pass'] = $rs['admin_pass'];
 		}
 		
+		// Legacy (v2) authentication hash
+		// Needed for hosted livemaps that were migrated from v2
+		$v2_hash = hash('sha256', $_POST['auth_pass']);
+		
 		// Admin Login
-		if( password_verify($_POST['auth_pass'], $config['admin_pass']) ) {
+		if( password_verify($_POST['auth_pass'], $config['admin_pass']) || $config['admin_pass'] === $v2_hash ) {
 			Livemap::login_group(0);
 			Livemap::success_redirect(Livemap::get_ui_string(33));
 		// User login
 		} else {
 			foreach( Livemap::get_groups_array() AS $group ) {
-				if( password_verify($_POST['auth_pass'], $group['password']) ) {
+				if( password_verify($_POST['auth_pass'], $group['password']) || $group['password'] === $v2_hash ) {
 					Livemap::login_group($group['ID']);
 					Livemap::success_redirect(Livemap::get_ui_string(33));
 				}
