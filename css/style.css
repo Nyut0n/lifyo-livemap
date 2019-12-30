@@ -187,12 +187,18 @@ header {
 		margin: 5px;
 	}
 	
-@media ( max-width: 1180px ) {
-	
+@media ( max-width: 1100px ) {
+	/* Tablet Tier */
 	header .hint {
-		display: none;
+		display: none !important;
 	}
+}
 
+@media ( max-width: 400px ) {
+	/* iPhone 6, Galaxy S5 Tier */
+	#header-jh, #header-restarts, #header-weather  {
+		display: none !important;
+	}
 }
 
 /* Notifications */

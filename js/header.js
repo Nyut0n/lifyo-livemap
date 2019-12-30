@@ -173,12 +173,14 @@ var NyuLivemapHeader = {
 	setOnlinePlayers: function( players ) {
 		// If server is offline
 		if( players === false ) {
-			$("#header-players .hint").hide();
-			$("#h-now-online").html(Locale.ui[37]);
+			$("#header-players .header-item-icon").attr('src', 'images/header/plug.png');
+			$("#header-players .hint").html(Locale.ui[37]);
+			$("#h-now-online").hide();
 		// If online, update player number
 		} else {
-			$("#header-players .hint").show();
-			$("#h-now-online").html(players);
+			$("#header-players .header-item-icon").attr('src', 'images/header/players.png');
+			$("#header-players .hint").html(Locale.ui[0]);
+			$("#h-now-online").html(players).show();
 		}
 		return this;
 	},
