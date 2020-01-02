@@ -270,6 +270,12 @@ var NyuLivemapHeader = {
 	
 	setRestartsTooltip: function( restarts ) {
 		var content = Locale.ui[7] + ":<ul id=\"restarts-list\">";
+		restarts.sort( function(a, b) {
+			var aDate = new Date(a*1000);
+			var bDate = new Date(b*1000);
+			if( aDate.getHours() > bDate.getHours() ) return 1;
+			return -1;
+		} );
 		restarts.forEach( function(ts) {
 			var date = new Date(ts*1000);
 			content += "<li>" + date.getHours().pad(2) + ':' + date.getMinutes().pad(2) + "</li>";
