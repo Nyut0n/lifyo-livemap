@@ -90,6 +90,19 @@
 		var data = cell.getData();
 		return data.Name + " " + data.LastName;
 	}
+	
+	function deletePermissionFormatter( cell ) {
+		var table = cell.getTable();
+		var link = "index.php?livemap_id={LIVEMAP_ID}&action=GUILDMAN&source_guild_id=" + cell.getTable().sourceGuild + "&command=delete_permission&type=" + table.subjectType + "&id=" + cell.getData()[table.subjectField];
+		var iconElement = new Image();
+		iconElement.src = "images/trash.png";
+		iconElement.className = "is-clickable";
+		iconElement.onclick = function() {
+			GuildManager.spinnerDialog();
+			window.location.href = link;
+		}
+		return iconElement;
+	}
 		
 	function permissionChanger( e, cell ) {
 		var initialValue = cell.getValue();
@@ -169,6 +182,7 @@
 		columns:[
 			{ title:"{ui_230}", field:"Name" },
 			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+			{ title:" ", field:"DeleteRowDummy", width:32, formatter:deletePermissionFormatter },
 		],
 		tableBuilt: function() {
 			this.subjectType = "guild";
@@ -184,6 +198,7 @@
 		columns:[
 			{ title:"{ui_215}", field:"Name", formatter:charPermissionFormatter },
 			columnDefinitions.CanEnter, columnDefinitions.CanBuild, columnDefinitions.CanClaim, columnDefinitions.CanUse, columnDefinitions.CanDestroy,
+			{ title:" ", field:"DeleteRowDummy", width:32, formatter:deletePermissionFormatter },
 		],
 		tableBuilt: function() {
 			this.subjectType = "char";

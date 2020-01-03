@@ -130,20 +130,15 @@
 		case 'delete_permission':
 		
 			Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=guildman&m=permissions&gid=$source_id";
-		
-			if( isSet($_GET['char_id']) ) {
-				$type = 'char';
-				$subject_id = intval($_GET['char_id']);
-			}
-			elseif( isSet($_GET['guild_id']) ) {
-				$type = 'guild';
-				$subject_id = intval($_GET['guild_id']);
-			} else {
-				Livemap::error_redirect();
-			}
-
+			
+			// Pre-checks
+			isset($_GET['id'], $_GET['type']) || Livemap::error_redirect();
+			in_array($_GET['type'], ['char', 'guild']) || Livemap::error_redirect();
+			
+			Livemap::$redirect .= "#tab-" . $_GET['type'];
+			
 			// Process action in database
-			$code = $guild->delete_permission($type, $subject_id);
+			$code = $guild->delete_permission($_GET['type'], intval($_GET['id']));
 			($code === 1) && Livemap::success_redirect(Livemap::get_ui_string(242));
 			Livemap::error_redirect(Livemap::get_ui_string(241+$code));
 
