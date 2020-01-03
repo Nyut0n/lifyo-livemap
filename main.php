@@ -141,6 +141,7 @@
 			$content->assign( 'font_claimdetail', $config['font_claimdetail'] );
 			
 			// Get last TTmod heartbeat and version
+			$content->assign( 'MOD_INSTALLED', $server->detect_ttmod() );
 			if( $server->detect_ttmod() ) {
 				$ttmod_version = $server->get_ttmod_version();
 				$rs = $server->passthru_db_query( "SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(MAX(`time`)) AS diff FROM nyu_tracker_stats", FALSE );
@@ -331,6 +332,9 @@
 			// Translations
 			$content->assign( 'json_ranks', json_encode(Livemap::get_ui_ranks()) );
 			
+			// TTmod detail
+			$content->assign( 'MOD_INSTALLED', $server->detect_ttmod() );
+			
 		break;
 		
 		// RCON
@@ -377,8 +381,7 @@
 	->assign( 'FEUDALTOOLS', $config['isttmap'] )
 	->assign( 'REAL_LINK', ( isset($_SERVER['HTTPS']) ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" )
 	->assign( 'IS_MAP', $site === 'main' )
-	->assign( 'IS_PUBLIC', (bool)$config['server_query'] )
-	->assign( 'MOD_INSTALLED', $server->detect_ttmod() );
+	->assign( 'IS_PUBLIC', (bool)$config['server_query'] );
 	
 	// Assign user status and group privileges
 	foreach( $mygroup->privileges AS $key => $bool ) $html->assign( "PRIV_$key", $bool );
