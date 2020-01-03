@@ -40,7 +40,8 @@ class LiFServer {
 	public function set_gameserver( $ip, $port ) {
 		$this->ip = $ip;
 		$this->port = $port;
-		$this->ispublic = TRUE;
+		// Verify valid IP or resolvable hostname
+		$this->ispublic = ( filter_var($ip, FILTER_VALIDATE_IP) || gethostbyname($ip) !== $ip );
 	}
 	
 	# Connect to gameserver through SourceQuery library 
