@@ -216,7 +216,7 @@ class LiFServer {
 			return array( 'timestamps' => $timestamps, 'duration' => intval($this->serverrules['duration']) );
 		// Handle error if no communication with server possible
 		} catch( Exception $e ) {
-			syslog(LOG_INFO, "Unable to query gameserver: " . $e->getMessage());
+			# syslog(LOG_INFO, "Unable to query gameserver: " . $e->getMessage());
 			return FALSE;
 		}
 	}
