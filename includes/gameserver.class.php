@@ -28,6 +28,7 @@ class LiFServer {
 	# Create a database object
 	public function set_db_credentials( $ip, $port, $user, $pass, $schema ) {
 		$this->db = new MySQL( $user, $pass, $schema, $ip, intval($port), 'utf8' );
+		$this->db->connect_exception = TRUE;
 	}
 	
 	# Execute query in gameserver database
