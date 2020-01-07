@@ -457,6 +457,8 @@ function Livemap( controller ) {
 					// Draw Outposts
 					data.forEach( function(outpost) {
 						var position = self.px2c(outpost.x, outpost.y);
+						// is a known objectd ID ?
+						if( ! Locale.objects.hasOwnProperty(outpost.ObjectTypeID) ) return false;
 						// Assign localized building name
 						outpost.BuildingName = Locale.objects[outpost.ObjectTypeID];
 						// Circle
