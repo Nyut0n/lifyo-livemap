@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- UI / Interface -->
+	<ui>
+		<!-- Header / Menu / General -->
+		<string id="0">players</string>
+		<string id="1">Online</string>
+		<string id="2">Duração do Dia: {num} hora(s)</string>
+		<string id="3">Fator Progressão do Tempo</string>
+		<string id="4">Próximo ciclo do dia</string>
+		<string id="5">Amanhã</string>
+		<string id="6">até o próximo restart</string>
+		<string id="7">Restart do Servidor</string>
+		<string id="8">Next JH</string>
+		<string id="9">Livemap Login</string>
+		<string id="10">Manter Logado</string>
+		<string id="11">Favor logar pela Steam para acessar configurações da sua guild no server</string>
+		<string id="12">Guild Management</string>
+		<string id="13">Informações do Servidor</string>
+		<string id="14">Server Timezone</string>
+		<string id="15">Game Settings</string>
+		<string id="16">Login</string>
+		<string id="17">Logout</string>
+		<string id="18">Fechar</string>
+		<string id="19">voltar</string>
+		<string id="20">Previsão do Tempo</string>
+		<string id="21">JH ativa</string>
+		<string id="22">Weekly Judgement Hours</string>
+		<string id="23">Duração: {num} minutos</string>
+		<string id="24">Memberlist</string>
+		<string id="25">Founded</string>
+		<string id="26">Diameter</string>
+		<string id="27">tiles</string>
+		<string id="28">Construções</string>
+		<string id="29">População</string>
+		<string id="30">Ocorreu um ERRO</string>
+		<string id="31">Login failed. Invalid password?</string>
+		<string id="32">Your SteamID isn't assinged to a permission group</string>
+		<string id="33">Login successful</string>
+		<string id="34">Regras do Servidor</string>
+		<string id="35">Registrar</string>
+		<string id="36">Couldn't load server details. Server offline?</string>
+		<string id="37">Server Offline</string>
+		<string id="38">Tier-{GuildTier} Guild Claim</string>
+		<string id="39">{SizeX}x{SizeY} tiles Admin Land</string>
+		<string id="40">{Name} {LastName}'s Personal Claim</string>
+		<string id="41">Outpost of {GuildName}</string>
+		<string id="42">Trading Post</string>
+		<string id="43">mais detalhes</string>
+		<!-- Livemap / Layers -->
+		<string id="100">Alternative terrain imagery</string>
+		<string id="101">Region Overlay</string>
+		<string id="102">Grid Overlay</string>
+		<string id="103">Claim &amp; Outpost Planner</string>
+		<string id="104">Players Online</string>
+		<string id="105">Admin Lands</string>
+		<string id="106">Personal Lands</string>
+		<string id="107">Guild Claims</string>
+		<string id="108">Outposts</string>
+		<string id="109">Estradas Pavimentadas</string>
+		<string id="110">Construções &amp; Estruturas</string>
+		<string id="111">Membros</string>
+		<string id="112">Sleeper's Forge</string>
+		<string id="113">Sleeper's Tongs</string>
+		<string id="114">Sleeper's Hammer</string>
+		<string id="115">Points of Interest</string>
+		<string id="116">Area Overlay</string>
+		<string id="117">Trading Posts</string>
+		<string id="118">Florestas</string>
+		<!-- Guild Management -->
+		<string id="200">Você ainda não criou nenhum personagem no servidor :(</string>
+		<string id="201">Privilege Checker</string>
+		<string id="202">Tier</string>
+		<string id="203">Guild Type</string>
+		<string id="204">This guild has no claim yet</string>
+		<string id="205">Rank</string>
+		<string id="206">Standings</string>
+		<string id="207">Permissões</string>
+		<string id="208">Guild Charter</string>
+		<string id="209">Editar Personagem</string>
+		<string id="210">This character is guildless</string>
+		<string id="211">Checks your characters permissions on foreign guild lands</string>
+		<string id="212">Procurar Guild</string>
+		<string id="213">Lista dos Membros</string>
+		<string id="214">Alterar o Rank</string>
+		<string id="215">Personagem</string>
+		<string id="216">Charter Visibility</string>
+		<string id="217">Apenas Membros</string>
+		<string id="218">Todos</string>
+		<string id="219">Confirmar expulsão do(a)'{char_name}' da guild?</string>
+		<string id="220">Expulsar da Guild</string>
+		<string id="221">Salvar</string>
+		<string id="222">Cancelar</string>
+		<string id="223">Our Standing</string>
+		<string id="224">Their Standing</string>
+		<string id="225">Permissões da Guild</string>
+		<string id="226">Permissões do Personagem</string>
+		<string id="227">Adicionar Regra</string>
+		<string id="228">Procurar Personagem</string>
+		<string id="229">No rules created yet</string>
+		<string id="230">Guild</string>
+		<string id="231">Adicionar</string>
+		<string id="232">Change Standings</string>
+		<string id="233">Aceitar</string>
+		<string id="234">Tipo</string>
+		<string id="235">Distância</string>
+		<string id="236">Líder</string>
+		<string id="237">guilds selecionadas</string>
+		<string id="238">Selecione pelo menos uma linha</string>
+		<string id="239">Não possuí permissão</string>
+		<string id="240">O servidor não responde. Tempo limite de ex. Server offline?</string>
+		<string id="241">O servidor rejeitou a ação</string>
+		<string id="242">Alterações realizadas com Sucesso</string>
+	</ui>
+	<!-- Game Objects -->
+	<objects>
+		<string id="1702">Mine Shaft</string>
+		<string id="1703">Herbalist's Hut</string>
+		<string id="1704">Lumber Mill</string>
+		<string id="1705">Quarry</string>
+		<string id="1706">Forager's Hut</string>
+		<string id="1707">Mill</string>
+		<string id="1708">Knackery</string>
+		<string id="1709">Geognosy Pit</string>
+		<string id="1710">Slave Camp</string>
+		<string id="1711">Military Outpost</string>
+	</objects>
+	<!-- Weather -->
+	<weather>
+		<string id="0">Chuva</string>
+		<string id="1">Nublado</string>
+		<string id="2">Neve</string>
+		<string id="3">Ensolarado</string>
+	</weather>
+	<!-- Day names -->
+	<daynames>
+		<string id="0">Domingo</string>
+		<string id="1">Segunda</string>
+		<string id="2">Terça</string>
+		<string id="3">Quarta</string>
+		<string id="4">Quinta</string>
+		<string id="5">Sexta</string>
+		<string id="6">Sábado</string>
+	</daynames>
+	<!-- Male Ranks -->
+	<ranks_m>
+		<string id="0">-</string>
+		<string id="1">Conde</string>
+		<string id="2">Visconde</string>
+		<string id="3">Barão</string>
+		<string id="4">Cavaleiro</string>
+		<string id="5">Revee</string>
+		<string id="6">Camponês</string>
+		<string id="7">Recruta</string>
+	</ranks_m>
+	<!-- Female Ranks -->
+	<ranks_f>
+		<string id="0">-</string>
+		<string id="1">Condessa</string>
+		<string id="2">Viscondessa</string>
+		<string id="3">Baronesa</string>
+		<string id="4">Cavaleira</string>
+		<string id="5">Revee</string>
+		<string id="6">Camponesa</string>
+		<string id="7">Recruta</string>
+	</ranks_f>
+	<!-- Guild Types -->
+	<guildtypes>
+		<string id="0">-</string>
+		<string id="1">Band</string>
+		<string id="2">Order</string>
+		<string id="3">Country</string>
+		<string id="4">Kingdom</string>
+		<string id="5">Vassal</string>
+	</guildtypes>
+	<!-- Standings -->
+	<standings>
+		<string id="0">-</string>
+		<string id="1">War</string>
+		<string id="2">Hostil</string>
+		<string id="3">Neutro</string>
+		<string id="4">Amigável</string>
+		<string id="5">Aliado</string>
+	</standings>
+	<!-- Permissions -->
+	<permissions>
+		<string id="0">Entrar</string>
+		<string id="1">Construir</string>
+		<string id="2">Claim</string>
+		<string id="3">Usar</string>
+		<string id="4">Destruir</string>
+	</permissions>
+</root>
