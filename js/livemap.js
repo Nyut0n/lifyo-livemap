@@ -147,9 +147,9 @@ function Livemap( controller ) {
 						L.polygon( area.geometry, {
 							opacity: 0.5,
 							color: "#" + area.color,
-							className: 'map-custom-area',
+						//	className: 'map-custom-area',
 						} )
-						.bindTooltip(L.Util.template("<b>{name}</b><br>{desc}", area), {direction:"top"})
+						.bindPopup(L.Util.template("<b>{name}</b><br>{desc}", area))
 						.addTo(layerGroup);
 					} );
 				};
