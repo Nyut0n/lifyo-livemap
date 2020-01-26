@@ -149,6 +149,8 @@ function Livemap( controller ) {
 							color: "#" + area.color
 						} )
 						.bindPopup(L.Util.template("<b>{name}</b><br>{desc}", area))
+						.on('mouseover', function(e) { this.setStyle({fillOpacity:0.27}); })
+						.on('mouseout', function(e) { this.setStyle({fillOpacity:0.2}); })
 						.addTo(layerGroup);
 					} );
 				};
