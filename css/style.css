@@ -294,9 +294,6 @@ header {
 	.map-region-label {
 		font-size: 2em !important;
 	}
-	.map-custom-area {
-		cursor: help !important;
-	}
 	.custom-controls {
 		background-color: rgba(0,0,0,.7);
 	}

@@ -146,8 +146,7 @@ function Livemap( controller ) {
 					data.forEach( function(area) {
 						L.polygon( area.geometry, {
 							opacity: 0.5,
-							color: "#" + area.color,
-						//	className: 'map-custom-area',
+							color: "#" + area.color
 						} )
 						.bindPopup(L.Util.template("<b>{name}</b><br>{desc}", area))
 						.addTo(layerGroup);
