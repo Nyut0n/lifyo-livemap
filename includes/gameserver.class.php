@@ -397,6 +397,21 @@ class LiFServer {
 		}
 		return $items;
 	}
+	
+	# Get RCON schedule
+	public function get_rcon_schedule() {
+		if( $this->get_ttmod_version() < 1.4 ) return array();
+		return $this->db->query( "SELECT *,
+									CASE 
+										WHEN runtime > NOW() THEN runtime 
+										WHEN interval_unit = 'MINUTE' THEN DATE_ADD(runtime, INTERVAL (FLOOR(TIMESTAMPDIFF(MINUTE, runtime, NOW()) / interval_value) + 1) * interval_value MINUTE)
+										WHEN interval_unit = 'HOUR' THEN DATE_ADD(runtime, INTERVAL (FLOOR(TIMESTAMPDIFF(HOUR, runtime, NOW()) / interval_value) + 1) * interval_value HOUR)
+										WHEN interval_unit = 'DAY' THEN DATE_ADD(runtime, INTERVAL (FLOOR(TIMESTAMPDIFF(DAY, runtime, NOW()) / interval_value) + 1) * interval_value DAY)
+										WHEN interval_unit = 'WEEK' THEN DATE_ADD(runtime, INTERVAL (FLOOR(TIMESTAMPDIFF(WEEK, runtime, NOW()) / interval_value) + 1) * interval_value WEEK)
+										ELSE runtime
+									END AS next_runtime 
+									FROM nyu_rcon_schedule" );
+	}
 
 	# Add RCON command to queue
 	public function add_rcon_command($cmd, $param1 = '', $param2 = '', $detail = '', $minutes = 0) {

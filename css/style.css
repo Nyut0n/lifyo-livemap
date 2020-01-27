@@ -530,6 +530,13 @@ fieldset {
 		display: none;
 		position: absolute;
 	}
+	
+#rcon-schedule-button, #rcon-refresh-button {
+	margin: 10px 0;
+}
+#rcon-refresh-button {
+	float: right;
+}
 
 /* Character Management */
 

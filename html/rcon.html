@@ -116,8 +116,11 @@
 			</form>
 			{ENDIF:PRIV_rcon_advanced}
 		</div>
+		<!-- Scheduled Events -->
 		<div id="tab-scheduler">
-			Coming Soon&trade;
+			<button id="rcon-refresh-button"><span class="ui-icon ui-icon-refresh"></span> Refresh List</button> 
+			<button id="rcon-schedule-button"><span class="ui-icon ui-icon-plus"></span> New Task</button>
+			<div id="rcon-scheduler-table"></div>
 		</div>
 	</div>
 
@@ -253,12 +256,27 @@
 	</div>
 </div>
 
+<!-- Dialog: New Task -->
+<div class="ui-dialog" id="rcon-schedule-dialog" title="Schedule New Task">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<!-- 
+		
+		placeholder
+		
+		-->
+		<input type="hidden" name="action" value="RCON">
+		<input type="hidden" name="command" value="schedule_task">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
 <script>
 
 	// Tabulator in ui-tabs fix
 	$("#tabs-container").tabs( {
 		activate: function(event, ui) {
-			Controller.rcon.playerTable.redraw();
+			ui.newPanel[0].id === 'tab-players' && Controller.rcon.playerTable.redraw();
+			ui.newPanel[0].id === 'tab-scheduler' && Controller.rcon.schedulerTable.redraw();
 		}
 	} );
 	

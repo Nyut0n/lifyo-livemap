@@ -1,6 +1,29 @@
 var NyuRconInterface = {
 	
 	playerTable: null,
+	schedulerTable: null,
+	
+	jobKeys: {
+		"bottomprint": "Message on screen bottom",
+		"bottomprintall":"Message on screen bottom",
+		"centerprint": "Message in screen center",
+		"centerprintall": "Message in screen center",
+		"crops_grow": "Trigger crops growth cycle",
+		"exec_command": "Execute script command",
+		"forest_grow": "Trigger forest growth cycle",
+		"insert_item": "Insert inventory item",
+		"insert_item_all": "Insert inventory item",
+		"local_msg": "Message to local chat",
+		"local_msg_all": "Message to local chat",
+		"system_msg": "Message to system chat",
+		"system_msg_all": "Message to system chat",
+		"patch_maint": "Trigger patch maintenance",
+		"spawn_maint": "Respawn animals",
+		"teleport": "Teleport players",
+		"kick_player": "Kick player",
+		"ban_player": "Ban player",
+		"unban_player": "Unban player",
+	},
 		
 	init: function( controller ) {
 		this.controller = controller;
@@ -10,7 +33,7 @@ var NyuRconInterface = {
 		this.locationSelectorGeoID = 0;
 		this.locationSelectorTarget = $("#rcon-teleport-geoid");
 		// Init online players table, dialogs, buttons
-		return this.initPlayerTable().initDialogs().initButtons();
+		return this.initPlayerTable().initSchedulerTable().initDialogs().initButtons();
 	},
 	
 	initPlayerTable: function() {
@@ -26,6 +49,37 @@ var NyuRconInterface = {
 					{ title:"Guild", field:"GuildName" },
 				] },
 			],
+		} );
+		return this;
+	},
+	
+	initSchedulerTable: function() {
+		function timeScheduleFormatter( cell ) {
+			var data = cell.getData();
+			switch( data.type ) {
+				case "repeat":
+					return "Every " + data.interval_value + " " + data.interval_unit;
+				case "event":
+					return "Event-based";
+				default:
+					return "Once at " + data.runtime;
+			}
+		}
+		this.schedulerTable = new Tabulator( "#rcon-scheduler-table", {
+			layout: "fitColumns",
+			selectable: "highlight",
+			placeholder: "no scheduled jobs",
+			index: "ID",
+			ajaxURL: "?livemap_id=" + this.controller.config.ID + "&ajax=get_rcon_schedule",
+			columns: [
+				{ title:"ID", field:"ID", width:32, headerSort:false },
+				{ title:"Task Name", field:"name" },
+				{ title:"Time Schedule", field:"type", formatter:timeScheduleFormatter },
+				{ title:"Task Type", field:"command", formatter:"lookup", formatterParams:this.jobKeys },
+				{ title:"Last Run", field:"last_runtime" },
+				{ title:"Next Run", field:"next_runtime" },
+			],
+			initialSort:[{ column:"next_runtime", dir:"asc" }]
 		} );
 		return this;
 	},
@@ -104,6 +158,18 @@ var NyuRconInterface = {
 			self.locationSelectorGeoID = self.controller.px2geoid(x, y);
 			$("#location-selector img").css({top: event.originalEvent.layerY - 16 - top, left: event.originalEvent.layerX - 8 - left}).show();
 		} );
+		// Schedule Task Dialog
+		this.scheduleTaskDialog = $("#rcon-schedule-dialog").dialog( {
+			autoOpen: false, modal: true,
+			height: "auto", width: "auto", 
+			buttons: { 
+				"Save": function() { 
+					// placeholder
+					$(this).dialog("close");
+				},
+				"Cancel": function() { $(this).dialog("close"); },
+			}
+		} );
 		return this;
 	},
 	
@@ -143,6 +209,12 @@ var NyuRconInterface = {
 		} );
 		$("#rcon-locate-icon").on( 'click', function() {
 			self.locatorDialog.dialog('open');
+		} );
+		$("#rcon-schedule-button").button().on( 'click', function() {
+			self.scheduleTaskDialog.dialog('open');
+		} );
+		$("#rcon-refresh-button").button().on( 'click', function() {
+			self.schedulerTable.setData();
 		} );
 		return this;
 	},

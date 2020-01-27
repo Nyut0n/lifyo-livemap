@@ -255,6 +255,14 @@
 				
 		break;
 		
+		case 'get_rcon_schedule':
+		
+			$mygroup->privileges['rcon'] || die('[]');
+			
+			echo json_encode($server->get_rcon_schedule());
+		
+		break;
+		
 		# Update player skills
 		case 'skill_update':
 		
@@ -417,5 +425,3 @@
 	}
 
 	die;
-	
-?>
