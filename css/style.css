@@ -487,6 +487,17 @@ fieldset {
 
 /* RCON */
 
+#location-selector {
+	position: relative;
+	width: 511px; height: 511px;
+	margin-top: 10px;
+	background-size: cover;
+}
+	#location-selector img {
+		display: none;
+		position: absolute;
+	}
+
 #rcon-player-wrapper {
 	display: flex;
 }
@@ -501,7 +512,7 @@ fieldset {
 		flex: 1;
 	}
 
-.rcon-selection-control {
+.rcon-selection-control, .rcon-task-button {
 	display: inline-block;
 	width: 100px;
 	height: 100px;
@@ -511,32 +522,27 @@ fieldset {
 	text-align: center;
 	font-size: 1.25em;
 	cursor: pointer;
-	
 }
-.rcon-selection-control:hover {
+.rcon-selection-control:hover, .rcon-task-button:hover {
 	background-color: Black;
 }
-.rcon-selection-control img {
+.rcon-selection-control img, .rcon-task-button img {
 	margin-top: 10px;
 }
 
-#location-selector {
-	position: relative;
-	width: 511px; height: 511px;
-	margin-top: 10px;
-	background-size: cover;
-}
-	#location-selector img {
-		display: none;
-		position: absolute;
-	}
-	
-#rcon-schedule-button, #rcon-refresh-button {
-	margin: 10px 0;
-}
 #rcon-refresh-button {
 	float: right;
+	margin: 10px 0;
 }
+
+.rcon-task-fieldset, .rcon-schedule-detail {
+	display: none;
+}
+
+#rcon-schedule-date {
+	width: 100px;
+}
+
 
 /* Character Management */
 

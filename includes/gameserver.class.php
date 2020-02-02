@@ -413,11 +413,19 @@ class LiFServer {
 									FROM nyu_rcon_schedule" );
 	}
 
+	# LEGACY VERSION FOR TTMOD 1.3
 	# Add RCON command to queue
 	public function add_rcon_command($cmd, $param1 = '', $param2 = '', $detail = '', $minutes = 0) {
 		if( ! $this->detect_ttmod() ) return FALSE;
 		$detail = $this->db->esc($detail);
 		return (bool)$this->db->query( "INSERT INTO nyu_rcon_queue (command, param1, param2, detail, exec_time) VALUES ('$cmd', '$param1', '$param2', '$detail', DATE_ADD(NOW(), INTERVAL $minutes MINUTE))" );
+	}
+	
+	# Update RCON Task name
+	public function update_rcon_name($task_id, $name) {
+		if( $this->get_ttmod_version() < 1.4 ) return FALSE;
+		$this->db->query( "UPDATE nyu_rcon_schedule SET name = '$name' WHERE ID = '$task_id'" );
+		return TRUE;
 	}
 	
 	# Ban a player by character_id

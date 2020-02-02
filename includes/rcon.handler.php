@@ -1,10 +1,15 @@
 <?php
 
-	Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=rcon";
-	$message_ok = "Command was sent to server and will be executed within the next 20 seconds.";
+	require 'includes/rcon.class.php';
+
+	Livemap::$redirect = isSet($_POST['schedule']) ? "index.php?livemap_id=$livemap_id&s=rcon#tab-scheduler" : "index.php?livemap_id=$livemap_id&s=rcon";
 	
 	$message_functions = array( 'centerprint', 'centerprintall', 'bottomprint', 'bottomprintall', 'system_msg', 'system_msg_all', 'local_msg', 'local_msg_all' );
 	$server_functions  = array( 'forest_grow', 'crops_grow', 'patch_maint', 'spawn_maint' );
+	$interval_units    = array( 'MINUTE', 'HOUR', 'DAY', 'WEEK' );
+	
+	// Spawn RCON object
+	$rcon = new RCON($server);
 	
 	// Get Character List
 	$char_list = isSet($_POST['characters']) ? array_map('intval', explode(',', $_POST['characters'])) : array();
@@ -16,18 +21,45 @@
 	
 	// Check command input
 	isSet($_POST['command']) || Livemap::error_redirect();
-
+	
+	// Check scheduling options
+	$schedule = isSet($_POST['schedule']) ? $_POST['schedule'] : "now";
+	in_array($schedule, ['now', 'delay', 'repeat']) || Livemap::error_redirect();
+	if( $schedule === "delay" || $schedule === "repeat" ) {
+		// Check starting date and time
+		isSet($_POST['run_hour'], $_POST['run_minute'], $_POST['run_date']) || Livemap::error_redirect();
+		$runtime = array(
+			'date' => $_POST['run_date'],
+			'hour' => intval($_POST['run_hour']),
+			'minute' => intval($_POST['run_minute'])
+		);
+		if( $runtime['hour'] > 23   || $runtime['hour'] < 0   ) Livemap::error_redirect("Invalid time error");
+		if( $runtime['minute'] > 59 || $runtime['minute'] < 0 ) Livemap::error_redirect("Invalid time error");
+		list($year, $month, $day) = explode("-", $runtime['date']);
+		checkdate($month, $day, $year) || Livemap::error_redirect("Invalid date error");
+		$rcon->set_time($runtime);
+		// Check repeat interval
+		if( $schedule === "repeat" ) {
+			isSet($_POST['interval_unit'], $_POST['interval_value']) || Livemap::error_redirect();
+			$interval_unit = $_POST['interval_unit'];
+			$interval_value = intval($_POST['interval_value']);
+			in_array($interval_unit, $interval_units) || Livemap::error_redirect();
+			if( $interval_value < 0 || $interval_value > 999 ) Livemap::error_redirect();
+			$rcon->set_schedule($interval_unit, $interval_value);
+		}
+	}
+	
+	$message_ok = $schedule === "now" ? "Command was sent to server and will be executed within the next 20 seconds." : "Task was scheduled successfully.";
+	
 	switch( $_POST['command'] ) {
 		
 		# Message all players 
 		case 'broadcast':
 		
-			Livemap::$redirect .= "#tab-global";
-
-			if( ! isSet($_POST['message'], $_POST['function']) ) Livemap::error_redirect();
+			isSet($_POST['message'], $_POST['message_function']) || Livemap::error_redirect();
 		
 			$message  = trim( $cdb->esc($_POST['message']) );
-			$function = $_POST['function'];
+			$function = $_POST['message_function'];
 			$duration = isSet($_POST['seconds']) ? intval($_POST['seconds']) : 10;
 			
 			// Check message
@@ -37,7 +69,8 @@
 			// Check duration
 			if( $duration < 5 || $duration > 120  ) Livemap::error_redirect();
 			
-			$server->add_rcon_command( $function, $duration, '', $message );
+			$rcon->add_command( $function, $duration, '', $message );
+			$rcon->submit();
 			Livemap::log_action( 'rcon_message_all', "($function) $message" );
 
 			Livemap::success_redirect($message_ok);
@@ -47,15 +80,14 @@
 		# Trigger a function
 		case 'exec_function':
 		
-			Livemap::$redirect .= "#tab-global";
-		
-			if( ! $mygroup->privileges['rcon_advanced'] ) Livemap::error_redirect();
+			$mygroup->privileges['rcon_advanced'] || Livemap::error_redirect("Insufficient privileges to run this function");
 			
 			// Check input
 			if( ! isSet($_POST['function']) ) Livemap::error_redirect();
 			if( ! in_array( $_POST['function'], $server_functions ) ) Livemap::error_redirect('Invalid function called.');
 			
-			$server->add_rcon_command( $_POST['function'] );
+			$rcon->add_command( $_POST['function'] );
+			$rcon->submit();
 			Livemap::log_action( 'rcon_exec_function', $_POST['function'] );
 
 			Livemap::success_redirect($message_ok);
@@ -65,9 +97,7 @@
 		# Run a custom command
 		case 'exec_command':
 		
-			Livemap::$redirect .= "#tab-global";
-		
-			if( ! $mygroup->privileges['rcon_advanced'] ) Livemap::error_redirect();
+			$mygroup->privileges['rcon_advanced'] || Livemap::error_redirect("Insufficient privileges to run this function");
 		
 			// Check input
 			if( ! isSet($_POST['command_string']) ) Livemap::error_redirect();
@@ -76,11 +106,27 @@
 			
 			if( strlen($command) < 1 ) Livemap::error_redirect("Command can't be empty");
 			
-			$server->add_rcon_command( 'exec_command', '', '', $command );
+			$rcon->add_command( 'exec_command', '', '', $command );
+			$rcon->submit();
 			Livemap::log_action( 'rcon_exec_command', $command );
 		
 			Livemap::success_redirect($message_ok);
 			
+		break; # ----------------------------------------------------------------------------------------------------------------
+		
+		# Teleport player
+		case 'teleport_all':
+		
+			$geoid = isSet($_POST['geo_id']) ? intval($_POST['geo_id']) : 0;
+			$geoid >= 115867648 || Livemap::error_redirect("Invalid GeoID");
+
+			// Send command to server
+			$rcon->add_command( 'teleport', "ALL", $geoid, "location" );
+			$rcon->submit();
+
+			Livemap::log_action( 'rcon_teleport', "GeoID $geoid" );
+			Livemap::success_redirect($message_ok);
+		
 		break; # ----------------------------------------------------------------------------------------------------------------
 		
 		# Teleport player
@@ -99,17 +145,20 @@
 				$logdetail = "CharID $char_string to CharID $subject";
 			// to certain GeoID
 			} else {
-				if( ! isSet($_POST['geo_id']) || intval($_POST['geo_id']) < 1000000 ) Livemap::error_redirect();
+				if( ! isSet($_POST['geo_id']) || intval($_POST['geo_id']) < 115867648 ) Livemap::error_redirect("Invalid GeoID");
 				$subject = intval($_POST['geo_id']);
 				$subject_type = 'location';
 				$logdetail = "CharID $char_string to GeoID $subject";
 			}
 
 			// Send command to server
-			foreach( $char_list AS $char_id ) $server->add_rcon_command( 'teleport', $char_id, $subject, $subject_type );
+			foreach( $char_list AS $char_id ) $rcon->add_command( 'teleport', $char_id, $subject, $subject_type );
+			$rcon->submit();
 
 			Livemap::log_action( 'rcon_teleport', $logdetail );
 			Livemap::success_redirect($message_ok);
+		
+		break; # ----------------------------------------------------------------------------------------------------------------
 		
 		# Kick player
 		case 'kick':
@@ -125,7 +174,8 @@
 			if( strlen($message) < 1 ) $message = "You were kicked from the server via RCON";
 			
 			// Send command to server
-			foreach( $char_list AS $char_id ) $server->add_rcon_command( 'kick_player', $char_id, '', $message );
+			foreach( $char_list AS $char_id ) $rcon->add_command( 'kick_player', $char_id, '', $message );
+			$rcon->submit();
 			
 			Livemap::log_action( 'rcon_kick_player', "CharID $char_string / Message: $message" );
 			Livemap::success_redirect($message_ok);
@@ -140,7 +190,7 @@
 			$permaban = ( $_POST['bantype'] === 'permanent' );
 			
 			if( $permaban ) {
-				$message = "You've been permanently banned from this server.";
+				$message = "You are permanently banned from this server.";
 				$duration = 0;
 			} else {
 				$duration   = intval($_POST['duration']);
@@ -148,22 +198,27 @@
 				$duration_m = $duration % 60;
 				$message = "You are banned from this server for $duration_h hours and $duration_m minutes.";
 			}
+			
+			$rcon->set_delay($duration);
 
 			// Send commands to server
 			foreach( $char_list AS $char_id ) {
 				// Ban the account of this character
 				$server->ban_player( $char_id );
 				// Kick player from the server
-				$server->add_rcon_command( 'kick_player', $char_id, '', $message );
+				$tempRCON = new RCON($server);
+				$tempRCON->add_command( 'kick_player', $char_id, '', $message );
+				$tempRCON->submit();
 				// Schedule unban if duration was set
 				if( ! $permaban ) {
-					$server->add_rcon_command( 'unban_player', $char_id, '', '', $duration );
+					$rcon->add_command( 'unban_player', $char_id, '', '' );
 					Livemap::log_action( 'rcon_ban_player', "CharID $char_id / Duration: $duration s" );
 				} else {
 					Livemap::log_action( 'rcon_ban_player', "CharID $char_id / Duration: Permanent" );
 				}
 			}
-			
+			$rcon->submit();
+
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------
@@ -185,15 +240,17 @@
 			if( $duration < 5 || $duration > 120 ) Livemap::error_redirect();
 			
 			// Send command to server
-			foreach( $char_list AS $char_id ) $server->add_rcon_command( $_POST['function'], $char_id, $duration, $message );
+			foreach( $char_list AS $char_id ) $rcon->add_command( $_POST['function'], $char_id, $duration, $message );
+			$rcon->submit();
 			
 			Livemap::log_action( 'rcon_message_player', "CharID $char_string / Message: $message" );
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------
 		
-		# Message player
+		# Distribute items
 		case 'insert_item':
+		case 'insert_item_all':
 
 			// Check input
 			if( ! isSet($_POST['item_id'], $_POST['item_name_id'], $_POST['item_data_type'], $_POST['quantity'], $_POST['quality'], $_POST['durability']) ) Livemap::error_redirect();
@@ -209,8 +266,14 @@
 			if( $object_id < 1 || $object_id > 9999 ) Livemap::error_redirect("Invalid Item ID");
 			if( $durability < 1 || $durability > 20000 ) Livemap::error_redirect("Invalid Durability");
 			
-			// Send command to server
-			foreach( $char_list AS $char_id ) $server->add_rcon_command( 'insert_item', $char_id, $object_id, "$quantity|$quality|$durability" );
+			// To individual players ...
+			if( $_POST['command'] === 'insert_item' ) {
+				foreach( $char_list AS $char_id ) $rcon->add_command( 'insert_item', $char_id, $object_id, "$quantity|$quality|$durability" );
+			// Via scheduler
+			} else {
+				$rcon->add_command( 'insert_item_all', "ALL", $object_id, "$quantity|$quality|$durability" );
+			}
+			$rcon->submit();
 			
 			Livemap::log_action( 'rcon_insert_item', "CharID $char_string / ObjectID $object_id / Quantity $quantity / Quality $quality" );
 			Livemap::success_redirect($message_ok);

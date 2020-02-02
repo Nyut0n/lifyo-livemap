@@ -6,9 +6,8 @@
 	<div id="tabs-container">
 		<!-- Tabs -->
 		<ul>
-			<li><a href="{REAL_LINK}#tab-players">Players</a></li>
-			<li><a href="{REAL_LINK}#tab-global">Global</a></li>
-			<li><a href="{REAL_LINK}#tab-scheduler">Scheduler</a></li>
+			<li><a href="{REAL_LINK}#tab-players">Online Players</a></li>
+			<li><a href="{REAL_LINK}#tab-scheduler">Task Scheduler</a></li>
 		</ul>
 		<!-- Players -->
 		<div id="tab-players">
@@ -26,101 +25,20 @@
 				</div>
 			</div>
 		</div>
-		<!-- Global / Advanced -->
-		<div id="tab-global">
-			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
-				<fieldset>
-					<legend>Broadcast Message</legend>
-					<div class="kv-row">
-						<div>Message</div>
-						<div>
-							<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="message" maxlength="100" style="width: 500px;">
-						</div>
-					</div>
-					<div class="kv-row">
-						<div>Display Position</div>
-						<div>
-							<select name="function" id="rcon-broadcast-function" class="ui-widget ui-widget-content ui-corner-all">
-								<option value="centerprintall">in screen center</option>
-								<option value="bottomprintall">on screen bottom</option>
-								<option value="system_msg_all">in system chat</option>
-								<option value="local_msg_all">in local chat</option>
-							</select>
-						</div>
-					</div>
-					<div class="kv-row" id="rcon-broadcast-duration">
-						<div>Display Duration</div>
-						<div>
-							<input id="rcon-broadcast-time" name="seconds" value="20"> Seconds
-						</div>
-					</div>
-					<input type="hidden" name="action" value="RCON">
-					<input type="hidden" name="command" value="broadcast">
-					<input type="submit" name="submit" value=" Send ">
-				</fieldset>
-			</form>
-			{IF:PRIV_rcon_advanced}
-			<!-- Trigger common functions -->
-			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
-				<fieldset>
-					<legend>Trigger Server Functions</legend>
-					<div class="kv-row">
-						<div>Server Function</div>
-						<div>
-							<input type="radio" name="function" value="forest_grow" checked> forestStretchedMaintenance()<br>
-							<span class="hint">Triggers tree spawn and growth cycle.</span>
-						</div>
-					</div>
-					<div class="kv-row">
-						<div> </div>
-						<div>
-							<input type="radio" name="function" value="crops_grow"> cropsStretchedMaintenance()<br>
-							<span class="hint">Triggers one crops grow cycle.</span>
-						</div>
-					</div>
-					<div class="kv-row">
-						<div> </div>
-						<div>
-							<input type="radio" name="function" value="patch_maint"> stretchedPatchMaintenance()<br>
-							<span class="hint">Triggers midnight geo maintenance. Writes terraforming changes to cached files.</span>
-						</div>
-					</div>
-					<div class="kv-row">
-						<div> </div>
-						<div>
-							<input type="radio" name="function" value="spawn_maint"> startStretchedAnimalSpawnMaintenance()<br>
-							<span class="hint">Respawn animals at their spawn locations.</span>
-						</div>
-					</div>
-					<input type="hidden" name="action" value="RCON">
-					<input type="hidden" name="command" value="exec_function">
-					<input type="submit" name="submit" value="Execute">
-				</fieldset>
-			</form>
-			<!-- Trigger custom console command -->
-			<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
-				<fieldset>
-					<legend>Execute Console Command</legend>
-					Executes a custom console command. Please type it the same way you would do in the server console window.<br>
-					There is no syntax checking and no feedback or error messages will be issued here. In case of problems please check the server logfile.<br>
-					<div class="kv-row">
-						<div>Command</div>
-						<div>
-							<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="command_string" maxlength="255" style="width: 500px;">
-						</div>
-					</div>
-					<input type="hidden" name="action" value="RCON">
-					<input type="hidden" name="command" value="exec_command">
-					<input type="submit" name="submit" value=" Execute ">
-				</fieldset>
-			</form>
-			{ENDIF:PRIV_rcon_advanced}
-		</div>
 		<!-- Scheduled Events -->
 		<div id="tab-scheduler">
-			<button id="rcon-refresh-button"><span class="ui-icon ui-icon-refresh"></span> Refresh List</button> 
-			<button id="rcon-schedule-button"><span class="ui-icon ui-icon-plus"></span> New Task</button>
-			<div id="rcon-scheduler-table"></div>
+			<button id="rcon-refresh-button"><span class="ui-icon ui-icon-refresh"></span> Refresh List</button>
+			<h1>Scheduled Tasks</h1>
+			<div id="rcon-scheduler-table" style="clear:both"></div>
+			<br>
+			<fieldset>
+				<legend>New Task</legend>
+				<div class="rcon-task-button" id="rcon-task-button-broadcast">Message<br><img src="images/rcon/message.png"></div>
+				<div class="rcon-task-button" id="rcon-task-button-item">Insert Item<br><img src="images/rcon/item.png"></div>
+				<div class="rcon-task-button" id="rcon-task-button-teleport">Teleport<br><img src="images/rcon/teleport.png"></div>
+				<div class="rcon-task-button" id="rcon-task-button-function">Function<br><img src="images/rcon/function.png"></div>
+				<div class="rcon-task-button" id="rcon-task-button-code">Code<br><img src="images/rcon/code.png"></div>
+			</fieldset>
 		</div>
 	</div>
 
@@ -209,15 +127,15 @@
 		</p>
 		<p>
 			<label>Quantity</label>
-			<input id="rcon-item-quantity" name="quantity" value="1">
+			<input class="rcon-item-quantity" name="quantity" value="1">
 		</p>
 		<p>
 			<label>Quality</label>
-			<input id="rcon-item-quality" name="quality" value="50">
+			<input class="rcon-item-quality" name="quality" value="50">
 		</p>
 		<p>
 			<label>Durability</label>
-			<input id="rcon-item-durability" name="durability" value="5000">
+			<input class="rcon-item-durability" name="durability" value="5000">
 		</p>
 		<input type="hidden" name="action" value="RCON">
 		<input type="hidden" name="command" value="insert_item">
@@ -234,8 +152,8 @@
 		</p>
 		<p>
 			<label><input type="radio" id="teleport-togeoid" name="dst_type" value="geo_id" checked> To GeoID:</label>
-			<input type="text" id="rcon-teleport-geoid" class="ui-widget ui-widget-content ui-corner-all" name="geo_id" maxlength="10" autofocus>
-			<img src="images/marker.png" id="rcon-locate-icon" class="post-icon is-clickable" title="Select Location">
+			<input type="text" id="rcon-teleport-geoid" class="rcon-geoid-holder ui-widget ui-widget-content ui-corner-all" name="geo_id" maxlength="10" autofocus>
+			<img src="images/marker.png" class="rcon-locate-icon post-icon is-clickable" title="Select Location">
 		</p>
 		<p>
 			<label><input type="radio" id="teleport-toplayer" name="dst_type" value="player"> To Player:</label>
@@ -259,16 +177,187 @@
 <!-- Dialog: New Task -->
 <div class="ui-dialog" id="rcon-schedule-dialog" title="Schedule New Task">
 	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
-		<!-- 
-		
-		placeholder
-		
-		-->
+		<!-- Task: Broadcast Message -->
+		<fieldset class="rcon-task-fieldset" id="rcon-task-broadcast">
+			<legend>Broadcast Message</legend>
+			<div class="kv-row">
+				<div>Target:</div>
+				<div>all online players</div>
+			</div>
+			<div class="kv-row">
+				<div>Message</div>
+				<div>
+					<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="message" maxlength="100" style="width: 500px;">
+				</div>
+			</div>
+			<div class="kv-row">
+				<div>Display Position</div>
+				<div>
+					<select name="message_function" id="rcon-broadcast-function" class="ui-widget ui-widget-content ui-corner-all">
+						<option value="centerprintall">in screen center</option>
+						<option value="bottomprintall">on screen bottom</option>
+						<option value="system_msg_all">in system chat</option>
+						<option value="local_msg_all">in local chat</option>
+					</select>
+				</div>
+			</div>
+			<div class="kv-row" id="rcon-broadcast-duration">
+				<div>Display Duration</div>
+				<div>
+					<input id="rcon-broadcast-time" name="seconds" value="20"> Seconds
+				</div>
+			</div>
+		</fieldset>
+		<!-- Task: Distribute Item -->
+		<fieldset class="rcon-task-fieldset" id="rcon-task-item">
+			<legend>Distribute Item</legend>
+			<div class="kv-row">
+				<div>Target:</div>
+				<div>all online players</div>
+			</div>
+			
+			<div class="kv-row">
+				<div><label><input id="radio-task-item-id" type="radio" name="item_data_type" value="id"> Item by ID</label></div>
+				<div><input id="rcon-task-item-id" type="text" class="ui-widget ui-widget-content ui-corner-all" name="item_id" maxlength="5" style="width: 80px;"></div>
+			</div>
+			<div class="kv-row">
+				<div><label><input id="radio-task-item-name" type="radio" name="item_data_type" value="name" checked> Item by Name</label></div>
+				<div>
+					<select name="item_name_id" id="rcon-task-item-select" class="ui-widget ui-widget-content ui-corner-all">
+						<option value="0"></option>
+						{LOOP:items}<option value="{ID}">{Name}</option>{ENDLOOP:items}
+					</select>
+				</div>
+			</div>
+			<div class="kv-row">
+				<div><label>Quantity</label></div>
+				<div><input class="rcon-item-quantity" name="quantity" value="1"></div>
+			</div>
+			<div class="kv-row">
+				<div><label>Quality</label></div>
+				<div><input class="rcon-item-quality" name="quality" value="50"></div>
+			</div>
+			<div class="kv-row">
+				<div><label>Durability</label></div>
+				<div><input class="rcon-item-durability" name="durability" value="5000"></div>
+			</div>
+		</fieldset>
+		<!-- Task: Teleport -->
+		<fieldset class="rcon-task-fieldset" id="rcon-task-teleport">
+			<legend>Teleport All Players</legend>
+			<div class="kv-row">
+				<div>Target:</div>
+				<div>all online players</div>
+			</div>
+			<div class="kv-row">
+				<div>To GeoID:</div>
+				<div>
+					<input type="text" class="rcon-geoid-holder ui-widget ui-widget-content ui-corner-all" name="geo_id" maxlength="10" autofocus>
+					<img src="images/marker.png" class="rcon-locate-icon post-icon is-clickable" title="Select Location">
+				</div>
+			</div>
+		</fieldset>
+		<!-- Task: Server Functions -->
+		<fieldset class="rcon-task-fieldset" id="rcon-task-function">
+			<legend>Trigger Server Functions</legend>
+			<div class="kv-row">
+				<div>Server Function</div>
+				<div>
+					<input type="radio" name="function" value="forest_grow" checked> forestStretchedMaintenance()<br>
+					<span class="hint">Triggers tree spawn and growth cycle.</span>
+				</div>
+			</div>
+			<div class="kv-row">
+				<div> </div>
+				<div>
+					<input type="radio" name="function" value="crops_grow"> cropsStretchedMaintenance()<br>
+					<span class="hint">Triggers one crops grow cycle.</span>
+				</div>
+			</div>
+			<div class="kv-row">
+				<div> </div>
+				<div>
+					<input type="radio" name="function" value="patch_maint"> stretchedPatchMaintenance()<br>
+					<span class="hint">Triggers midnight geo maintenance. Writes terraforming changes to cached files.</span>
+				</div>
+			</div>
+			<div class="kv-row">
+				<div> </div>
+				<div>
+					<input type="radio" name="function" value="spawn_maint"> startStretchedAnimalSpawnMaintenance()<br>
+					<span class="hint">Respawn animals at their spawn locations.</span>
+				</div>
+			</div>
+		</fieldset>
+		<!-- Task: Execute Script Code -->
+		<fieldset class="rcon-task-fieldset" id="rcon-task-code">
+			<legend>Execute Console Command</legend>
+			Executes a custom console command.<br>
+			Please type it the same way you would do in the server console window.<br>
+			There is no syntax checking and no feedback or error messages will be issued here.<br>
+			In case of problems please check the server logfile.<br>
+			<div class="kv-row">
+				<div>Command</div>
+				<div>
+					<input type="text" class="ui-widget ui-widget-content ui-corner-all" name="command_string" maxlength="255" style="width: 500px;">
+				</div>
+			</div>
+		</fieldset>
+		<!-- Task: Time Schedule -->
+		<fieldset>
+			<legend>Time Schedule</legend>
+			<div class="kv-row">
+				<div>
+					<select name="schedule" class="ui-widget ui-widget-content ui-corner-all" id="rcon-schedule-type">
+						<option value="now">Run now</option>
+						<option value="delay">Run once at ...</option>
+						<option value="repeat">Run & Repeat</option>
+					</select>
+				</div>
+				<div class="rcon-schedule-detail" id="rcon-schedule-now">
+					&nbsp;
+				</div>
+				<div class="rcon-schedule-detail" id="rcon-schedule-plan">
+					<p>
+						Date: <input id="rcon-schedule-date" class="ui-widget ui-widget-content ui-corner-all" name="run_date"> &nbsp; Time: <input id="rcon-schedule-hour" name="run_hour" value="0"> <input id="rcon-schedule-minute" name="run_minute" value="0">
+					</p>
+					<p class="rcon-schedule-detail" id="rcon-schedule-repeat">
+						Repeat every <input id="rcon-repeat-value" name="interval_value" value="1"> 
+						<select name="interval_unit" id="rcon-repeat-unit" class="ui-widget ui-widget-content ui-corner-all">
+							<option value="MINUTE">minutes</option>
+							<option value="HOUR">hours</option>
+							<option value="DAY" selected>days</option>
+							<option value="WEEK">weeks</option>
+						</select>
+					</p>
+				</div>
+			</div>
+		</fieldset>
+		<!-- Task: Common -->
 		<input type="hidden" name="action" value="RCON">
-		<input type="hidden" name="command" value="schedule_task">
+		<input id="rcon-task-command" type="hidden" name="command" value="">
 		<input type="submit" tabindex="-1">
 	</form>
 </div>
+
+<!-- Dialog: Task Details -->
+<div class="ui-dialog" id="rcon-detail-dialog" title="Task Details">
+	<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
+		<div class="kv-row">
+			<div>Task Name</div>
+			<div><input id="rcon-task-name" type="text" class="ui-widget ui-widget-content ui-corner-all" name="name" maxlength="255"></div>
+		</div>
+		<div class="kv-row">
+			<div>Task Detail</div>
+			<div id="rcon-task-detail"></div>
+		</div>
+		<input type="hidden" name="task_id" id="rcon-task-id">
+		<input type="hidden" name="action" value="UpdateRconTask">
+		<input type="submit" tabindex="-1">
+	</form>
+</div>
+
+
 
 <script>
 
@@ -278,17 +367,6 @@
 			ui.newPanel[0].id === 'tab-players' && Controller.rcon.playerTable.redraw();
 			ui.newPanel[0].id === 'tab-scheduler' && Controller.rcon.schedulerTable.redraw();
 		}
-	} );
-	
-	$("#rcon-broadcast-function").on( 'change', function() {
-		$("#rcon-broadcast-duration").toggle( this.value.search("print") !== -1 );
-	} );
-	
-	$("#rcon-broadcast-time").spinner( {
-		min: 5, max: 300, step: 1
-	} );
-	
-	$("#tab-global input[type=submit]").button();
-
+	} );	
 
 </script>

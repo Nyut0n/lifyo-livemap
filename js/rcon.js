@@ -23,6 +23,7 @@ var NyuRconInterface = {
 		"kick_player": "Kick player",
 		"ban_player": "Ban player",
 		"unban_player": "Unban player",
+		"reload_schedule": "(System) Reload Scheduler",
 	},
 		
 	init: function( controller ) {
@@ -31,7 +32,7 @@ var NyuRconInterface = {
 		if( ! document.getElementById('rcon-player-table') ) return null;
 		// Init location selector properties
 		this.locationSelectorGeoID = 0;
-		this.locationSelectorTarget = $("#rcon-teleport-geoid");
+		this.locationSelectorTarget = $(".rcon-geoid-holder");
 		// Init online players table, dialogs, buttons
 		return this.initPlayerTable().initSchedulerTable().initDialogs().initButtons();
 	},
@@ -54,6 +55,7 @@ var NyuRconInterface = {
 	},
 	
 	initSchedulerTable: function() {
+		var self = this;
 		function timeScheduleFormatter( cell ) {
 			var data = cell.getData();
 			switch( data.type ) {
@@ -79,7 +81,16 @@ var NyuRconInterface = {
 				{ title:"Last Run", field:"last_runtime" },
 				{ title:"Next Run", field:"next_runtime" },
 			],
-			initialSort:[{ column:"next_runtime", dir:"asc" }]
+			initialSort:[
+				{ column:"next_runtime", dir:"asc" }
+			],
+			rowClick: function( e, row ) {
+				var data = row.getData();
+				$("#rcon-task-id").val(data.ID);
+				$("#rcon-task-name").val(data.name);
+				$("#rcon-task-detail").html("*** Placeholder ***");
+				self.taskDetailDialog.dialog('open');
+			}
 		} );
 		return this;
 	},
@@ -124,9 +135,9 @@ var NyuRconInterface = {
 		} );
 		// Insert Item
 		this.itemDialog = $("#rcon-item-dialog").dialog( generateDialogConfig("Insert Item") );
-		$("#rcon-item-quality").spinner( {min: 1, max: 100, step: 1} );
-		$("#rcon-item-quantity").spinner( {min: 1, max: 10000, step: 1} );
-		$("#rcon-item-durability").spinner( {min: 100, max: 20000, step: 100} );
+		$(".rcon-item-quality").spinner( {min: 1, max: 100, step: 1} );
+		$(".rcon-item-quantity").spinner( {min: 1, max: 10000, step: 1} );
+		$(".rcon-item-durability").spinner( {min: 100, max: 20000, step: 100} );
 		$("#rcon-item-id, #rcon-item-select").on( 'input change', function() {
 			( this.id === 'rcon-item-id' ) ? $("#radio-item-id").click() : $("#radio-item-name").click();
 		} );
@@ -137,6 +148,61 @@ var NyuRconInterface = {
 		} );
 		$("#rcon-teleport-geoid").on( 'input', function() {
 			$("#teleport-togeoid").click();
+		} );
+		// Schedule Task Dialog
+		this.scheduleTaskDialog = $("#rcon-schedule-dialog").dialog( {
+			autoOpen: false, modal: true,
+			height: "auto", width: "auto", 
+			buttons: { 
+				"Accept": function() { $("form", this).submit(); },
+				"Cancel": function() { $(this).dialog("close"); },
+			}
+		} );
+		$("#rcon-broadcast-function").on( 'change', function() {
+			$("#rcon-broadcast-duration").toggle( this.value.search("print") !== -1 );
+		} );
+		$("#rcon-broadcast-time").spinner( {
+			min: 5, max: 300, step: 1
+		} );
+		$("#rcon-task-item-id, #rcon-task-item-select").on( 'input change', function() {
+			( this.id === 'rcon-task-item-id' ) ? $("#radio-task-item-id").click() : $("#radio-task-item-name").click();
+		} );
+		$("#rcon-schedule-type").on( 'change', function() {
+			$(".rcon-schedule-detail").hide();
+			switch(this.value) {
+				case "now":
+					$("#rcon-schedule-now").show();
+					break;
+				case "delay":
+					$("#rcon-schedule-plan").show();
+					break;
+				case "repeat":
+					$("#rcon-schedule-plan").show();
+					$("#rcon-schedule-repeat").show();
+					break;
+			}
+		} );
+		$("#rcon-schedule-date").datepicker( {
+			firstDay: 1,
+			dateFormat: "yy-mm-dd",
+			showAnim: "fold",
+		} );
+		$("#rcon-schedule-hour").spinner( {
+			min: 0, max: 23
+		} );
+		$("#rcon-schedule-minute").spinner( {
+			min: 0, max: 59
+		} );
+		$("#rcon-repeat-value").spinner( {
+			min: 1, max: 999
+		} );
+		// Task Detail
+		this.taskDetailDialog = $("#rcon-detail-dialog").dialog( {
+			autoOpen: false, resizable: false, modal: true, height: "auto", width: "auto", 
+			buttons: { 
+				"Update Name": function() { $("form", this).submit(); },
+				"Close": function() { $(this).dialog("close"); },
+			}
 		} );
 		// Locater Dialog
 		this.locatorDialog = $("#rcon-locator-dialog").dialog( {
@@ -154,21 +220,8 @@ var NyuRconInterface = {
 			var top  = window.pageYOffset || document.documentElement.scrollTop;
 			var x = (event.originalEvent.layerX - left) / $(this).width() * 1533;
 			var y = (event.originalEvent.layerY - top) / $(this).height() * 1533;
-			console.log({x:x,y:y});
 			self.locationSelectorGeoID = self.controller.px2geoid(x, y);
 			$("#location-selector img").css({top: event.originalEvent.layerY - 16 - top, left: event.originalEvent.layerX - 8 - left}).show();
-		} );
-		// Schedule Task Dialog
-		this.scheduleTaskDialog = $("#rcon-schedule-dialog").dialog( {
-			autoOpen: false, modal: true,
-			height: "auto", width: "auto", 
-			buttons: { 
-				"Save": function() { 
-					// placeholder
-					$(this).dialog("close");
-				},
-				"Cancel": function() { $(this).dialog("close"); },
-			}
 		} );
 		return this;
 	},
@@ -207,14 +260,37 @@ var NyuRconInterface = {
 					break;
 			}
 		} );
-		$("#rcon-locate-icon").on( 'click', function() {
+		$(".rcon-locate-icon").on( 'click', function() {
 			self.locatorDialog.dialog('open');
-		} );
-		$("#rcon-schedule-button").button().on( 'click', function() {
-			self.scheduleTaskDialog.dialog('open');
 		} );
 		$("#rcon-refresh-button").button().on( 'click', function() {
 			self.schedulerTable.setData();
+		} );
+		$(".rcon-task-button").on( 'click', function() {
+			$(".rcon-task-fieldset").hide();
+			switch(this.id) {
+				case 'rcon-task-button-broadcast':
+					$("#rcon-task-broadcast").show();
+					$("#rcon-task-command").val("broadcast");
+					break;
+				case 'rcon-task-button-item':
+					$("#rcon-task-item").show();
+					$("#rcon-task-command").val("insert_item_all");
+					break;
+				case 'rcon-task-button-teleport':
+					$("#rcon-task-teleport").show();
+					$("#rcon-task-command").val("teleport_all");
+					break;
+				case 'rcon-task-button-function':
+					$("#rcon-task-function").show();
+					$("#rcon-task-command").val("exec_function");
+					break;
+				case 'rcon-task-button-code':
+					$("#rcon-task-code").show();
+					$("#rcon-task-command").val("exec_command");
+					break;
+			}
+			self.scheduleTaskDialog.dialog('open');
 		} );
 		return this;
 	},

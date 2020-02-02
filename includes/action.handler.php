@@ -554,6 +554,23 @@ switch( $_REQUEST['action'] ) {
 		
 	break;
 	
+	# Update RCON Command
+	case 'UpdateRconTask':
+	
+		Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=rcon#tab-scheduler";
+		
+		isset($_POST['name'], $_POST['task_id']) || Livemap::error_redirect();
+		
+		$task = intval($_POST['task_id']);
+		$name = $cdb->esc($_POST['name']);
+		
+		$server->update_rcon_name($task, $name) || Livemap::error_redirect();
+		Livemap::log_action('rcon_update_task', $task);
+		
+		Livemap::success_redirect("The task details were updated.");
+	
+	break;
+	
 	# Call outsourced modules
 	case 'RCON':		require_once('includes/rcon.handler.php');		break;
 	case 'CHMAN': 		require_once('includes/chman.handler.php');		break;
