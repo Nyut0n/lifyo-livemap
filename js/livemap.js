@@ -31,7 +31,7 @@ function Livemap( controller ) {
 			zoom: 0,
 			minZoom: -1,
 			maxZoom: 5,
-			maxBounds: [[0,0], [1533,1533]],
+			maxBounds: [[0,0], [2000,1533]],
 			maxBoundsViscosity: 0.8,
 			renderer: L.svg({padding: 100}),
 		} );
