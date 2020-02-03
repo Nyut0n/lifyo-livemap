@@ -410,7 +410,8 @@ class LiFServer {
 										WHEN interval_unit = 'WEEK' THEN DATE_ADD(runtime, INTERVAL (FLOOR(TIMESTAMPDIFF(WEEK, runtime, NOW()) / interval_value) + 1) * interval_value WEEK)
 										ELSE runtime
 									END AS next_runtime 
-									FROM nyu_rcon_schedule" );
+									FROM nyu_rcon_schedule
+									WHERE command != 'reload_schedule'" );
 	}
 
 	# LEGACY VERSION FOR TTMOD 1.3

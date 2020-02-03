@@ -36,8 +36,10 @@
 				<div class="rcon-task-button" id="rcon-task-button-broadcast">Message<br><img src="images/rcon/message.png"></div>
 				<div class="rcon-task-button" id="rcon-task-button-item">Insert Item<br><img src="images/rcon/item.png"></div>
 				<div class="rcon-task-button" id="rcon-task-button-teleport">Teleport<br><img src="images/rcon/teleport.png"></div>
+				{IF:PRIV_rcon_advanced}
 				<div class="rcon-task-button" id="rcon-task-button-function">Function<br><img src="images/rcon/function.png"></div>
 				<div class="rcon-task-button" id="rcon-task-button-code">Code<br><img src="images/rcon/code.png"></div>
+				{ENDIF:PRIV_rcon_advanced}
 			</fieldset>
 		</div>
 	</div>
