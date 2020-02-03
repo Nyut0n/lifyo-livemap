@@ -224,6 +224,7 @@ var NyuRconInterface = {
 			autoOpen: false, resizable: false, modal: true, height: "auto", width: "auto", 
 			buttons: { 
 				"Update Name": function() { $("form", this).submit(); },
+				"Delete Task": function() { window.location.href = "?livemap_id=" + self.controller.config.ID + "&action=DeleteRconTask&task_id=" + $("#rcon-task-id", this).val(); },
 				"Close": function() { $(this).dialog("close"); },
 			}
 		} );

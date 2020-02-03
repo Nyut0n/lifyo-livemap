@@ -559,6 +559,8 @@ switch( $_REQUEST['action'] ) {
 	
 		Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=rcon#tab-scheduler";
 		
+		$mygroup->privileges['rcon'] || Livemap::error_redirect("Insufficient privileges to run this function");
+		
 		isset($_POST['name'], $_POST['task_id']) || Livemap::error_redirect();
 		
 		$task = intval($_POST['task_id']);
@@ -568,6 +570,24 @@ switch( $_REQUEST['action'] ) {
 		Livemap::log_action('rcon_update_task', $task);
 		
 		Livemap::success_redirect("The task details were updated.");
+	
+	break;
+	
+	# Update RCON Command
+	case 'DeleteRconTask':
+
+		Livemap::$redirect = "index.php?livemap_id=$livemap_id&s=rcon#tab-scheduler";
+		
+		$mygroup->privileges['rcon'] || Livemap::error_redirect("Insufficient privileges to run this function");
+		
+		isset($_GET['task_id']) || Livemap::error_redirect();
+		
+		$task = intval($_GET['task_id']);
+		
+		$server->delete_rcon_task($task) || Livemap::error_redirect();
+		Livemap::log_action('rcon_delete_task', $task);
+		
+		Livemap::success_redirect("The task was deleted from the schedule.");
 	
 	break;
 	

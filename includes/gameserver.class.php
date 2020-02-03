@@ -429,6 +429,13 @@ class LiFServer {
 		return TRUE;
 	}
 	
+	# Update RCON Task name
+	public function delete_rcon_task($task_id) {
+		if( $this->get_ttmod_version() < 1.4 ) return FALSE;
+		$this->db->query( "DELETE FROM nyu_rcon_schedule WHERE ID = '$task_id'" );
+		return TRUE;
+	}
+	
 	# Ban a player by character_id
 	public function ban_player( $char_id ) {
 		$char_id = intval($char_id);
