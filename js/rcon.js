@@ -86,9 +86,32 @@ var NyuRconInterface = {
 			],
 			rowClick: function( e, row ) {
 				var data = row.getData();
+				var taskType = self.jobKeys.hasOwnProperty(data.command) ? self.jobKeys[data.command] : data.command;
+				var taskDetail = "none";
+				switch( data.command ) {
+					case "centerprint":
+					case "centerprintall":
+					case "bottomprint":
+					case "bottomprintall":
+					case "local_msg":
+					case "local_msg_all":
+					case "system_msg":
+					case "system_msg_all":
+						taskDetail = "<u>Message:</u><br>" + data.detail;
+						break;
+					case "teleport":
+						if( data.param1 === "ALL" ) taskDetail = "To GeoID " + data.param2;
+						break;
+					case "insert_item":
+					case "insert_item_all":
+						var options = data.detail.split("|");
+						taskDetail = "Item ID: " + data.param2 + "<br>Quantity: " + options[0] + "<br>Quality: " + options[1] + "<br>Durability: " + options[2];
+						break;
+				}
 				$("#rcon-task-id").val(data.ID);
 				$("#rcon-task-name").val(data.name);
-				$("#rcon-task-detail").html("*** Placeholder ***");
+				$("#rcon-task-type").html(taskType);
+				$("#rcon-task-detail").html(taskDetail);
 				self.taskDetailDialog.dialog('open');
 			}
 		} );
