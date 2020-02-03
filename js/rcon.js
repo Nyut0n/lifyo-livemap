@@ -60,11 +60,12 @@ var NyuRconInterface = {
 			var data = cell.getData();
 			switch( data.type ) {
 				case "repeat":
-					return "Every " + data.interval_value + " " + data.interval_unit;
+					var scheduleString = data.interval_value == 1 ? data.interval_unit.toLowerCase() : data.interval_value + " " + data.interval_unit.toLowerCase() + "s";
+					return "<span class='ui-icon ui-icon-arrowrefresh-1-n'></span> Every " + scheduleString + " since " + data.runtime.slice(0, -3);
 				case "event":
 					return "Event-based";
 				default:
-					return "Once at " + data.runtime;
+					return "<span class='ui-icon ui-icon-arrowthickstop-1-e'></span> Once at " + data.runtime;
 			}
 		}
 		this.schedulerTable = new Tabulator( "#rcon-scheduler-table", {
@@ -76,10 +77,10 @@ var NyuRconInterface = {
 			columns: [
 				{ title:"ID", field:"ID", width:32, headerSort:false },
 				{ title:"Task Name", field:"name" },
-				{ title:"Time Schedule", field:"type", formatter:timeScheduleFormatter },
+				{ title:"Time Schedule", field:"type", widthGrow:1.25, formatter:timeScheduleFormatter },
 				{ title:"Task Type", field:"command", formatter:"lookup", formatterParams:this.jobKeys },
-				{ title:"Last Run", field:"last_runtime" },
-				{ title:"Next Run", field:"next_runtime" },
+				{ title:"Last Run", field:"last_runtime", width:150 },
+				{ title:"Next Run", field:"next_runtime", width:150 },
 			],
 			initialSort:[
 				{ column:"next_runtime", dir:"asc" }
@@ -113,7 +114,7 @@ var NyuRconInterface = {
 				$("#rcon-task-type").html(taskType);
 				$("#rcon-task-detail").html(taskDetail);
 				self.taskDetailDialog.dialog('open');
-			}
+			},
 		} );
 		return this;
 	},

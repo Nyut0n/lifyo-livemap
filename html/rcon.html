@@ -31,6 +31,8 @@
 			<h1>Scheduled Tasks</h1>
 			<div id="rcon-scheduler-table" style="clear:both"></div>
 			<br>
+			<span class="ui-icon ui-icon-info"></span> All timestamps conform to the actual server timezone.
+			<br><br>
 			<fieldset>
 				<legend>New Task</legend>
 				<div class="rcon-task-button" id="rcon-task-button-broadcast">Message<br><img src="images/rcon/message.png"></div>
@@ -321,7 +323,7 @@
 				</div>
 				<div class="rcon-schedule-detail" id="rcon-schedule-plan">
 					<p>
-						Date: <input id="rcon-schedule-date" class="ui-widget ui-widget-content ui-corner-all" name="run_date"> &nbsp; Time: <input id="rcon-schedule-hour" name="run_hour" value="0"> <input id="rcon-schedule-minute" name="run_minute" value="0">
+						Date: <input id="rcon-schedule-date" class="ui-widget ui-widget-content ui-corner-all" name="run_date"> &nbsp; Time: <input id="rcon-schedule-hour" name="run_hour" value="0">:<input id="rcon-schedule-minute" name="run_minute" value="0">
 					</p>
 					<p class="rcon-schedule-detail" id="rcon-schedule-repeat">
 						Repeat every <input id="rcon-repeat-value" name="interval_value" value="1"> 
