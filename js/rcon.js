@@ -38,12 +38,24 @@ var NyuRconInterface = {
 	},
 	
 	initPlayerTable: function() {
+		var self = this;
+		// Table footer
+		var footer = $("<div></div>").addClass('tabulator-footer');
+		$("<button>select all</button>")
+			.button()
+			.on('click', function() { self.playerTable.selectRow("all"); })
+			.appendTo(footer);
+		$("<button>select none</button>")
+			.button()
+			.on('click', function() { self.playerTable.deselectRow(); })
+			.appendTo(footer);
 		// Create Tabulator table
 		this.playerTable = new Tabulator( "#rcon-player-table", {
 			layout: "fitColumns",
 			index: "ID",
-			selectable:true,
-			placeholder:"no players online",
+			selectable: true,
+			placeholder: "no players online",
+			footerElement: footer[0],
 			columns: [
 				{ title:"Online Players", columns: [
 					{ title:"Character", field:"FullName" },
