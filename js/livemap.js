@@ -516,6 +516,38 @@ function Livemap( controller ) {
 				};
 			break;
 			
+			case 'animalSpawns':
+				layer.onDraw = function(layerGroup, data) {
+					var animalData = {
+						WolfData: { name: Locale.ui[120], icon: "images/animals/wolf.png" },
+						DeerMaleData: { name: Locale.ui[121], icon: "images/animals/deer.png" },
+						HindData: { name: Locale.ui[122], icon: "images/animals/hind.png" },
+						BoarData: { name: Locale.ui[123], icon: "images/animals/boar.png" },
+						SowData: { name: Locale.ui[124], icon: "images/animals/sow.png" },
+						GrouseData: { name: Locale.ui[125], icon: "images/animals/grouse.png" },
+						HareData: { name: Locale.ui[126], icon: "images/animals/hare.png" },
+					};
+					// Draw animal icons
+					data.forEach( function(spawn) {
+						if( ! animalData.hasOwnProperty(spawn.Animal) ) return false;
+						var position = self.px2c(spawn.x, spawn.y);
+						// Circle
+						L.circle( position, {
+							weight: 0,
+							fillColor: 'Black',
+							fillOpacity: 0.5,
+							radius: 14,
+						} )
+						.addTo(layerGroup);
+						// Animal icon
+						var animal_icon = L.icon( {iconUrl: animalData[spawn.Animal].icon, iconSize: [16, 16], iconAnchor: [8, 8]} );
+						L.marker(position, { icon:animal_icon })
+						.bindTooltip("Q" + spawn.Quality + " " + animalData[spawn.Animal].name, {direction:"top"})
+						.addTo(layerGroup);
+					} );
+				};
+			break;
+			
 			case 'pavedTiles':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw canvas

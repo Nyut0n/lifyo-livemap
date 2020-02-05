@@ -89,6 +89,11 @@ class LiFServer {
 		}
 	}
 	
+	public function get_animal_spawns() {
+		if( $this->get_ttmod_version() < 1.4 ) return array();
+		return $this->db->query( "SELECT * FROM nyu_ttmod_animals" );
+	}
+	
 	public function get_tradeposts() {
 		return $this->db->query( "SELECT ID, GeoDataID FROM unmovable_objects WHERE IsComplete = 1 AND ObjectTypeID = 1077" );
 	}

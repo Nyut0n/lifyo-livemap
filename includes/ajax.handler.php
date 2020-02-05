@@ -16,6 +16,7 @@
 			$data['outposts']	 = $mygroup->privileges['outposts'] ? $server->get_outposts() : array();
 			$data['tradeposts']  = $mygroup->privileges['trading_posts'] ? $server->get_tradeposts() : array();
 			$data['standings']   = $mygroup->privileges['standings'] ? $server->get_guild_standings() : array();
+			$data['animalSpawns']= $mygroup->privileges['animal_spawns'] ? $server->get_animal_spawns() : array();
 			$characters = $server->get_characters();
 			
 			// Fetch custom data from config database
@@ -42,6 +43,9 @@
 			}
 			foreach( $data['tradeposts'] AS &$tp ) {
 				list($tp['x'], $tp['y']) = Livemap::geoid2pixelpos($tp['GeoDataID']);
+			}
+			foreach( $data['animalSpawns'] AS &$spawn ) {
+				list($spawn['x'], $spawn['y']) = Livemap::geoid2pixelpos($spawn['GeoID']);
 			}
 			
 			// Guild Claims

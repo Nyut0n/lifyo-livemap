@@ -30,7 +30,8 @@ class Group {
 		'rcon'			=> 4096,
 		'rcon_advanced' => 8192,
 		'manage_chars'	=> 16384,
-		'manage_adv'    => 1048576
+		'manage_adv'    => 1048576,
+		'animal_spawns' => 4194304,
 	);
 	
 	public function __construct( $id, $name, $type = 0, $bitmask = 0 ) {
@@ -102,6 +103,7 @@ class Group {
 			case 'manage_chars':	return array( 'Character Management - Basic',	'Manage player accounts and characters with basic permission set.' );									break;
 			case 'manage_adv':	    return array( 'Character Management - Advanced','Permissions to delete characters, promote GMs, insert items and change skills in Character Management' );	break;
 			case 'trees_layer':		return array( 'Trees Layer',					'See trees on the map' );	break;
+			case 'animal_spawns':	return array( 'Animal Spawn Locations',			'See location, type and average quality of animal spawns' );	break;
 		}
 	}
 	
@@ -127,5 +129,3 @@ class Group {
 	}
 	
 }
-
-?>

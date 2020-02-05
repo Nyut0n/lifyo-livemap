@@ -67,6 +67,14 @@
 		<string id="116">Gebiete</string>
 		<string id="117">Handelsposten</string>
 		<string id="118">Wald</string>
+		<string id="119">Tier-Spawnpunkte</string>
+		<string id="120">Wolf Spawn</string>
+		<string id="121">Hirschbock Spawn</string>
+		<string id="122">Hirschkuh Spawn</string>
+		<string id="123">Wildschwein Spawn</string>
+		<string id="124">Sau Spawn</string>
+		<string id="125">Huhn Spawn</string>
+		<string id="126">Hase Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">Du hast noch keine Charaktere auf diesem Server :(</string>
 		<string id="201">Rechte-Check</string>

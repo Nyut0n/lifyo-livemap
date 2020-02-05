@@ -67,6 +67,14 @@
 		<string id="116">Area Overlay</string>
 		<string id="117">Trading Posts</string>
 		<string id="118">Forest</string>
+		<string id="119">Animal Spawn Locations</string>
+		<string id="120">Wolf Spawn</string>
+		<string id="121">Deer Spawn</string>
+		<string id="122">Hind Spawn</string>
+		<string id="123">Boar Spawn</string>
+		<string id="124">Sow Spawn</string>
+		<string id="125">Grouse Spawn</string>
+		<string id="126">Hare Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">You have no characters on this server yet :(</string>
 		<string id="201">Privilege Checker</string>

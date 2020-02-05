@@ -67,6 +67,14 @@
 		<string id="116">Зоны</string>
 		<string id="117">Торговые посты</string>
 		<string id="118">Леса</string>
+		<string id="119">Animal Spawn Locations</string>
+		<string id="120">Wolf Spawn</string>
+		<string id="121">Deer Spawn</string>
+		<string id="122">Hind Spawn</string>
+		<string id="123">Boar Spawn</string>
+		<string id="124">Sow Spawn</string>
+		<string id="125">Grouse Spawn</string>
+		<string id="126">Hare Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">Вы не имеете персонажей на этом сервере :(</string>
 		<string id="201">Проверка привилегий</string>

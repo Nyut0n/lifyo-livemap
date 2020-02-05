@@ -91,6 +91,9 @@ function NyuLivemapController() {
 			if( self.hasPrivilege('standings') ) {
 				livemap.initLayer('standings').setData({standings: data.standings, active:0});
 			}
+			if( self.hasPrivilege('animal_spawns') ) {
+				livemap.initLayer('animalSpawns').setData(data.animalSpawns);
+			}
 			// Init on-demand loading layers
 			livemap.initLayer('pavedTiles').setLoader( function() {
 				var layer = this;
@@ -144,6 +147,8 @@ function NyuLivemapController() {
 			self.hasPrivilege('outposts')	  && livemap.getLayer('outposts').addControl("images/control/outposts.png", Locale.ui[108]);
 			// Trading posts
 			self.hasPrivilege('trading_posts') && livemap.getLayer('tradeposts').addControl("images/control/tradingposts.png", Locale.ui[117]);
+			// Animal spawns
+			self.hasPrivilege('animal_spawns') && livemap.getLayer('animalSpawns').addControl("images/control/animalspawns.png", Locale.ui[119]);
 			// Canvas Layers
 			self.hasPrivilege('road_layer')   && livemap.getLayer('pavedTiles').addControl("images/control/pavedtiles.png", Locale.ui[109]);
 			self.hasPrivilege('struct_layer') && livemap.getLayer('buildings').addControl("images/control/buildings.png", Locale.ui[110]);
