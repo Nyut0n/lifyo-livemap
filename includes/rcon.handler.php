@@ -71,8 +71,8 @@
 			
 			$rcon->add_command( $function, $duration, '', $message );
 			$rcon->submit();
-			Livemap::log_action( 'rcon_message_all', "($function) $message" );
-
+			
+			Livemap::log_action( $schedule === 'now' ? 'rcon_message_all' : 'task_message_all', "($function) $message" );
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------
@@ -88,8 +88,8 @@
 			
 			$rcon->add_command( $_POST['function'] );
 			$rcon->submit();
-			Livemap::log_action( 'rcon_exec_function', $_POST['function'] );
-
+			
+			Livemap::log_action( $schedule === 'now' ? 'rcon_exec_function' : 'task_exec_function', $_POST['function'] );
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------
@@ -108,8 +108,8 @@
 			
 			$rcon->add_command( 'exec_command', '', '', $command );
 			$rcon->submit();
-			Livemap::log_action( 'rcon_exec_command', $command );
-		
+			
+			Livemap::log_action( $schedule === 'now' ? 'rcon_exec_command' : 'task_exec_command', $command );
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@
 			$rcon->add_command( 'teleport', "ALL", $geoid, "location" );
 			$rcon->submit();
 
-			Livemap::log_action( 'rcon_teleport', "GeoID $geoid" );
+			Livemap::log_action( 'task_teleport', "GeoID $geoid" );
 			Livemap::success_redirect($message_ok);
 		
 		break; # ----------------------------------------------------------------------------------------------------------------
@@ -275,7 +275,7 @@
 			}
 			$rcon->submit();
 			
-			Livemap::log_action( 'rcon_insert_item', "CharID $char_string / ObjectID $object_id / Quantity $quantity / Quality $quality" );
+			Livemap::log_action( $schedule === 'now' ? 'rcon_insert_item' : 'task_insert_item', "CharID $char_string / ObjectID $object_id / Quantity $quantity / Quality $quality" );
 			Livemap::success_redirect($message_ok);
 			
 		break; # ----------------------------------------------------------------------------------------------------------------

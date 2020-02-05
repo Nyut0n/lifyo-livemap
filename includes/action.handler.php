@@ -567,7 +567,7 @@ switch( $_REQUEST['action'] ) {
 		$name = $cdb->esc($_POST['name']);
 		
 		$server->update_rcon_name($task, $name) || Livemap::error_redirect();
-		Livemap::log_action('rcon_update_task', $task);
+		Livemap::log_action('task_update_task', "Task ID $task");
 		
 		Livemap::success_redirect("The task details were updated.");
 	
@@ -585,7 +585,7 @@ switch( $_REQUEST['action'] ) {
 		$task = intval($_GET['task_id']);
 		
 		$server->delete_rcon_task($task) || Livemap::error_redirect();
-		Livemap::log_action('rcon_delete_task', $task);
+		Livemap::log_action('task_delete_task', "Task ID $task");
 		
 		Livemap::success_redirect("The task was deleted from the schedule.");
 	

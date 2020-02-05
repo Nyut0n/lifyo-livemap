@@ -40,6 +40,10 @@ class RCON {
 		/* reserved */
 	}
 	
+	public function get_type() {
+		return $this->type;
+	}
+	
 	public function submit() {
 		
 		if( $this->server->get_ttmod_version() >= 1.4 ) {

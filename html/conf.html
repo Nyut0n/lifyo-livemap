@@ -526,6 +526,13 @@
 			case 'rcon_ban_player':		return 'Player banned from server';
 			case 'rcon_message_player':	return 'Message sent to player';
 			case 'rcon_insert_item':	return 'Insert item to players inventory';
+			case 'task_update':			return 'Updated RCON task information';
+			case 'task_delete':			return 'Deleted RCON task';
+			case 'task_insert_item':	return 'Task: Distribute item to online players';
+			case 'task_message_all':	return 'Task: Broadcast message';
+			case 'task_teleport':		return 'Task: Teleport all players';
+			case 'task_exec_function':	return 'Task: Execute server function';
+			case 'task_exec_command':	return 'Task: Run script command';
 			case 'group_add':			return 'Created new user group';
 			case 'group_edit':			return 'Edited user group';
 			case 'group_delete':		return 'Deleted user group';
@@ -539,6 +546,7 @@
 			case 'group':	return 'User Groups';
 			case 'chman':	return 'Character Management';
 			case 'rcon':	return 'RCON Console';
+			case 'task':	return 'RCON Schedule';
 			case 'cdata':	return 'Custom Data';
 			default:		return cell.getValue();
 		}
