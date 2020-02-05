@@ -266,17 +266,23 @@ var NyuRconInterface = {
 	initButtons: function() {
 		var self = this;
 		$(".rcon-selection-control").on( 'click', function() {
+			var selectionSummary = $(".rcon-selection-summary");
 			// Get list of selected characters
 			var ids = [];
+			var names =[];
 			self.playerTable.getSelectedData().forEach( function(player) { 
 				ids.push(player.ID);
+				names.push(player.FullName);
 			} );
 			if( ids.length === 0 ) {
 				alert("Select at least one character from the list!");
 				return false;
 			}
 			// Update selection list in forms
-			$(".rcon-selection-summary").html( ids.length + " players selected" );
+			selectionSummary.empty().html(ids.length + " players selected");
+			$("<img src='images/tooltip.png' class='post-icon has-tooltip'>")
+			.tooltip( {items: "img", content: names.join(', ') } )
+			.appendTo(selectionSummary);
 			$(".rcon-char-list").val( ids.join(',') );
 			// Open corresponding dialog
 			switch(this.id) {
