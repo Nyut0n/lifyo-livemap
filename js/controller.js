@@ -63,6 +63,7 @@ function NyuLivemapController() {
 				$(".serverinfo-sq").each( function() {
 					this.innerHTML = data.sq_rules[this.dataset.key];
 				} );
+				data.world_color === false ? $(".serverinfo-color").hide() : $(".serverinfo-color").html(data.world_color);
 			}			
 		} );
 	};

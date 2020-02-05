@@ -126,7 +126,11 @@
 		
 			$jh = $server->get_judgement_hour();
 			
-			$result = array('sq_rules' => $server->serverrules, 'judgementHour' => $jh);
+			$result = array(
+				'sq_rules' => $server->serverrules,
+				'judgementHour' => $jh,
+				'world_color' => $server->get_world_color()
+			);
 		
 			echo json_encode($result);
 			

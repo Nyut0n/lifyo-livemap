@@ -198,6 +198,13 @@ class LiFServer {
 			break;
 		}
 	}
+	
+	# Get configured world type color
+	public function get_world_color() {
+		if( $this->get_ttmod_version() < 1.4 ) return FALSE;
+		$rs = $this->db->query( "SELECT world_type FROM nyu_ttmod_info LIMIT 1", FALSE );
+		return $rs['world_type'];
+	}
 
 	# Get JH schedule through SourceQuery interface
 	public function get_judgement_hour() {
