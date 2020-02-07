@@ -210,10 +210,11 @@ class LiFServer {
 	public function get_judgement_hour() {
 		// Return empty array if server is private. Can't detect JH values in this case
 		if( ! $this->ispublic ) return FALSE;
-		// Connect sourcequery socket if necessary
-		$this->sq || $this->sq_connect(); 
 		// In case of any problems, will return an empty array instead of throwing an exception
 		try {
+			// Connect sourcequery socket if necessary
+			$this->sq || $this->sq_connect();
+			// Get rules array from server
 			$this->serverrules = $this->sq->GetRules();
 			// Return FALSE if JH is disabled in config
 			if( empty($this->serverrules['weekSchedule']) || ! $this->serverrules['duration'] ) return FALSE;
@@ -270,16 +271,16 @@ class LiFServer {
 		if( ! $this->ispublic ) return FALSE;
 		// Skip if we have the info already
 		if( $this->serverinfo !== NULL ) return TRUE;
-		// Connect to SQ if necessary
-		if( ! $this->sq ) $this->sq_connect();
 		// Fetch the information array from SourceQuery API
 		try {
+			// Connect to SQ if necessary
+			$this->sq || $this->sq_connect();
+			// Get info array from server
 			$this->serverinfo = $this->sq->GetInfo();
 			if( isSet($this->serverinfo['Players']) ) return TRUE;
 			else return FALSE;
 		// Handle error if no communication with LiF server possible
 		} catch( Exception $e ) {
-			syslog(LOG_INFO, "Unable to query gameserver: " . $e->getMessage());
 			return FALSE;
 		}
 	}
