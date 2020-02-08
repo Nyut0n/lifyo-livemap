@@ -129,7 +129,8 @@
 			$result = array(
 				'sq_rules' => $server->serverrules,
 				'judgementHour' => $jh,
-				'world_color' => $server->get_world_color()
+				'world_color' => $server->get_world_color(),
+				'ttmod' => $server->get_ttmod_version(),
 			);
 		
 			echo json_encode($result);

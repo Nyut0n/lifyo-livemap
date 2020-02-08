@@ -14,6 +14,7 @@ function NyuLivemapController() {
 	
 	this.notificationDuration  = 10;
 	this.playersUpdateInterval = 10;
+	this.onlinePlayersEnabled  = true;
 	
 	this.init = function( config, privileges ) {
 		this.config = config;
@@ -49,6 +50,11 @@ function NyuLivemapController() {
 	this.initServerInfo = function() {
 		this.ajax( "get_server_details", false, function(data) {
 			self.serverInfo = data;
+			// Process TTmod version
+			if( data.ttmod < 1.3 && parseInt(self.config.server_query) === 0 ) {
+				self.onlinePlayersEnabled = false;
+				self.header.playersItem.remove();
+			}
 			// If server has JH, show timer and start refresh schedule
 			if( data.judgementHour ) {
 				self.header.jhItem.show();
@@ -171,6 +177,7 @@ function NyuLivemapController() {
 	};
 	
 	this.updateOnlinePlayers = function() {
+		if( ! this.onlinePlayersEnabled ) return false;
 		this.ajax( 'get_players', false, function(data) {
 			self.players = data;
 			// Update header

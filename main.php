@@ -404,8 +404,7 @@
 	->assign( 'SHOW_LABELS', ($config['color_label'] !== 'ZZZZZZ') )
 	->assign( 'COLOR_GLABEL', $config['color_label'] )
 	->assign( 'FONT_GLABEL', $config['font_claimlabel'] )
-	->assign( 'FONT_TOOLTIP', $config['font_claimdetail'] )
-	->assign( 'PLAYERS_ENABLE', ($server->detect_ttmod() || (bool)intval($config['server_query'])) );
+	->assign( 'FONT_TOOLTIP', $config['font_claimdetail'] );
 	
 	// Assign server details
 	$html->assign( 'SERVER_IP', $config['game_ip'] )

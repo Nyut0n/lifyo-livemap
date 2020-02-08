@@ -174,6 +174,7 @@ var NyuLivemapHeader = {
 	},
 	
 	setOnlinePlayers: function( players ) {
+		if( ! this.controller.onlinePlayersEnabled ) return true;
 		// If server is offline
 		if( players === false ) {
 			$("#header-players .header-item-icon").attr('src', 'images/header/plug.png');
@@ -189,6 +190,7 @@ var NyuLivemapHeader = {
 	},
 	
 	setOnlinePlayersList: function( list ) {
+		if( ! this.controller.onlinePlayersEnabled ) return true;
 		if( list.length > 0 ) {
 			// Build html list
 			var html = "<ul id=\"online-players-list\">";
