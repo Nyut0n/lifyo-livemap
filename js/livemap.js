@@ -607,6 +607,7 @@ function Livemap( controller ) {
 			minZoom: -1,
 			minNativeZoom: 0,
 			bounds: [[0,0], [1533, 1533]],
+			errorTileUrl: 'images/errortile.jpg'
 		} );
 		return tileLayer;
 	};
