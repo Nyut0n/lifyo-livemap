@@ -114,7 +114,7 @@ var NyuCharTable = {
 			data: self.charData,
 			columns: [
 				{ title:" ", field:"statusImage", width:30, align:"center", mutator:self.statusMutator, formatter:"image", tooltip:self.statusTooltip },
-				{ title:"Acc ID", field:"AccountID", width:80, sorter:"number", headerFilter:true },
+				{ title:"Acc ID", field:"AccountID", width:80, sorter:"number", headerFilter:true, formatter:self.accountFormatter },
 				{ title:"Char ID", field:"ID", width:85, sorter:"number", headerFilter:true },
 				{ title:"Char Name", field:"Name", sorter:"string", tooltip:true, headerFilter:true, formatter:self.charNameFormatter },
 				{ title:"Guild & Rank", field:"GuildName", sorter:"string", tooltip:true, headerFilter:true, formatter:self.guildFormatter },
@@ -292,6 +292,11 @@ var NyuCharTable = {
 			default:
 				return "";
 		}
+	},
+	
+	accountFormatter: function( cell ) {
+		var data = cell.getData();
+		return data.CharCount > 1 ? data.AccountID + " <span class='hint'>[" + data.CharCount + "]</span>" : data.AccountID;
 	},
 	
 	recordFormatter: function( cell ) {

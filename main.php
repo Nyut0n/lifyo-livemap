@@ -282,7 +282,8 @@
 							MAX(`ts`.`time`) AS LastOnlineString,
 							UNIX_TIMESTAMP(MAX(`ts`.`time`)) AS LastOnlineTimestamp,
 							ROUND( COUNT(`ts`.`ID`) * 5 / 60 ) AS Playtime,
-							ci.deaths AS Deaths, ci.kills AS Kills
+							ci.deaths AS Deaths, ci.kills AS Kills,
+							( SELECT COUNT(ID) FROM `character` WHERE AccountID = c.AccountID ) AS CharCount
 						  FROM
 							`account` a, `character` c
 						  LEFT JOIN `nyu_chars_info` ci
@@ -306,7 +307,8 @@
 							c.Name AS FirstName, c.LastName, CONCAT(c.Name, ' ', c.LastName) AS Name,
 							ASCII( SUBSTRING(c.appearance,1) ) AS Gender,
 							g.ID AS GuildID, g.Name AS GuildName,
-							0 AS is_online
+							0 AS is_online,
+							( SELECT COUNT(ID) FROM `character` WHERE AccountID = c.AccountID ) AS CharCount
 						  FROM
 							`account` a, `character` c
 						  LEFT JOIN `guilds` g
