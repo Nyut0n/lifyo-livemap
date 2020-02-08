@@ -82,6 +82,12 @@ function NyuLivemapController() {
 		
 		// Loading base data
 		this.ajax('get_base_data', true, function(data) {
+			
+			// Health check
+			if( ! data.healthCheck ) {
+				$("<div title='Error'>Livemap could not establish a connection to the gameserver database. Please check configuration and database health.</div>").dialog();
+				return true;
+			}
 
 			// Init default-visible layers
 			livemap.initLayer('areas').setData(data.areas).show();

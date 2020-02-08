@@ -50,6 +50,16 @@ class LiFServer {
 		$this->sq->Connect( $this->ip, $this->port + 2, 2, SourceQuery::SOURCE );
 	}
 	
+	# Check DB connection health
+	public function check_db_connection() {
+		try {
+			@$this->get_ttmod_version();
+			return TRUE;
+		} catch( Throwable $e ) {
+			return FALSE;
+		}
+	}
+	
 	# is TTmod installed?
 	public function detect_ttmod() {
 		if( $this->ttmod_version === NULL ) $this->ttmod_version = $this->get_ttmod_version();
