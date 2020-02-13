@@ -104,7 +104,7 @@ var NyuLivemapHeader = {
 			}
 		} );
 		var parser = new sceditor.BBCodeParser();
-		$("#dialog-rules").html( parser.toHTML(controller.config.rules) );
+		controller.config.rules == null || $("#dialog-rules").html( parser.toHTML(controller.config.rules) );
 		return this;
 	},
 	
