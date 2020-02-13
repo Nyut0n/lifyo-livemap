@@ -67,6 +67,7 @@ var NyuRconInterface = {
 	},
 	
 	initSchedulerTable: function() {
+		if( ! document.getElementById('rcon-scheduler-table') ) return this;
 		var self = this;
 		function timeScheduleFormatter( cell ) {
 			var data = cell.getData();

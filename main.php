@@ -360,7 +360,7 @@
 		
 			$content = new Template('html/rcon.html');
 			$content->assign( 'items', $server->get_all_items() )
-			->assign( 'show_ttmod_warning', ($server->get_ttmod_version() < Livemap::TTMOD_VERSION) );
+			->assign( 'ttmod_14', ($server->get_ttmod_version() >= 1.4) );
 
 		break;
 

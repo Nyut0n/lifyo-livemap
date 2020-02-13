@@ -27,6 +27,7 @@
 		</div>
 		<!-- Scheduled Events -->
 		<div id="tab-scheduler">
+			{IF:ttmod_14}
 			<button id="rcon-refresh-button"><span class="ui-icon ui-icon-refresh"></span> Refresh List</button>
 			<h1>Scheduled Tasks</h1>
 			<div id="rcon-scheduler-table" style="clear:both"></div>
@@ -43,6 +44,10 @@
 				<div class="rcon-task-button" id="rcon-task-button-code">Code<br><img src="images/rcon/code.png"></div>
 				{ENDIF:PRIV_rcon_advanced}
 			</fieldset>
+			{ENDIF:ttmod_14}
+			{IFNOT:ttmod_14}
+			This function requires TTmod 1.4
+			{ENDIFNOT:ttmod_14}
 		</div>
 	</div>
 
@@ -373,7 +378,7 @@
 	$("#tabs-container").tabs( {
 		activate: function(event, ui) {
 			ui.newPanel[0].id === 'tab-players' && Controller.rcon.playerTable.redraw();
-			ui.newPanel[0].id === 'tab-scheduler' && Controller.rcon.schedulerTable.redraw();
+			ui.newPanel[0].id === 'tab-scheduler' && Controller.rcon.schedulerTable !== null && Controller.rcon.schedulerTable.redraw();
 		}
 	} );	
 

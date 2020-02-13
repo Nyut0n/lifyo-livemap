@@ -10,7 +10,7 @@ class Livemap {
 	protected function __construct() {}
 	protected function __clone() {}
 	
-	const TTMOD_VERSION = 1.3;
+	const TTMOD_VERSION = 1.4;
 	const MAX_UPLOAD_SIZE = 8388608;
 	const LOGIN_COOKIE_DAYS = 14;
 	const POI_ICON_PATH = "images/poi";
