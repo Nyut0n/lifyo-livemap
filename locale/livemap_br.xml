@@ -75,6 +75,8 @@
 		<string id="124">Sow Spawn</string>
 		<string id="125">Grouse Spawn</string>
 		<string id="126">Hare Spawn</string>
+		<string id="127">Bear Spawn</string>
+		<string id="128">Wild Horse Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">Você ainda não criou nenhum personagem no servidor :(</string>
 		<string id="201">Privilege Checker</string>

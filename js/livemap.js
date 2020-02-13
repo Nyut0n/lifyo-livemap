@@ -526,6 +526,8 @@ function Livemap( controller ) {
 						SowData: { name: Locale.ui[124], icon: "images/animals/sow.png" },
 						GrouseData: { name: Locale.ui[125], icon: "images/animals/grouse.png" },
 						HareData: { name: Locale.ui[126], icon: "images/animals/hare.png" },
+						BearData: { name: Locale.ui[127], icon: "images/animals/bear.png" },
+						WildHorseData: { name: Locale.ui[128], icon: "images/animals/horse.png" },
 					};
 					// Draw animal icons
 					data.forEach( function(spawn) {

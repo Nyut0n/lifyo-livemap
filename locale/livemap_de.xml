@@ -75,6 +75,8 @@
 		<string id="124">Sau Spawn</string>
 		<string id="125">Huhn Spawn</string>
 		<string id="126">Hase Spawn</string>
+		<string id="127">Bär Spawn</string>
+		<string id="128">Pferd Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">Du hast noch keine Charaktere auf diesem Server :(</string>
 		<string id="201">Rechte-Check</string>
