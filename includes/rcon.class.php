@@ -57,7 +57,7 @@ class RCON {
 				$this->server->passthru_db_query( "INSERT INTO nyu_rcon_schedule (name, type, runtime, interval_unit, interval_value, command, param1, param2, detail) VALUES ('{$this->name}', '{$this->type}', $runtime_expression, $interval_unit, $interval_value, '{$c['command']}', '{$c['param1']}', '{$c['param2']}', '{$c['detail']}')" );
 			}
 			
-			$this->type === 'once' || $this->server->passthru_db_query("SELECT * FROM nyu_rcon_schedule WHERE command = 'reload_schedule'") || $this->server->passthru_db_query("INSERT INTO nyu_rcon_schedule (type, command) VALUES ('once', 'reload_schedule')");
+			$this->type === 'once' || $this->server->trigger_rcon_reload();
 		
 		} else {
 			

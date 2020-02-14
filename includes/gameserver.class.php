@@ -436,6 +436,11 @@ class LiFServer {
 									FROM nyu_rcon_schedule
 									WHERE command != 'reload_schedule'" );
 	}
+	
+	# Trigger schedule reload
+	public function trigger_rcon_reload() {
+		$this->db->query("SELECT * FROM nyu_rcon_schedule WHERE command = 'reload_schedule'") || $this->db->query("INSERT INTO nyu_rcon_schedule (type, command) VALUES ('once', 'reload_schedule')");
+	}
 
 	# LEGACY VERSION FOR TTMOD 1.3
 	# Add RCON command to queue
@@ -456,6 +461,7 @@ class LiFServer {
 	public function delete_rcon_task($task_id) {
 		if( $this->get_ttmod_version() < 1.4 ) return FALSE;
 		$this->db->query( "DELETE FROM nyu_rcon_schedule WHERE ID = '$task_id'" );
+		$this->trigger_rcon_reload();
 		return TRUE;
 	}
 	
