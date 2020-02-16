@@ -18,7 +18,7 @@
 	 *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	 */
 
-	const VERSION  = '3.1.0';
+	const VERSION  = '3.1.1';
 	const BASE_URL = '/';
 	
 	require_once('config-dedicated.php');
