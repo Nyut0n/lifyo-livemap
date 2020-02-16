@@ -73,9 +73,11 @@
 		$config['path'] = dirname(__FILE__);
 		$config['isttmap'] = FALSE;
 		$config['server_query'] = strtolower(QUERY_SERVER) === 'yes' ? '1' : '0';
-		$config['mapfile_default'] = 'maps/primary.jpg';
-		$config['mapfile_alternative'] = 'maps/secondary.jpg';
 		$config['admin_pass'] = password_hash(ADMIN_PASS, PASSWORD_DEFAULT);
+		
+		// Map image
+		$config['mapfile_default'] = intval($config['pri_map']) < 2 ? 'maps/primary.jpg' : 'maps/tileset/full.jpg';
+		$config['mapfile_alternative'] = intval($config['alt_map']) < 2 ? 'maps/secondary.jpg' : 'maps/tileset/full.jpg';
 		
 		// Put information into session
 		$_SESSION['LIVEMAP_INFO'][$livemap_id]['CONFIG'] = $config;
