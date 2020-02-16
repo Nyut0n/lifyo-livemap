@@ -60,6 +60,12 @@ class LiFServer {
 		}
 	}
 	
+	# Get current DB time
+	public function get_database_time() {
+		$rs = $this->db->query("SELECT NOW() AS timestring", FALSE);
+		return $rs['timestring'];
+	}
+	
 	# is TTmod installed?
 	public function detect_ttmod() {
 		if( $this->ttmod_version === NULL ) $this->ttmod_version = $this->get_ttmod_version();

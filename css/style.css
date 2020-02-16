@@ -530,9 +530,9 @@ fieldset {
 	margin-top: 10px;
 }
 
-#rcon-refresh-button {
+#rcon-refresh-button, #rcon-timecheck-button {
 	float: right;
-	margin: 10px 0;
+	margin: 10px 0 10px 6px;
 }
 
 .rcon-task-fieldset, .rcon-schedule-detail {

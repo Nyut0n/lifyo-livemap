@@ -277,6 +277,16 @@
 		
 		break;
 		
+		case 'get_database_time':
+		
+			$mygroup->privileges['rcon'] || die;
+			
+			$result = [ 'time' => $server->get_database_time() ];
+			
+			echo json_encode($result);
+		
+		break;
+		
 		# Update player skills
 		case 'skill_update':
 		

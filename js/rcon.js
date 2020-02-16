@@ -310,6 +310,11 @@ var NyuRconInterface = {
 		$("#rcon-refresh-button").button().on( 'click', function() {
 			self.schedulerTable.setData();
 		} );
+		$("#rcon-timecheck-button").button().on( 'click', function() {
+			self.controller.ajax( "get_database_time", false, function(result) {
+				alert("Server reports time as: " + result.time);
+			} );
+		} );
 		$(".rcon-task-button").on( 'click', function() {
 			$(".rcon-task-fieldset").hide();
 			switch(this.id) {
