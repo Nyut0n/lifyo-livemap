@@ -295,6 +295,7 @@ switch( $_REQUEST['action'] ) {
 				// Save image
 				imagejpeg($image, "{$config['path']}/maps/user/$filename", 82) OR Livemap::error_redirect("An error occoured during file upload");
 				imagedestroy($image);
+				@chmod("{$config['path']}/maps/user/$filename", 0666);
 				// Set new revision id
 				$cdb->query( "UPDATE {$config['table_c']} SET file_revision = file_revision + 1 WHERE ID = '$livemap_id'" );
 			}
