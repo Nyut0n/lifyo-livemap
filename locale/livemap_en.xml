@@ -77,6 +77,9 @@
 		<string id="126">Hare Spawn</string>
 		<string id="127">Bear Spawn</string>
 		<string id="128">Wild Horse Spawn</string>
+		<string id="129">Mutton Spawn</string>
+		<string id="130">Bull Spawn</string>
+		<string id="131">Cow Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">You have no characters on this server yet :(</string>
 		<string id="201">Privilege Checker</string>
