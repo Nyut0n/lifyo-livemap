@@ -47,7 +47,7 @@
 			
 			if( $this->connected ) return $this->connected;
 			
-			$this->link = new mysqli( $this->host, $this->user, $this->pass, $this->schema, $this->port );
+			$this->link = @new mysqli( $this->host, $this->user, $this->pass, $this->schema, $this->port );
 			
 			if( $this->link->connect_errno ) {
 				$this->handle_error('connect');
@@ -192,11 +192,7 @@
 		// Checks if a table exists in the database
 		public function table_exists( $table ) {
 
-			$this->connect();
-
-			if( $this->link->query("SELECT 1 FROM $table") ) return TRUE;
-
-			return FALSE;
+			return ( $this->connect() && $this->link->query("SELECT 1 FROM $table") );
 			
 		}
 		

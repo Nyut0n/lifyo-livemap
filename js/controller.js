@@ -85,6 +85,7 @@ function NyuLivemapController() {
 			
 			// Health check
 			if( ! data.healthCheck ) {
+				self.playersUpdateInterval = 3600;
 				$("<div title='Error'>Livemap could not establish a connection to the gameserver database. Please check configuration and database health.</div>").dialog();
 				return true;
 			}

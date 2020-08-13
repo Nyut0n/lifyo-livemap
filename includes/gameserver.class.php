@@ -28,7 +28,6 @@ class LiFServer {
 	# Create a database object
 	public function set_db_credentials( $ip, $port, $user, $pass, $schema ) {
 		$this->db = new MySQL( $user, $pass, $schema, $ip, intval($port), 'utf8' );
-		$this->db->connect_exception = TRUE;
 	}
 	
 	# Execute query in gameserver database
@@ -53,8 +52,7 @@ class LiFServer {
 	# Check DB connection health
 	public function check_db_connection() {
 		try {
-			@$this->get_ttmod_version();
-			return TRUE;
+			return $this->db->connect() && is_numeric($this->get_ttmod_version());
 		} catch( Throwable $e ) {
 			return FALSE;
 		}
