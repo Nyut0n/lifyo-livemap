@@ -80,6 +80,7 @@
 		<string id="129">Schaf Spawn</string>
 		<string id="130">Bulle Spawn</string>
 		<string id="131">Kuh Spawn</string>
+		<string id="132">Elch Spawn</string>
 		<!-- Guild Management -->
 		<string id="200">Du hast noch keine Charaktere auf diesem Server :(</string>
 		<string id="201">Rechte-Check</string>

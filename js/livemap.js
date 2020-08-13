@@ -531,7 +531,9 @@ function Livemap( controller ) {
 						MuttonData: { name: Locale.ui[129], icon: "images/animals/sheep.png" },
 						AurochsBullData: { name: Locale.ui[130], icon: "images/animals/bull.png" },
 						AurochsCowData: { name: Locale.ui[131], icon: "images/animals/cow.png" },
+						MooseData: { name: Locale.ui[132], icon: "images/animals/moose.png" },
 					};
+					console.log(data);
 					// Draw animal icons
 					data.forEach( function(spawn) {
 						if( ! animalData.hasOwnProperty(spawn.Animal) ) return false;
