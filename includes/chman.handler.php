@@ -118,7 +118,13 @@
 			$online = $server->get_online_players();
 			foreach( $online AS $player ) {
 				if( intval($id_list) === intval($player['ID']) ) {
-					$server->add_rcon_command( 'kick_player', $id_list, '', 'Your character was renamed. Please reconnect to apply this change. Thank you.' );
+					// Load rcon class
+					$kick_message = "Your character was renamed. Please reconnect to apply this change. Thank you.";
+					require 'includes/rcon.class.php';
+					$rcon = new RCON($server);
+					$rcon->add_command( 'kick_player', intval($player['ID']), '', $kick_message );
+					$rcon->submit();
+					Livemap::log_action( 'rcon_kick_player', "CharID {$player['ID']} / Message: $kick_message" );
 				}
 			}
 			$message = "Character ID $id_list was renamed to: $first $last";
