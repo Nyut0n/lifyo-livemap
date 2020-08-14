@@ -185,7 +185,7 @@ class Livemap {
 	
 	public static $languages = array(
 		'en' => 'English',
-	#	'fr' => 'French',
+		'fr' => 'French',
 		'de' => 'German',
 	#	'it' => 'Italian',
 		'br' => 'Portuguese (BR)',

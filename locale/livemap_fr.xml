@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- UI / Interface -->
+	<ui>
+		<!-- Header / Menu / General -->
+		<string id="0">joueurs</string>
+		<string id="1">En ligne</string>
+		<string id="2">Durée d'une journée en jeu: {num} heures</string>
+		<string id="3">Facteur multiplicateur de temps</string>
+		<string id="4">Changement de jour</string>
+		<string id="5">Demain</string>
+		<string id="6">avant le redémarrage</string>
+		<string id="7">Redémarrage(s) quotidien(s) du serveur</string>
+		<string id="8">Prochaine HdJ</string>
+		<string id="9">Connexion Livemap</string>
+		<string id="10">Resté connecté</string>
+		<string id="11">Veuillez vous identifier via Steam pour accéder à vos guildes sur ce serveur</string>
+		<string id="12">Gestion de Guilde</string>
+		<string id="13">Infos du serveur</string>
+		<string id="14">Fuseau horaire du serveur</string>
+		<string id="15">Paramètres de la partie</string>
+		<string id="16">Connexion</string>
+		<string id="17">Déconnexion</string>
+		<string id="18">Fermer</string>
+		<string id="19">Retour</string>
+		<string id="20">Prévision météo</string>
+		<string id="21">HdJ active</string>
+		<string id="22">Heure(s) de Jugement hebdomadaire(s)</string>
+		<string id="23">Durée: {num} minutes</string>
+		<string id="24">Membre(s)</string>
+		<string id="25">Fondée le</string>
+		<string id="26">Diamètre</string>
+		<string id="27">case(s)</string>
+		<string id="28">Bâtiment(s)</string>
+		<string id="29">Population</string>
+		<string id="30">Une erreur inconnue est survenue</string>
+		<string id="31">Connexion échouée. Mot de passe invalide.</string>
+		<string id="32">Votre identifiant Steam n'est pas lié à un groupe de permission</string>
+		<string id="33">Connexion réussie</string>
+		<string id="34">Règles du serveur</string>
+		<string id="35">Rejoindre</string>
+		<string id="36">Impossible d'afficher les détails du serveur. (Serveur hors-ligne ?)</string>
+		<string id="37">Serveur hors-ligne</string>
+		<string id="38">Territoire de guilde de -{GuildTier}e palier </string>
+		<string id="39">Zone admin de {SizeX}x{SizeY} case(s)</string>
+		<string id="40">Territoire personnel de {Name} {LastName}</string>
+		<string id="41">Poste avancé de {GuildName}</string>
+		<string id="42">Comptoir déchange</string>
+		<string id="43">Cliquer pour afficher les détails</string>
+		<!-- Livemap / Layers -->
+		<string id="100">Carte alternative</string>
+		<string id="101">Affichage des régions</string>
+		<string id="102">Affichage de la grille</string>
+		<string id="103">Prévisualisation des zones revendiquées par un monument / un poste avancé</string>
+		<string id="104">Position des joueurs connectés</string>
+		<string id="105">Zones admin</string>
+		<string id="106">Territoires personnels</string>
+		<string id="107">Territoires de Guildes</string>
+		<string id="108">Postes avancés</string>
+		<string id="109">Cases pavées</string>
+		<string id="110">Bâtiments &amp; structures</string>
+		<string id="111">Membres</string>
+		<string id="112">Forge du Dormeur</string>
+		<string id="113">Pinces du Dormeur</string>
+		<string id="114">Marteau du Dormeur</string>
+		<string id="115">Points d'intérêt</string>
+		<string id="116">Area Overlay</string>
+		<string id="117">Comptoirs d'échanges</string>
+		<string id="118">Forêt</string>
+		<string id="119">Réapparition des animaux</string>
+		<string id="120">Loup</string>
+		<string id="121">Cerf</string>
+		<string id="122">Biche</string>
+		<string id="123">Sanglier/Cochon</string>
+		<string id="124">Laie/Truie</string>
+		<string id="125">Gélinotte</string>
+		<string id="126">Lièvre/Lapin</string>
+		<string id="127">Ours</string>
+		<string id="128">Cheval sauvage</string>
+		<!-- Guild Management -->
+		<string id="200">Vous ne possédez pas encore de personnage sur ce serveur :(</string>
+		<string id="201">Autorisations de CE personnage ailleurs</string>
+		<string id="202">Palier</string>
+		<string id="203">Type de guilde</string>
+		<string id="204">Cette guilde n'a pas encore de territoire revendiqué</string>
+		<string id="205">Rangs</string>
+		<string id="206">Postures diplomatiques</string>
+		<string id="207">Autorisations</string>
+		<string id="208">Charte de guilde</string>
+		<string id="209">Editer la charte</string>
+		<string id="210">Ce personnage n'est pas membre d'une guilde</string>
+		<string id="211">Vérifie votre posture et les autorisations de votre personnage sur les territoires d'autres guildes</string>
+		<string id="212">Trouver une guilde</string>
+		<string id="213">Membre(s)</string>
+		<string id="214">Changer le rang</string>
+		<string id="215">Personnage</string>
+		<string id="216">Visibilité de la charte</string>
+		<string id="217">Seulement les membres</string>
+		<string id="218">Tout le monde</string>
+		<string id="219">Voulez-vous vraiment expulser '{char_name}' de la guilde ?</string>
+		<string id="220">Expulser le membre</string>
+		<string id="221">Enregistrer</string>
+		<string id="222">Annuler</string>
+		<string id="223">Leur posture</string>
+		<string id="224">Notre posture</string>
+		<string id="225">Autorisations pour une (ou des) guilde(s)</string>
+		<string id="226">Autorisations pour un (ou des) personnage(s)</string>
+		<string id="227">Nouvelle autorisation</string>
+		<string id="228">Trouver le personnage</string>
+		<string id="229">Aucune autorisation existante</string>
+		<string id="230">Guilde</string>
+		<string id="231">Ajouter</string>
+		<string id="232">Changer votre posture vis-à-vis de ...</string>
+		<string id="233">Accepter</string>
+		<string id="234">Type</string>
+		<string id="235">Distance</string>
+		<string id="236">Chef</string>
+		<string id="237">guilde(s) sélectionnée(s) en ...</string>
+		<string id="238">Sélectionnez au moins une guilde dans la liste !</string>
+		<string id="239">Vous n'avez pas l'autorisation de faire ceci</string>
+		<string id="240">Le serveur ne répond pas. Délai d'attente dépassé. Serveur hors-ligne ?</string>
+		<string id="241">Le serveur a rejeté cette action !</string>
+		<string id="242">Vos modifications ont été effectuées avec succès !</string>
+	</ui>
+	<!-- Game Objects -->
+	<objects>
+		<string id="1702">Puit de mine</string>
+		<string id="1703">Hutte de l'herboriste</string>
+		<string id="1704">Scierie</string>
+		<string id="1705">Carrière</string>
+		<string id="1706">Hutte de butineuse</string>
+		<string id="1707">Moulin</string>
+		<string id="1708">Knackery</string>
+		<string id="1709">Geognosy Pit</string>
+		<string id="1710">Camp d'esclaves</string>
+		<string id="1711">Avant-poste militaire</string>
+	</objects>
+	<!-- Weather -->
+	<weather>
+		<string id="0">Pluvieux</string>
+		<string id="1">Nuageux</string>
+		<string id="2">Neige</string>
+		<string id="3">Ensoleillé</string>
+	</weather>
+	<!-- Day names -->
+	<daynames>
+		<string id="0">Dimanche</string>
+		<string id="1">Lundi</string>
+		<string id="2">Mardi</string>
+		<string id="3">Mercredi</string>
+		<string id="4">Jeudi</string>
+		<string id="5">Vendredi</string>
+		<string id="6">Samedi</string>
+	</daynames>
+	<!-- Male Ranks -->
+	<ranks_m>
+		<string id="0">-</string>
+		<string id="1">Comte</string>
+		<string id="2">Vicomte</string>
+		<string id="3">Baron</string>
+		<string id="4">Chevalier</string>
+		<string id="5">Ecuyer</string>
+		<string id="6">Serf</string>
+		<string id="7">Recrue</string>
+	</ranks_m>
+	<!-- Female Ranks -->
+	<ranks_f>
+		<string id="0">-</string>
+		<string id="1">Comtesse</string>
+		<string id="2">Viscomtesse</string>
+		<string id="3">Baronne</string>
+		<string id="4">Dame</string>
+		<string id="5">Suivante</string>
+		<string id="6">Serve</string>
+		<string id="7">Recrue</string>
+	</ranks_f>
+	<!-- Guild Types -->
+	<guildtypes>
+		<string id="0">-</string>
+		<string id="1">Bande</string>
+		<string id="2">Ordre</string>
+		<string id="3">Pays</string>
+		<string id="4">Royaume</string>
+		<string id="5">Vassal</string>
+	</guildtypes>
+	<!-- Standings -->
+	<standings>
+		<string id="0">-</string>
+		<string id="1">Guerre</string>
+		<string id="2">Hostile</string>
+		<string id="3">Neutre</string>
+		<string id="4">Amical</string>
+		<string id="5">Allié</string>
+	</standings>
+	<!-- Permissions -->
+	<permissions>
+		<string id="0">Entrer</string>
+		<string id="1">Construire des bâtiments, créer des meubles, des décorations, utiliser la pelle, creuser des tunnels</string>
+		<string id="2">Revendiquer un territoire personnel (non fonctionnel sur LIF:YO)</string>
+		<string id="3">Utiliser les objets, ouvrir les portes</string>
+		<string id="4">Détruire et renommer les bâtiments et les objets</string>
+	</permissions>
+</root>
