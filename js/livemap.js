@@ -294,12 +294,20 @@ function Livemap( controller ) {
 						} )
 						.addTo(layerGroup);
 					} );
-					// Mouse Circle
+					// Mouse Circles
 					layer.mouseCircle = L.circle( layer.config.mousePosition, {
 						weight: 0,
 						fillColor: this.config.mouseCircleColor,
-						fillOpacity: 0.5,
+						fillOpacity: 0.3,
 						radius: this.config.mouseCircleRadius,
+						interactive: false,
+					} )
+					.addTo(layer.layerGroup);
+					layer.mouseCircleTwo = L.circle( layer.config.mousePosition, {
+						weight: 0,
+						fillColor: this.config.mouseCircleColor,
+						fillOpacity: layer.config.outpostMode ? 0 : 0.3,
+						radius: 50,
 						interactive: false,
 					} )
 					.addTo(layer.layerGroup);
@@ -316,8 +324,9 @@ function Livemap( controller ) {
 				};
 				layer.moveEvent = function(event) {
 					// Follow mouse
-					this.mouseCircle.setLatLng(event.latlng);
 					this.mouseLabel.setLatLng(event.latlng);
+					this.mouseCircle.setLatLng(event.latlng);
+					this.mouseCircleTwo.setLatLng(event.latlng);
 					// Check Area
 					var blocked = false;
 					var mouse = self.c2px(event.latlng);
@@ -337,9 +346,10 @@ function Livemap( controller ) {
 						}
 					}
 					this.mouseCircle.setStyle({fillColor: blocked ? "#ffff00" : "#00ff00"});
+					this.mouseCircleTwo.setStyle({fillColor: blocked ? "#ffff00" : "#00ff00"});
 				};
 				layer.clickEvent = function(event) {
-					this.config.mouseCircleRadius  = this.config.mouseCircleRadius === 75 ? 150 : 75;
+					this.config.mouseCircleRadius = this.config.mouseCircleRadius === 75 ? 150 : 75;
 					this.config.outpostMode = !this.config.outpostMode;
 					this.config.mousePosition = event.latlng;
 					this.draw();
@@ -533,7 +543,6 @@ function Livemap( controller ) {
 						AurochsCowData: { name: Locale.ui[131], icon: "images/animals/cow.png" },
 						MooseData: { name: Locale.ui[132], icon: "images/animals/moose.png" },
 					};
-					console.log(data);
 					// Draw animal icons
 					data.forEach( function(spawn) {
 						if( ! animalData.hasOwnProperty(spawn.Animal) ) return false;
