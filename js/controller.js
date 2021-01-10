@@ -239,7 +239,7 @@ function NyuLivemapController() {
 		if( this.serverInfo === null || ! this.serverInfo.judgementHour ) return false;
 		// Some shortcuts
 		var duration    = this.serverInfo.judgementHour.duration * 60;
-		var timestamps  = this.serverInfo.judgementHour.timestamps;
+		var timestamps  = this.serverInfo.judgementHour.timestamps.sort();
 		var secondsToJH = Math.round(timestamps[0] - Date.now()/1000);
 		var active      = false;
 		// Is JH active now?
