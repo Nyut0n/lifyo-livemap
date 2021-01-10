@@ -8,94 +8,102 @@
 		
 		case 'get_base_data':
 		
-			$data = array();
-			$data['healthCheck'] = $server->check_db_connection();
-			if( $data['healthCheck'] ) {
+			$data = array('healthCheck' => $server->check_db_connection());
+			
+			try {
+				
+				if( $data['healthCheck'] ) {
 		
-				// Fetch data from gameserver database
-				$data['guildClaims'] = $mygroup->privileges['claims'] ? $server->get_guild_claims() : array();
-				$data['adminClaims'] = $mygroup->privileges['aclaim_layer'] ? $server->get_admin_lands() : array();
-				$data['persoClaims'] = $mygroup->privileges['pclaim_layer'] ? $server->get_personal_claims() : array();
-				$data['outposts']	 = $mygroup->privileges['outposts'] ? $server->get_outposts() : array();
-				$data['tradeposts']  = $mygroup->privileges['trading_posts'] ? $server->get_tradeposts() : array();
-				$data['standings']   = $mygroup->privileges['standings'] ? $server->get_guild_standings() : array();
-				$data['animalSpawns']= $mygroup->privileges['animal_spawns'] ? $server->get_animal_spawns() : array();
-				$characters = $server->get_characters();
-				
-				// Fetch custom data from config database
-				$data['pois']  = Livemap::get_custom_pois();
-				$data['areas'] = Livemap::get_custom_areas();
+					// Fetch data from gameserver database
+					$data['guildClaims'] = $mygroup->privileges['claims'] ? $server->get_guild_claims() : array();
+					$data['adminClaims'] = $mygroup->privileges['aclaim_layer'] ? $server->get_admin_lands() : array();
+					$data['persoClaims'] = $mygroup->privileges['pclaim_layer'] ? $server->get_personal_claims() : array();
+					$data['outposts']	 = $mygroup->privileges['outposts'] ? $server->get_outposts() : array();
+					$data['tradeposts']  = $mygroup->privileges['trading_posts'] ? $server->get_tradeposts() : array();
+					$data['standings']   = $mygroup->privileges['standings'] ? $server->get_guild_standings() : array();
+					$data['animalSpawns']= $mygroup->privileges['animal_spawns'] ? $server->get_animal_spawns() : array();
+					$characters = $server->get_characters();
+					
+					// Fetch custom data from config database
+					$data['pois']  = Livemap::get_custom_pois();
+					$data['areas'] = Livemap::get_custom_areas();
 
-				// Convert GeoIDs
-				foreach( $data['adminClaims'] AS &$claim ) {
-					list($claim['x1'], $claim['y1']) = Livemap::geoid2pixelpos($claim['GeoID1']);
-					list($claim['x2'], $claim['y2']) = Livemap::geoid2pixelpos($claim['GeoID2']);
-					$claim['SizeX'] = 1 + abs($claim['x1'] - $claim['x2']);
-					$claim['SizeY'] = 1 + abs($claim['y1'] - $claim['y2']);
-				}
-				unset($claim);
-				foreach( $data['persoClaims'] AS &$claim ) {
-					list($claim['x1'], $claim['y1']) = Livemap::geoid2pixelpos($claim['GeoID1']);
-					list($claim['x2'], $claim['y2']) = Livemap::geoid2pixelpos($claim['GeoID2']);
-					$claim['SizeX'] = 1 + abs($claim['x1'] - $claim['x2']);
-					$claim['SizeY'] = 1 + abs($claim['y1'] - $claim['y2']);
-				}
-				unset($claim);
-				foreach( $data['outposts'] AS &$outpost ) {
-					list($outpost['x'], $outpost['y']) = Livemap::geoid2pixelpos($outpost['GeoDataID']);
-				}
-				foreach( $data['tradeposts'] AS &$tp ) {
-					list($tp['x'], $tp['y']) = Livemap::geoid2pixelpos($tp['GeoDataID']);
-				}
-				foreach( $data['animalSpawns'] AS &$spawn ) {
-					list($spawn['x'], $spawn['y']) = Livemap::geoid2pixelpos($spawn['GeoID']);
-				}
-				
-				// Guild Claims
-				foreach( $data['guildClaims'] AS &$claim ) {
-					// Coordinates and dimension of guild claim circle
-					list($claim['x'], $claim['y']) = Livemap::geoid2pixelpos($claim['CenterGeoID']);
-					$claim['d'] = intval($claim['Radius']);
-					$claim['r'] = ceil($claim['d']/2);
-					// Misc info about guild
-					$claim['name'] = htmlentities($claim['guild']);
-					$claim['founded'] = date('Y-m-d', strtotime($claim['ctime']));
-					$claim['GuildTier'] = Guild::get_claim_tier($claim['d']);
-					$claim['bcount'] = 0;
-					// Unpack charter info
-					$charter_data = json_decode($claim['GuildCharter'], TRUE);
-					if( isSet($charter_data['GuildCharterPublic']) && $charter_data['GuildCharterPublic'] ) {
-						$claim['GuildCharterPublic'] = TRUE;
-						$claim['SanitizedCharter'] = htmlentities($charter_data['GuildCharter']);
-					} else {
-						$claim['GuildCharterPublic'] = FALSE;
-						$claim['SanitizedCharter'] = "";
-						$claim['GuildCharter'] = "";
+					// Convert GeoIDs
+					foreach( $data['adminClaims'] AS &$claim ) {
+						list($claim['x1'], $claim['y1']) = Livemap::geoid2pixelpos($claim['GeoID1']);
+						list($claim['x2'], $claim['y2']) = Livemap::geoid2pixelpos($claim['GeoID2']);
+						$claim['SizeX'] = 1 + abs($claim['x1'] - $claim['x2']);
+						$claim['SizeY'] = 1 + abs($claim['y1'] - $claim['y2']);
 					}
-					// Build list of guild members
-					$guild_id = $claim['GuildID'];
-					$claim['members'] = array_values(array_filter($characters, function($c) use($guild_id) { return $c['GuildID'] === $guild_id; }));
-					$claim['mcount'] = count($claim['members']);
-					foreach( $claim['members'] AS $i => $member ) $claim['members'][$i]['FullName'] = htmlspecialchars("{$member['FirstName']} {$member['LastName']}");				
-				}
-				unset($claim);
-				
-				// Calculate building count for guild claims
-				if( $mygroup->privileges['struct_count'] ) {
-					// this may be huge on a highly populated server with many guilds and buildings
-					// maybe find a better solution some day
-					$buildings = $server->get_structures();
-					foreach( $buildings AS $b ) {
-						foreach( $data['guildClaims'] AS &$c ) {
-							if( Livemap::get_distance($c['CenterGeoID'], $b['GeoDataID']) <= $c['r'] ) {
-								$c['bcount']++;
-								break;
-							}
+					unset($claim);
+					foreach( $data['persoClaims'] AS &$claim ) {
+						list($claim['x1'], $claim['y1']) = Livemap::geoid2pixelpos($claim['GeoID1']);
+						list($claim['x2'], $claim['y2']) = Livemap::geoid2pixelpos($claim['GeoID2']);
+						$claim['SizeX'] = 1 + abs($claim['x1'] - $claim['x2']);
+						$claim['SizeY'] = 1 + abs($claim['y1'] - $claim['y2']);
+					}
+					unset($claim);
+					foreach( $data['outposts'] AS &$outpost ) {
+						list($outpost['x'], $outpost['y']) = Livemap::geoid2pixelpos($outpost['GeoDataID']);
+					}
+					foreach( $data['tradeposts'] AS &$tp ) {
+						list($tp['x'], $tp['y']) = Livemap::geoid2pixelpos($tp['GeoDataID']);
+					}
+					foreach( $data['animalSpawns'] AS &$spawn ) {
+						list($spawn['x'], $spawn['y']) = Livemap::geoid2pixelpos($spawn['GeoID']);
+					}
+					
+					// Guild Claims
+					foreach( $data['guildClaims'] AS &$claim ) {
+						// Coordinates and dimension of guild claim circle
+						list($claim['x'], $claim['y']) = Livemap::geoid2pixelpos($claim['CenterGeoID']);
+						$claim['d'] = intval($claim['Radius']);
+						$claim['r'] = ceil($claim['d']/2);
+						// Misc info about guild
+						$claim['name'] = htmlentities($claim['guild']);
+						$claim['founded'] = date('Y-m-d', strtotime($claim['ctime']));
+						$claim['GuildTier'] = Guild::get_claim_tier($claim['d']);
+						$claim['bcount'] = 0;
+						// Unpack charter info
+						$charter_data = json_decode($claim['GuildCharter'], TRUE);
+						if( isSet($charter_data['GuildCharterPublic']) && $charter_data['GuildCharterPublic'] ) {
+							$claim['GuildCharterPublic'] = TRUE;
+							$claim['SanitizedCharter'] = htmlentities($charter_data['GuildCharter']);
+						} else {
+							$claim['GuildCharterPublic'] = FALSE;
+							$claim['SanitizedCharter'] = "";
+							$claim['GuildCharter'] = "";
 						}
-						unset($c);
+						// Build list of guild members
+						$guild_id = $claim['GuildID'];
+						$claim['members'] = array_values(array_filter($characters, function($c) use($guild_id) { return $c['GuildID'] === $guild_id; }));
+						$claim['mcount'] = count($claim['members']);
+						foreach( $claim['members'] AS $i => $member ) $claim['members'][$i]['FullName'] = htmlspecialchars("{$member['FirstName']} {$member['LastName']}");				
 					}
+					unset($claim);
+					
+					// Calculate building count for guild claims
+					if( $mygroup->privileges['struct_count'] ) {
+						// this may be huge on a highly populated server with many guilds and buildings
+						// maybe find a better solution some day
+						$buildings = $server->get_structures();
+						foreach( $buildings AS $b ) {
+							foreach( $data['guildClaims'] AS &$c ) {
+								if( Livemap::get_distance($c['CenterGeoID'], $b['GeoDataID']) <= $c['r'] ) {
+									$c['bcount']++;
+									break;
+								}
+							}
+							unset($c);
+						}
+					}
+					
 				}
 				
+			} catch( Exception $e ) {
+			
+				$data['healthCheck'] = FALSE;
+			
 			}
 
 			// Output as json
