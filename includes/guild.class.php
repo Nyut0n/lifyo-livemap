@@ -84,7 +84,7 @@ class Guild {
 	# Get guild standings
 	public function get_standings() {
 		
-		return $this->db->query( "SELECT g.ID, g.Name, g.GuildTypeID, gl.Radius, gs1.StandingTypeID AS OurStanding, gs2.StandingTypeID AS TheirStanding, gl.CenterGeoID, 
+		return $this->db->query( "SELECT g.ID, g.Name, g.GuildTypeID, gl.Radius, gs1.StandingTypeID AS TheirStanding, gs2.StandingTypeID AS OurStanding, gl.CenterGeoID, 
 										 CONCAT(c.Name, ' ', c.LastName) AS LeaderName, ASCII( SUBSTRING(c.appearance,1) ) AS LeaderGender
 									FROM `guilds` g
 									JOIN `character` c ON c.GuildID = g.ID AND c.GuildRoleID = 1
