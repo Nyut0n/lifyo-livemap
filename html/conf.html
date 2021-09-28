@@ -6,7 +6,7 @@
 	{IF:UPDATER_EXISTS}
 	<div id="updater-warning"><img src="images/warn.png" class="pre-icon">The Livemap was updated. For security reasons, you should delete the <b>updater.php</b> file from your webserver now.</div>
 	{ENDIF:UPDATER_EXISTS}
-	
+
 	<div id="tabs-container">
 		<ul>
 			<li><a href="{REAL_LINK}#tab-general">General</a></li>
@@ -265,7 +265,7 @@
 		</div>
 		<!-- Custom Data -->
 		<div id="tab-customdata">
-			<button id="new-poi-button"><span class="ui-icon ui-icon-plus"></span> New POI</button> 
+			<button id="new-poi-button"><span class="ui-icon ui-icon-plus"></span> New POI</button>
 			<button id="new-area-button"><span class="ui-icon ui-icon-plus"></span> New Area</button>
 			<button id="cancel-button"><span class="ui-icon ui-icon-cancel"></span> Cancel</button>
 			<br><br>
@@ -298,7 +298,7 @@
 				{IF:steamLogin}<img src="images/check.png"> Enabled ({memcount} SteamIDs assigned)<br>{ENDIF:steamLogin}
 				{IFNOT:steamLogin}<img src="images/stop.png"> Disabled<br>{ENDIFNOT:steamLogin}
 				{ENDIFNOT:isVisitorGroup}
-				{privCount} privileges assigned <img id="privgroup-{ID}" class="has-tooltip" src="images/tooltip.png">		
+				{privCount} privileges assigned <img id="privgroup-{ID}" class="has-tooltip" src="images/tooltip.png">
 			</div>
 			{ENDLOOP:groups}
 			<button type="button" id="button-newgroup"><span class="ui-icon ui-icon-plus"></span> New Group</button>
@@ -388,7 +388,7 @@
 			<a href="index.php?livemap_id={LIVEMAP_ID}&action=ClearLogs" id="button-clearlogs"><span class="ui-icon ui-icon-trash"></span> Clear Logs</a>
 		</div>
 	</div>
-	
+
 	<!-- Dialog: New Group -->
 	<div id="dialog-newgroup" class="ui-dialog" title="Create New Group">
 		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
@@ -397,7 +397,7 @@
 			<input type="submit" value="Submit">
 		</form>
 	</div>
-	
+
 	<!-- Dialog: New POI -->
 	<div id="conf-poi-dialog" class="ui-dialog" title="Create Point of Interest">
 		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
@@ -421,7 +421,7 @@
 				<legend>Marker Icon</legend>
 				<div class="kv-row">
 					<div>Icon Image</div>
-					<div>
+					<div style="width: 410px;">
 						{LOOP:poi_icons}<div class="conf-poi-icon" data-file="{file}">{svg}</div>{ENDLOOP:poi_icons}
 					</div>
 				</div>
@@ -448,7 +448,7 @@
 			<input type="submit" tabindex="-1">
 		</form>
 	</div>
-	
+
 	<!-- Dialog: New Area -->
 	<div id="conf-area-dialog" class="ui-dialog" title="Create Area Overlay">
 		<form action="index.php?livemap_id={LIVEMAP_ID}" method="POST">
@@ -489,18 +489,18 @@
 	var PoiData  = {poi_json};
 	var AreaData = {area_json};
 	var RulesString = {rules_json};
-	
+
 	// Group tooltips
 	{LOOP:groups}
 	$("#privgroup-{ID}").tooltip( {items: "img", content: "<ul class=\"group-privlist\">{LOOP:privileges}<li>{priv_name}</li>{ENDLOOP:privileges}</ul>"} );
 	{ENDLOOP:groups}
-	
+
 	// Style form with jquery-ui
 	$("select, input:not(#conf-daycycle)").addClass("ui-widget ui-widget-content ui-corner-all");
 	$("button[type=submit]").button();
 	$(".conf-ui-button").button();
 	$("#conf-daycycle").spinner( {min: 1.0, max: 24.0, step: 0.1} );
-	
+
 	function logActionFormatter( cell ) {
 		switch( cell.getValue() ) {
 			case 'cdata_poi':			return 'Created new point of interest';
@@ -539,7 +539,7 @@
 			default:					return cell.getValue();
 		}
 	}
-	
+
 	function logModuleFormatter( cell ) {
 		switch( cell.getData().action.split("_")[0] ) {
 			case 'config':	return 'Livemap Configuration';
@@ -551,16 +551,16 @@
 			default:		return cell.getValue();
 		}
 	}
-	
+
 	var TabbedTabulators = [];
 	var CustomDataMap = null;
 
 	TabbedTabulators.push( new Tabulator( "#log-table", {
 		layout:"fitColumns",
-		tooltips:false,	
+		tooltips:false,
 		pagination:"local",
 		paginationSize:20,
-		movableColumns:true,	
+		movableColumns:true,
 		resizableRows:false,
 		placeholder:"No actions logged yet.",
 		index:"ID",
@@ -573,13 +573,13 @@
 			{title:"Details", field:"detail", widthGrow:2, headerSort:false, tooltip:true},
 		],
 	} ) );
-	
+
 	// Toggle show label
 	{IFNOT:SHOW_LABELS}$(".claim-label-group").toggle();{ENDIFNOT:SHOW_LABELS}
 	$("#show-label-checkbox").click( function() {
 		$(".claim-label-group").toggle(this.checked);
 	} );
-	
+
 	// Tabulator and leaflet in ui-tabs fix
 	$("#tabs-container").tabs( {
 		activate: function(event, ui) {
@@ -599,13 +599,13 @@
 			}
 		}
 	} );
-	
+
 	// New Group Dialog
 	$("#button-newgroup").button().on( 'click', function() {
 		$("#dialog-newgroup").dialog( {
 			width: 400,
 			buttons: {
-				"Create Group": function() { 
+				"Create Group": function() {
 					$(this).find("form").submit();
 					$(this).dialog("close");
 				},
@@ -613,7 +613,7 @@
 			}
 		} );
 	} );
-	
+
 	// Clear Logs Button
 	$("#button-clearlogs").button().on( 'click', function(e) {
 		if( ! confirm("Clearing logs can't be undone. Are you sure?") ) {
@@ -621,7 +621,7 @@
 			return false;
 		}
 	} );
-	
+
 	// Rules Editor
 	var rulesElement = document.getElementById('conf-rules');
 	sceditor.create( rulesElement, {
@@ -638,7 +638,7 @@
 	$("#general-form").on( 'submit', function(event) {
 		$("#hidden-rules").val(sceditor.instance(rulesElement).val());
 	} );
-	
-		
+
+
 
 </script>
