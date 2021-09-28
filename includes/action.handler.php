@@ -159,7 +159,7 @@ switch( $_REQUEST['action'] ) {
 		$discord  = trim($cdb->esc($_POST['discord']));
 		$teamspeak= trim($cdb->esc($_POST['teamspeak']));
 		$rules	  = trim($cdb->esc($_POST['rules']));
-		$steamid  = intval($_POST['steamid'])) === 0 ? 'NULL' : intval($_POST['steamid']));
+		$steamid  = intval($_POST['steamid']) === 0 ? 'NULL' : intval($_POST['steamid']);
 
 		// Check title
 		if( strlen($title) < 5 ) Livemap::error_redirect('Livemap title too short (min. 5 characters)');
