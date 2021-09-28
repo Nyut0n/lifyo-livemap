@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/tabulator.css">
 <link rel="stylesheet" href="css/sceditor/defaultdark.min.css">
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script src="https://unpkg.com/tabulator-tables@4.5.3/dist/js/tabulator.min.js"></script>
@@ -15,7 +15,7 @@
 <script src="js/sceditor/monocons.js"></script>
 <script src="js/controller.js"></script>
 <style>
-	.content-page { 
+	.content-page {
 		padding-top: 20px !important;
 		min-width: 700px !important;
 	}
@@ -29,13 +29,13 @@
 
 	var livemap_id = {LIVEMAP_ID};
 	var Locale = {LOCALE_UI_JSON};
-	
+
 	var Controller = new NyuLivemapController();
 	$( function() {
 		Controller.minimalInit( {JSON_CONFIG}, {PRIVILEGES} );
 		Controller.showMessage( {MESSAGE} );
 	} );
-	
+
 </script>
 
 </body>
