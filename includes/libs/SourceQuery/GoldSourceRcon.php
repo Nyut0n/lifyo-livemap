@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * @author Pavel Djundik <sourcequery@xpaw.me>
+	 * @author Pavel Djundik
 	 *
 	 * @link https://xpaw.me
 	 * @link https://github.com/xPaw/PHP-Source-Query
@@ -13,6 +13,7 @@
 	namespace xPaw\SourceQuery;
 	
 	use xPaw\SourceQuery\Exception\AuthenticationException;
+	use xPaw\SourceQuery\Exception\InvalidPacketException;
 
 	/**
 	 * Class GoldSourceRcon
@@ -20,51 +21,50 @@
 	 * @package xPaw\SourceQuery
 	 *
 	 * @uses xPaw\SourceQuery\Exception\AuthenticationException
+	 * @uses xPaw\SourceQuery\Exception\InvalidPacketException
 	 */
 	class GoldSourceRcon
 	{
 		/**
 		 * Points to socket class
 		 * 
-		 * @var Socket
+		 * @var BaseSocket
 		 */
 		private $Socket;
 		
-		private $RconPassword;
-		private $RconRequestId;
-		private $RconChallenge;
+		private string $RconPassword = '';
+		private string $RconChallenge = '';
 		
-		public function __construct( $Socket )
+		public function __construct( BaseSocket $Socket )
 		{
 			$this->Socket = $Socket;
 		}
 		
-		public function Close( )
+		public function Close( ) : void
 		{
-			$this->RconChallenge = 0;
-			$this->RconRequestId = 0;
-			$this->RconPassword  = 0;
+			$this->RconChallenge = '';
+			$this->RconPassword  = '';
 		}
 		
-		public function Open( )
+		public function Open( ) : void
 		{
 			//
 		}
 		
-		public function Write( $Header, $String = '' )
+		public function Write( int $Header, string $String = '' ) : bool
 		{
-			$Command = Pack( 'cccca*', 0xFF, 0xFF, 0xFF, 0xFF, $String );
-			$Length  = StrLen( $Command );
+			$Command = pack( 'cccca*', 0xFF, 0xFF, 0xFF, 0xFF, $String );
+			$Length  = strlen( $Command );
 			
-			return $Length === FWrite( $this->Socket->Socket, $Command, $Length );
+			return $Length === fwrite( $this->Socket->Socket, $Command, $Length );
 		}
 		
 		/**
 		 * @param int $Length
 		 * @throws AuthenticationException
-		 * @return bool
+		 * @return Buffer
 		 */
-		public function Read( $Length = 1400 )
+		public function Read( int $Length = 1400 ) : Buffer
 		{
 			// GoldSource RCON has same structure as Query
 			$Buffer = $this->Socket->Read( );
@@ -89,7 +89,7 @@
 					//$StringBuffer .= SubStr( $Packet, 0, -2 );
 					
 					// Let's assume if this packet is not long enough, there are no more after this one
-					$ReadMore = StrLen( $Packet ) > 1000; // use 1300?
+					$ReadMore = strlen( $Packet ) > 1000; // use 1300?
 					
 					if( $ReadMore )
 					{
@@ -115,7 +115,7 @@
 			return $Buffer;
 		}
 		
-		public function Command( $Command )
+		public function Command( string $Command ) : string
 		{
 			if( !$this->RconChallenge )
 			{
@@ -128,7 +128,7 @@
 			return $Buffer->Get( );
 		}
 		
-		public function Authorize( $Password )
+		public function Authorize( string $Password ) : void
 		{
 			$this->RconPassword = $Password;
 			
@@ -140,6 +140,6 @@
 				throw new AuthenticationException( 'Failed to get RCON challenge.', AuthenticationException::BAD_PASSWORD );
 			}
 			
-			$this->RconChallenge = Trim( $Buffer->Get( ) );
+			$this->RconChallenge = trim( $Buffer->Get( ) );
 		}
 	}

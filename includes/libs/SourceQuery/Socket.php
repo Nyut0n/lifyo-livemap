@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * @author Pavel Djundik <sourcequery@xpaw.me>
+	 * @author Pavel Djundik
 	 *
 	 * @link https://xpaw.me
 	 * @link https://github.com/xPaw/PHP-Source-Query
@@ -25,40 +25,41 @@
 	 */
 	class Socket extends BaseSocket
 	{
-		public function Close( )
+		public function Close( ) : void
 		{
-			if( $this->Socket )
+			if( $this->Socket !== null )
 			{
-				FClose( $this->Socket );
+				fclose( $this->Socket );
 				
 				$this->Socket = null;
 			}
 		}
 		
-		public function Open( $Address, $Port, $Timeout, $Engine )
+		public function Open( string $Address, int $Port, int $Timeout, int $Engine ) : void
 		{
 			$this->Timeout = $Timeout;
 			$this->Engine  = $Engine;
 			$this->Port    = $Port;
 			$this->Address = $Address;
 			
-			$this->Socket = @FSockOpen( 'udp://' . $Address, $Port, $ErrNo, $ErrStr, $Timeout );
+			$Socket = @fsockopen( 'udp://' . $Address, $Port, $ErrNo, $ErrStr, $Timeout );
 			
-			if( $ErrNo || $this->Socket === false )
+			if( $ErrNo || $Socket === false )
 			{
 				throw new SocketException( 'Could not create socket: ' . $ErrStr, SocketException::COULD_NOT_CREATE_SOCKET );
 			}
 			
-			Stream_Set_Timeout( $this->Socket, $Timeout );
-			Stream_Set_Blocking( $this->Socket, true );
+			$this->Socket = $Socket;
+			stream_set_timeout( $this->Socket, $Timeout );
+			stream_set_blocking( $this->Socket, true );
 		}
 		
-		public function Write( $Header, $String = '' )
+		public function Write( int $Header, string $String = '' ) : bool
 		{
-			$Command = Pack( 'ccccca*', 0xFF, 0xFF, 0xFF, 0xFF, $Header, $String );
-			$Length  = StrLen( $Command );
+			$Command = pack( 'ccccca*', 0xFF, 0xFF, 0xFF, 0xFF, $Header, $String );
+			$Length  = strlen( $Command );
 			
-			return $Length === FWrite( $this->Socket, $Command, $Length );
+			return $Length === fwrite( $this->Socket, $Command, $Length );
 		}
 		
 		/**
@@ -68,21 +69,21 @@
 		 *
 		 * @return Buffer Buffer
 		 */
-		public function Read( $Length = 1400 )
+		public function Read( int $Length = 1400 ) : Buffer
 		{
 			$Buffer = new Buffer( );
-			$Buffer->Set( FRead( $this->Socket, $Length ) );
+			$Buffer->Set( fread( $this->Socket, $Length ) );
 			
 			$this->ReadInternal( $Buffer, $Length, [ $this, 'Sherlock' ] );
 			
 			return $Buffer;
 		}
 		
-		public function Sherlock( $Buffer, $Length )
+		public function Sherlock( Buffer $Buffer, int $Length ) : bool
 		{
-			$Data = FRead( $this->Socket, $Length );
+			$Data = fread( $this->Socket, $Length );
 			
-			if( StrLen( $Data ) < 4 )
+			if( strlen( $Data ) < 4 )
 			{
 				return false;
 			}
