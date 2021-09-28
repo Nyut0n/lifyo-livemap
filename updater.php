@@ -2,17 +2,17 @@
 
 	defined('VERSION') || die;
 	isset($_POST['ajax']) && die;
-	
+
 	if( isset($_POST['update'], $_POST['admin_pw']) && $_POST['update'] ) {
-		
+
 		if( $_POST['admin_pw'] !== ADMIN_PASS ) {
-			
+
 			$error = "Wrong password";
-			
+
 		} else {
-			
+
 			$current_version = isset($config) && isset($config['version']) ? $config['version'] : "2.7.2";
-			
+
 			// 3.0.0 base installation
 			if( version_compare($current_version, "3.0.0", "<") ) {
 				// Cleanup old Livemap installations
@@ -81,26 +81,26 @@
 				$cdb->query( "INSERT INTO nyu_livemap (ID, timezone) VALUES ('$livemap_id', '$timezone')" );
 				$cdb->query( "INSERT INTO nyu_livemap_groups (livemap_id, type_id, name, privileges) VALUES ('$livemap_id', 1, 'Anonymous visitor', 3051183), ('$livemap_id', 2, 'Game Masters', 3137535)" );
 			}
-			
+
 			// 3.1.0 update
 			if( version_compare($current_version, "3.1.0", "<") ) {
 				$cdb->query( "ALTER TABLE `nyu_livemap` ADD COLUMN `admin_steam` BIGINT UNSIGNED NULL AFTER `ID`" );
 				$cdb->query( "ALTER TABLE `nyu_livemap` ADD COLUMN `pri_map` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `rules`" );
 			}
-			
+
 			// Finally, update version column in livemap table
 			$cdb->query( "UPDATE nyu_livemap SET version = '" . VERSION . "' WHERE ID = '$livemap_id'" );
-			
+
 			header("Location: index.php");
 			die;
-			
+
 		}
-		
+
 	}
-		
+
 	require_once('includes/template.class.php');
 	$html = new Template('html/updater.html');
-	
+
 	// Test gameserver query connection
 	try {
 		$queryport = GAMESERVER_PORT + 2;
@@ -117,9 +117,9 @@
 	
 	$arch_ok = (PHP_INT_SIZE > 4 || extension_loaded('gmp'));
 	$lif_ok  = $cdb->table_exists('outposts');
-	$php_ok  = version_compare(PHP_VERSION, "5.5.0", ">=");
+	$php_ok  = version_compare(PHP_VERSION, "7.4.0", ">=");
 	$xml_ok  = extension_loaded('xml');
-	
+
 	$html->assign('PHP_VERSION', PHP_VERSION)
 	->assign('ARCH64', PHP_INT_SIZE > 4)
 	->assign('ARCH32', PHP_INT_SIZE === 4 && ! extension_loaded('gmp'))
@@ -132,7 +132,7 @@
 	->assign('REQ_OK', $arch_ok && $lif_ok && $php_ok && $xml_ok)
 	->assign('SHOW_ERROR', isset($error))
 	->assign('ERROR', isset($error) ? $error : '');
-	
+
 	print $html->parse();
-	
+
 	die;
