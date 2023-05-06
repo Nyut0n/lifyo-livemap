@@ -18,26 +18,26 @@
 	 *	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	 */
 
-	const VERSION  = '3.2.0';
+	const VERSION  = '3.2.1';
 	const BASE_URL = '/';
-	
+
 	require_once('config-dedicated.php');
 	require_once('includes/mysql.class.php');
 
 	session_start();
-	
+
 	# Fetch config information from session for AJAX requests
 	if( isset($_REQUEST['ajax']) && isset($_SESSION['LIVEMAP_INFO']) && array_key_exists($livemap_id, $_SESSION['LIVEMAP_INFO']) ) {
 		$config = $_SESSION['LIVEMAP_INFO'][$livemap_id]['CONFIG'];
 	}
-	
+
 	# Initialize database object. Will auto-connect on first query
 	$cdb = new MySQL(MYSQL_USER, MYSQL_PASS, MYSQL_DBSE, MYSQL_HOST, intval(MYSQL_PORT));
 	$cdb->connect_exception = TRUE;
-	
+
 	# Get livemap information from database if none in session or livemap was updated
 	if( ! isset($config) || $config['version'] !== VERSION ) {
-	
+
 		try{
 			// First connection attempt to database. Check if livemap table exists, otherwise trigger installation
 			$cdb->table_exists('nyu_livemap') || require_once('updater.php');
@@ -46,13 +46,13 @@
 			// Trigger installation/update page if no record found
 			$config || require_once('updater.php');
 		// Couldn't connect to database
-		} catch( Exception $e ) { 
+		} catch( Exception $e ) {
 			die("<b>Failed to connect to the database.</b><br>Error: {$e->getMessage()}");
 		}
-		
+
 		// Trigger updater if using old version
 		version_compare(VERSION, $config['version'], "==") || require_once('updater.php');
-		
+
 		// Server facts
 		$config['game_ip'] = GAMESERVER_IP;
 		$config['game_port'] = intval(GAMESERVER_PORT);
@@ -61,26 +61,26 @@
 		$config['db_user'] = MYSQL_USER;
 		$config['db_pass'] = MYSQL_PASS;
 		$config['db_name'] = MYSQL_DBSE;
-		
+
 		// Database table names
 		$config['table_c'] = 'nyu_livemap';
 		$config['table_g'] = 'nyu_livemap_groups';
 		$config['table_s'] = 'nyu_livemap_sessions';
 		$config['table_l'] = 'nyu_livemap_log';
 		$config['table_d'] = 'nyu_livemap_customdata';
-		
+
 		// Append environment details
 		$config['path'] = dirname(__FILE__);
 		$config['isttmap'] = FALSE;
 		$config['server_query'] = strtolower(QUERY_SERVER) === 'yes' ? '1' : '0';
 		$config['admin_pass'] = password_hash(ADMIN_PASS, PASSWORD_DEFAULT);
-		
+
 		// Map image
 		$config['mapfile_default'] = intval($config['pri_map']) < 2 ? 'maps/primary.jpg' : 'maps/tileset/full.jpg';
 		$config['mapfile_alternative'] = intval($config['alt_map']) < 2 ? 'maps/secondary.jpg' : 'maps/tileset/full.jpg';
-		
+
 		// Put information into session
 		$_SESSION['LIVEMAP_INFO'][$livemap_id]['CONFIG'] = $config;
 	}
-	
+
 	require_once('main.php');

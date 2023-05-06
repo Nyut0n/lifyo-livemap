@@ -2,20 +2,20 @@ function Livemap( controller ) {
 
 	var self = this;
 	this.controller = controller;
-	
+
 	var ssFactor = 2;		// Supersampling factor for canvas layers
 	var dcThreshold = 10;	// Threshold for double columns in guild member lists
-	
+
 	this.config  = null;
 	this.leaflet = null;
 	this.control = null;
 	this.layers = {};
-	
+
 	this.credits = $("#dialog-credits").dialog( {
 		autoOpen: false, modal: true,
 		width: "auto", height: "auto"
 	} );
-	
+
 	// Initialize Leaflet Map
 	this.initMap = function( config ) {
 		this.config = config;
@@ -52,7 +52,7 @@ function Livemap( controller ) {
 		this.control.addTo(this.leaflet);
 		return true;
 	};
-	
+
 	// Loading animation
 	this.spinner = function( bool ) {
 		this.leaflet.spin( bool, {
@@ -60,17 +60,17 @@ function Livemap( controller ) {
 			scale: 3,
 		} );
 	};
-	
+
 	this.px2c = function(x, y) {
 		return [1533 - parseFloat(y), parseFloat(x)];
 	};
-	
+
 	this.c2px = function(latlng) {
 		return {x: latlng.lng, y: 1533 - latlng.lat};
 	};
 
 	/*** Controls ***/
-	
+
 	this.createControlButton = function( icon, tooltip ) {
 		var div = L.DomUtil.create('div');
 		var img = new Image();
@@ -79,7 +79,7 @@ function Livemap( controller ) {
 		div.appendChild(img);
 		return div;
 	};
-	
+
 	this.addControl = function( icon, tooltip, clickCallback ) {
 		var button = this.createControlButton(icon, tooltip);
 		// Attach click event
@@ -88,31 +88,31 @@ function Livemap( controller ) {
 		this.control.getContainer().appendChild(button);
 		return button;
 	};
-	
+
 	/*** Layers ***/
-	
+
 	this.addLayer = function( name) {
 		this.layers[name] = Object.create(LivemapLayer).init(this);
 		return this.layers[name];
 	};
-	
+
 	this.getLayer = function( name ) {
 		return ( this.layers.hasOwnProperty(name) ) ? this.layers[name] : false;
 	};
-	
+
 	this.initLayer = function( name ) {
-		
+
 		var layer = this.addLayer(name);
-		
+
 		switch(name) {
-			
+
 			case 'primaryMap':
 				layer.onDraw = function(layerGroup, data) {
 					var primaryMap = self.config.pri_map < 2 ? L.imageOverlay(data, [[0,0], [1533,1533]]) : self.createTileLayer();
 					primaryMap.addTo(layerGroup);
 				};
 			break;
-			
+
 			case 'secondaryMap':
 				layer.onDraw = function(layerGroup, data) {
 					var secondaryMap = self.config.alt_map < 2 ? L.imageOverlay(data, [[0,0], [1533,1533]]) : self.createTileLayer();
@@ -125,7 +125,7 @@ function Livemap( controller ) {
 					self.getLayer('primaryMap').show();
 				};
 			break;
-			
+
 			case 'pois':
 				layer.onDraw = function(layerGroup, data) {
 					data.forEach( function(poi) {
@@ -140,7 +140,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'areas':
 				layer.onDraw = function(layerGroup, data) {
 					data.forEach( function(area) {
@@ -155,7 +155,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'players':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw Players
@@ -176,7 +176,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'grid':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw canvas
@@ -184,7 +184,7 @@ function Livemap( controller ) {
 					var canvas = document.createElement("canvas");
 					canvas.width  = size;
 					canvas.height = size;
-					var ctx = canvas.getContext("2d");					
+					var ctx = canvas.getContext("2d");
 					var divi = 25;
 					var step = size / divi;
 					var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -205,7 +205,7 @@ function Livemap( controller ) {
 					L.imageOverlay(canvas.toDataURL("image/png"), [[0,0], [1533,1533]]).addTo(layerGroup);
 				};
 			break;
-			
+
 			case 'regions':
 				layer.onDraw = function(layerGroup, data) {
 					data.forEach( function(terrainblock) {
@@ -230,10 +230,10 @@ function Livemap( controller ) {
 							default:
 								regionName  = "Unknown";
 								regionColor = "Gray";
-							
+
 						}
 						L.rectangle( bounds, {
-							color: regionColor, 
+							color: regionColor,
 							weight: 0,
 							interactive: false,
 						} )
@@ -250,7 +250,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'planner':
 				layer.config = {
 					outpostMode: false,
@@ -371,7 +371,7 @@ function Livemap( controller ) {
 					var dashArray = "0";
 					if( self.config.style_claim === 'dashed' ) dashArray = "5, " + ( 6 + lineWidth );
 					if( self.config.style_claim === 'dotted' ) dashArray = "1, " + ( 2 + lineWidth * 2 );
-					
+
 					data.forEach( function(claim) {
 						var coords = self.px2c(claim.x, claim.y);
 						var color  = '#' + self.config['color_claim_t' + claim.GuildTier];
@@ -394,7 +394,7 @@ function Livemap( controller ) {
 							this.getPopup().update();
 							self.showStandings(claim.GuildID);
 						})
-						.on('popupclose', function(e) { 
+						.on('popupclose', function(e) {
 							this.bindTooltip(tooltip);
 							self.hideStandings();
 						})
@@ -416,7 +416,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'standings':
 				layer.onDraw = function(layerGroup, data) {
 					var StandingColors = ['#999','#FF0000','#FF8800','#FFFF00','#99FF00','#00FF00'];
@@ -460,7 +460,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'persoClaims':
 				layer.onDraw = function(layerGroup, data) {
 					data.forEach( function(claim) {
@@ -476,7 +476,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'outposts':
 				layer.onDraw = function(layerGroup, data) {
 					// Create outpost markers
@@ -513,7 +513,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'tradeposts':
 				layer.onDraw = function(layerGroup, data) {
 					var tp_icon = L.icon( {iconUrl: 'images/tradingpost.png', iconSize: [16, 16], iconAnchor: [8, -3]} );
@@ -525,7 +525,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'animalSpawns':
 				layer.onDraw = function(layerGroup, data) {
 					var animalData = {
@@ -542,6 +542,12 @@ function Livemap( controller ) {
 						AurochsBullData: { name: Locale.ui[130], icon: "images/animals/bull.png" },
 						AurochsCowData: { name: Locale.ui[131], icon: "images/animals/cow.png" },
 						MooseData: { name: Locale.ui[132], icon: "images/animals/moose.png" },
+						// Knool mod support
+						BearKnoolData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
+						ChieftainData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
+						HunterData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
+						WitchData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
+						MoleData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
 					};
 					// Draw animal icons
 					data.forEach( function(spawn) {
@@ -563,7 +569,7 @@ function Livemap( controller ) {
 					} );
 				};
 			break;
-			
+
 			case 'pavedTiles':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw canvas
@@ -581,7 +587,7 @@ function Livemap( controller ) {
 					L.imageOverlay(canvas.toDataURL("image/png"), [[0,0], [1533,1533]]).addTo(layerGroup);
 				};
 			break;
-			
+
 			case 'buildings':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw canvas
@@ -595,7 +601,7 @@ function Livemap( controller ) {
 					L.imageOverlay(canvas.toDataURL("image/png"), [[0,0], [1533,1533]]).addTo(layerGroup);
 				};
 			break;
-			
+
 			case 'trees':
 				layer.onDraw = function(layerGroup, data) {
 					// Draw canvas
@@ -609,13 +615,13 @@ function Livemap( controller ) {
 					L.imageOverlay(canvas.toDataURL("image/png"), [[0,0], [1533,1533]]).addTo(layerGroup);
 				};
 			break;
-			
+
 		}
-		
+
 		return layer;
-		
+
 	};
-	
+
 	this.createTileLayer = function() {
 		var tileURL = this.config.isttmap ? 'maps/tileset/' + this.config.ID + '/{z}_{x}_{y}.jpg' : 'maps/tileset/{z}_{x}_{y}.jpg';
 		var tileLayer = new L.TileLayer.YoMatrix( tileURL, {
@@ -627,7 +633,7 @@ function Livemap( controller ) {
 		} );
 		return tileLayer;
 	};
-	
+
 	this.updatePlayers = function( newData ) {
 		var layer = this.getLayer('players');
 		if( layer.hasData ) {
@@ -645,7 +651,7 @@ function Livemap( controller ) {
 			this.getLayer('players').setData(newData);
 		}
 	};
-	
+
 	this.showStandings = function( id ) {
 		if( this.controller.hasPrivilege('standings') ) {
 			var layer = this.getLayer('standings');
@@ -654,7 +660,7 @@ function Livemap( controller ) {
 			layer.show();
 		}
 	};
-	
+
 	this.hideStandings = function() {
 		if( this.controller.hasPrivilege('standings') ) {
 			var layer = this.getLayer('standings');
@@ -662,7 +668,7 @@ function Livemap( controller ) {
 			layer.hide();
 		}
 	};
-	
+
 	this.generateClaimMemberlist = function( members ) {
 		var ul = L.DomUtil.create("ul");
 		var allowSteam = this.controller.hasPrivilege('steam_links');
@@ -678,7 +684,7 @@ function Livemap( controller ) {
 		} );
 		return "<fieldset class=\"" + fieldsetClass + "\"><legend>" + Locale.ui[24] + "</legend>" + ul.outerHTML + "</fieldset>";
 	};
-	
+
 	this.generateClaimPopup = function( claim ) {
 		// Make popup html
 		var charterLink = "<br><a class=\"map-guild-link\" href=\"javascript:void(0);\">&raquo; " + Locale.ui[208] + "</a>";
@@ -698,7 +704,7 @@ function Livemap( controller ) {
 		// Return element div
 		return div[0];
 	};
-	
+
 	this.openCharter = function( guildName, charterText ) {
 		var bbparser = new sceditor.BBCodeParser();
 		$("<div class=\"bbcode-wysiwyg\">" + bbparser.toHTML(charterText) + "</div>").dialog( {
@@ -758,13 +764,13 @@ var LivemapLayer = {
 		}
 		return this;
 	},
-	hide: function() { 
+	hide: function() {
 		this.layerGroup.remove();
 		this.checkState();
 		if( this.onHide !== null ) this.onHide();
 		return this;
 	},
-	toggle: function() { 
+	toggle: function() {
 		this.livemap.leaflet.hasLayer(this.layerGroup) ? this.hide() : this.show();
 		return this;
 	},
@@ -781,7 +787,7 @@ var LivemapLayer = {
 		}
 		return this;
 	},
-	draw: function() { 
+	draw: function() {
 		if( this.onDraw === null ) {
 			console.error("No onDraw function was set for this layer");
 			return false;
@@ -801,7 +807,7 @@ L.Control.CustomControl = L.Control.extend({
 		return container;
 	},
 });
-L.control.customControl = function(opts) { 
+L.control.customControl = function(opts) {
 	return new L.Control.CustomControl(opts);
 };
 
