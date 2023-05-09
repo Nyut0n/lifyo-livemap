@@ -543,11 +543,11 @@ function Livemap( controller ) {
 						AurochsCowData: { name: Locale.ui[131], icon: "images/animals/cow.png" },
 						MooseData: { name: Locale.ui[132], icon: "images/animals/moose.png" },
 						// Knool mod support
-						BearKnoolData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
-						ChieftainData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
-						HunterData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
-						WitchData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
-						MoleData: { name: 'Knool (mod)', icon: "images/animals/knool.png" },
+						BearKnoolData: { name: 'Bear Knool (mod)', icon: "images/animals/knool.png" },
+						ChieftainData: { name: 'Chieftain Knool (mod)', icon: "images/animals/knool.png" },
+						HunterData: { name: 'Hunter Knool (mod)', icon: "images/animals/knool.png" },
+						WitchData: { name: 'Witch Knool (mod)', icon: "images/animals/knool.png" },
+						MoleData: { name: 'Mole Knool (mod)', icon: "images/animals/knool.png" },
 					};
 					// Draw animal icons
 					data.forEach( function(spawn) {
